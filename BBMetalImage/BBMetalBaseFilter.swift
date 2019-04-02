@@ -126,6 +126,8 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         encoder.dispatchThreadgroups(threadgroupCount!, threadsPerThreadgroup: threadgroupSize)
         encoder.endEncoding()
         
+        commandBuffer.commit()
+        
         // Clear old input texture
         for i in 0..<sources.count { sources[i].texture = nil }
         
@@ -133,7 +135,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         for consumer in consumers { consumer.newTextureAvailable(outputTexture, from: self) }
     }
     
-    func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    @objc func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         fatalError("\(#function) must be overridden by subclass")
     }
 }

@@ -14,6 +14,11 @@
 		4A4CADA4225288E60058BEB6 /* BBMetalBaseFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADA2225288E60058BEB6 /* BBMetalBaseFilter.swift */; };
 		4A4CADA62252CC260058BEB6 /* BBMetalDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADA52252CC260058BEB6 /* BBMetalDevice.swift */; };
 		4A4CADA72252CC260058BEB6 /* BBMetalDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADA52252CC260058BEB6 /* BBMetalDevice.swift */; };
+		4A4CADA922530E440058BEB6 /* BBMetalLuminanceFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADA822530E440058BEB6 /* BBMetalLuminanceFilter.swift */; };
+		4A4CADAA22530E440058BEB6 /* BBMetalLuminanceFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADA822530E440058BEB6 /* BBMetalLuminanceFilter.swift */; };
+		4A4CADAF22530ED90058BEB6 /* Luminance.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADAE22530ED90058BEB6 /* Luminance.metal */; };
+		4A4CADB022530ED90058BEB6 /* Luminance.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADAE22530ED90058BEB6 /* Luminance.metal */; };
+		4A4CADB2225310CB0058BEB6 /* BBMetalShaderTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A4CADB1225310CB0058BEB6 /* BBMetalShaderTypes.h */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -35,6 +40,9 @@
 		4A4CAD98225285E60058BEB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A4CADA2225288E60058BEB6 /* BBMetalBaseFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalBaseFilter.swift; sourceTree = "<group>"; };
 		4A4CADA52252CC260058BEB6 /* BBMetalDevice.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalDevice.swift; sourceTree = "<group>"; };
+		4A4CADA822530E440058BEB6 /* BBMetalLuminanceFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalLuminanceFilter.swift; sourceTree = "<group>"; };
+		4A4CADAE22530ED90058BEB6 /* Luminance.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Luminance.metal; sourceTree = "<group>"; };
+		4A4CADB1225310CB0058BEB6 /* BBMetalShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMetalShaderTypes.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,6 +87,9 @@
 			children = (
 				4A4CADA52252CC260058BEB6 /* BBMetalDevice.swift */,
 				4A4CADA2225288E60058BEB6 /* BBMetalBaseFilter.swift */,
+				4A4CADA822530E440058BEB6 /* BBMetalLuminanceFilter.swift */,
+				4A4CADAE22530ED90058BEB6 /* Luminance.metal */,
+				4A4CADB1225310CB0058BEB6 /* BBMetalShaderTypes.h */,
 				4A4CAD8B225285E60058BEB6 /* BBMetalImage.h */,
 				4A4CAD8C225285E60058BEB6 /* Info.plist */,
 			);
@@ -102,6 +113,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4A4CAD99225285E60058BEB6 /* BBMetalImage.h in Headers */,
+				4A4CADB2225310CB0058BEB6 /* BBMetalShaderTypes.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -203,8 +215,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A4CADAF22530ED90058BEB6 /* Luminance.metal in Sources */,
 				4A4CADA3225288E60058BEB6 /* BBMetalBaseFilter.swift in Sources */,
 				4A4CADA62252CC260058BEB6 /* BBMetalDevice.swift in Sources */,
+				4A4CADA922530E440058BEB6 /* BBMetalLuminanceFilter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,8 +226,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A4CADAA22530E440058BEB6 /* BBMetalLuminanceFilter.swift in Sources */,
 				4A4CADA72252CC260058BEB6 /* BBMetalDevice.swift in Sources */,
 				4A4CADA4225288E60058BEB6 /* BBMetalBaseFilter.swift in Sources */,
+				4A4CADB022530ED90058BEB6 /* Luminance.metal in Sources */,
 				4A4CAD97225285E60058BEB6 /* BBMetalImageTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
