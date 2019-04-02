@@ -11,9 +11,19 @@ import BBMetalImage
 
 class StaticImageFilterVC: UIViewController {
 
+    private let type: FilterType
     private var image: UIImage!
     
     private var imageView: UIImageView!
+    
+    init(type: FilterType) {
+        self.type = type
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,14 +49,16 @@ class StaticImageFilterVC: UIViewController {
     @objc private func clickButton(_ button: UIButton) {
         button.isSelected = !button.isSelected
         if button.isSelected {
-            let source = BBMetalStaticImageSource(image: image)
-            let filter = BBMetalLuminanceFilter()
-            filter.runSynchronously = true
-            source.add(consumer: filter)
-            source.transmitTexture()
-            imageView.image = filter.outputTexture?.bb_image
+            imageView.image = filteredImage
         } else {
             imageView.image = image
+        }
+    }
+    
+    private var filteredImage: UIImage? {
+        switch type {
+        case .luminance:
+            return image.bb_luminanceFiltered()
         }
     }
 }
