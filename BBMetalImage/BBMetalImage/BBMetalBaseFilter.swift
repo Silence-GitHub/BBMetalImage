@@ -9,14 +9,14 @@
 import UIKit
 
 public protocol BBMetalImageSource: AnyObject {
-    func add<T: BBMetalImageConsumer>(_ consumer: T) -> T
-    func add(_ consumer: BBMetalImageConsumer, at index: Int)
-    func remove(_ consumer: BBMetalImageConsumer)
+    func add<T: BBMetalImageConsumer>(consumer: T) -> T
+    func add(consumer: BBMetalImageConsumer, at index: Int)
+    func remove(consumer: BBMetalImageConsumer)
 }
 
 public protocol BBMetalImageConsumer: AnyObject {
-    func add(_ source: BBMetalImageSource)
-    func remove(_ source: BBMetalImageSource)
+    func add(source: BBMetalImageSource)
+    func remove(source: BBMetalImageSource)
     func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource)
 }
 
@@ -50,31 +50,31 @@ public class BBMetalBaseFilter {
 
 extension BBMetalBaseFilter: BBMetalImageSource {
     @discardableResult
-    public func add<T: BBMetalImageConsumer>(_ consumer: T) -> T {
+    public func add<T: BBMetalImageConsumer>(consumer: T) -> T {
         consumers.append(consumer)
-        consumer.add(self)
+        consumer.add(source: self)
         return consumer
     }
     
-    public func add(_ consumer: BBMetalImageConsumer, at index: Int) {
+    public func add(consumer: BBMetalImageConsumer, at index: Int) {
         consumers.insert(consumer, at: index)
-        consumer.add(self)
+        consumer.add(source: self)
     }
     
-    public func remove(_ consumer: BBMetalImageConsumer) {
+    public func remove(consumer: BBMetalImageConsumer) {
         if let index = consumers.firstIndex(where: { $0 === consumer }) {
             consumers.remove(at: index)
-            consumer.remove(self)
+            consumer.remove(source: self)
         }
     }
 }
 
 extension BBMetalBaseFilter: BBMetalImageConsumer {
-    public func add(_ source: BBMetalImageSource) {
+    public func add(source: BBMetalImageSource) {
         sources.append(BBMetalWeakImageSource(source: source))
     }
     
-    public func remove(_ source: BBMetalImageSource) {
+    public func remove(source: BBMetalImageSource) {
         if let index = sources.firstIndex(where: { $0.source === source }) {
             sources.remove(at: index)
         }

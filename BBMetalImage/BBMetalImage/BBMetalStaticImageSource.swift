@@ -24,21 +24,21 @@ public class BBMetalStaticImageSource {
 
 extension BBMetalStaticImageSource: BBMetalImageSource {
     @discardableResult
-    public func add<T: BBMetalImageConsumer>(_ consumer: T) -> T {
+    public func add<T: BBMetalImageConsumer>(consumer: T) -> T {
         consumers.append(consumer)
-        consumer.add(self)
+        consumer.add(source: self)
         return consumer
     }
     
-    public func add(_ consumer: BBMetalImageConsumer, at index: Int) {
+    public func add(consumer: BBMetalImageConsumer, at index: Int) {
         consumers.insert(consumer, at: index)
-        consumer.add(self)
+        consumer.add(source: self)
     }
     
-    public func remove(_ consumer: BBMetalImageConsumer) {
+    public func remove(consumer: BBMetalImageConsumer) {
         if let index = consumers.firstIndex(where: { $0 === consumer }) {
             consumers.remove(at: index)
-            consumer.remove(self)
+            consumer.remove(source: self)
         }
     }
 }
