@@ -8,7 +8,7 @@
 
 import UIKit
 
-class BBMetalLuminanceFilter: BBMetalBaseFilter {
-    convenience init() { self.init(kernelFunctionName: "luminanceKernel") }
+public class BBMetalLuminanceFilter: BBMetalBaseFilter {
+    public convenience init() { self.init(kernelFunctionName: "luminanceKernel") }
     override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

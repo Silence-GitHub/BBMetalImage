@@ -32,7 +32,7 @@ public class BBMetalBaseFilter {
     public private(set) var sources: [BBMetalWeakImageSource]
     public let name: String
     public let computePipeline: MTLComputePipelineState
-    public private(set) var outputTexture: MTLTexture!
+    public private(set) var outputTexture: MTLTexture?
     public var threadgroupSize: MTLSize { didSet { threadgroupCount = nil } }
     public var threadgroupCount: MTLSize?
     
@@ -41,7 +41,7 @@ public class BBMetalBaseFilter {
         sources = []
         name = kernelFunctionName
         
-        let library = BBMetalDevice.sharedDevice.makeDefaultLibrary()!
+        let library = try! BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: Bundle(for: BBMetalBaseFilter.self))
         let kernelFunction = library.makeFunction(name: kernelFunctionName)!
         computePipeline = try! BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
         threadgroupSize = MTLSize(width: 16, height: 16, depth: 1)
@@ -128,12 +128,13 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         encoder.endEncoding()
         
         commandBuffer.commit()
+        commandBuffer.waitUntilCompleted()
         
         // Clear old input texture
         for i in 0..<sources.count { sources[i].texture = nil }
         
         // Transmit output texture to image consumers
-        for consumer in consumers { consumer.newTextureAvailable(outputTexture, from: self) }
+        for consumer in consumers { consumer.newTextureAvailable(outputTexture!, from: self) }
     }
     
     @objc func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
