@@ -31,10 +31,13 @@ public class BBMetalBaseFilter {
     public private(set) var consumers: [BBMetalImageConsumer]
     public private(set) var sources: [BBMetalWeakImageSource]
     public let name: String
-    public let computePipeline: MTLComputePipelineState
     public private(set) var outputTexture: MTLTexture?
     public var threadgroupSize: MTLSize { didSet { threadgroupCount = nil } }
     public var threadgroupCount: MTLSize?
+    public var runSynchronously: Bool
+    
+    private let computePipeline: MTLComputePipelineState
+    private var completions: [(MTLCommandBuffer) -> Void]
     
     public init(kernelFunctionName: String) {
         consumers = []
@@ -45,6 +48,12 @@ public class BBMetalBaseFilter {
         let kernelFunction = library.makeFunction(name: kernelFunctionName)!
         computePipeline = try! BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
         threadgroupSize = MTLSize(width: 16, height: 16, depth: 1)
+        runSynchronously = false
+        completions = []
+    }
+    
+    public func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer) -> Void) {
+        completions.append(handler)
     }
 }
 
@@ -119,6 +128,8 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer(),
             let encoder = commandBuffer.makeComputeCommandEncoder() else { return }
         
+        for completion in completions { commandBuffer.addCompletedHandler(completion) }
+        
         encoder.label = name
         encoder.setComputePipelineState(computePipeline)
         for i in 0..<sources.count { encoder.setTexture(sources[i].texture, index: i) }
@@ -128,7 +139,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         encoder.endEncoding()
         
         commandBuffer.commit()
-        commandBuffer.waitUntilCompleted()
+        if runSynchronously { commandBuffer.waitUntilCompleted() }
         
         // Clear old input texture
         for i in 0..<sources.count { sources[i].texture = nil }

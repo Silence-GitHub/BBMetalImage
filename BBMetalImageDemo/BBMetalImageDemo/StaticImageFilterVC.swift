@@ -41,7 +41,8 @@ class StaticImageFilterVC: UIViewController {
         if button.isSelected {
             let source = BBMetalStaticImageSource(image: image)
             let filter = BBMetalLuminanceFilter()
-            source.add(filter)
+            filter.runSynchronously = true
+            source.add(consumer: filter)
             source.transmitTexture()
             imageView.image = filter.outputTexture?.bb_image
         } else {
