@@ -9,6 +9,7 @@
 import UIKit
 
 public protocol BBMetalImageSource: AnyObject {
+    func add<T: BBMetalImageConsumer>(_ consumer: T) -> T
     func add(_ consumer: BBMetalImageConsumer, at index: Int)
     func remove(_ consumer: BBMetalImageConsumer)
 }
@@ -20,10 +21,10 @@ public protocol BBMetalImageConsumer: AnyObject {
 }
 
 public struct BBMetalWeakImageSource {
-    weak var source: BBMetalImageSource?
-    var texture: MTLTexture?
+    public weak var source: BBMetalImageSource?
+    public var texture: MTLTexture?
     
-    init(source: BBMetalImageSource) { self.source = source }
+    public init(source: BBMetalImageSource) { self.source = source }
 }
 
 public class BBMetalBaseFilter {
@@ -35,7 +36,7 @@ public class BBMetalBaseFilter {
     public var threadgroupSize: MTLSize { didSet { threadgroupCount = nil } }
     public var threadgroupCount: MTLSize?
     
-    init(kernelFunctionName: String) {
+    public init(kernelFunctionName: String) {
         consumers = []
         sources = []
         name = kernelFunctionName

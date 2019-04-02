@@ -19,6 +19,8 @@
 		4A4CADAF22530ED90058BEB6 /* Luminance.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADAE22530ED90058BEB6 /* Luminance.metal */; };
 		4A4CADB022530ED90058BEB6 /* Luminance.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADAE22530ED90058BEB6 /* Luminance.metal */; };
 		4A4CADB2225310CB0058BEB6 /* BBMetalShaderTypes.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A4CADB1225310CB0058BEB6 /* BBMetalShaderTypes.h */; };
+		4A4CADD9225322920058BEB6 /* BBMetalStaticImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADD8225322920058BEB6 /* BBMetalStaticImageSource.swift */; };
+		4A4CADDA225322920058BEB6 /* BBMetalStaticImageSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADD8225322920058BEB6 /* BBMetalStaticImageSource.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +45,7 @@
 		4A4CADA822530E440058BEB6 /* BBMetalLuminanceFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalLuminanceFilter.swift; sourceTree = "<group>"; };
 		4A4CADAE22530ED90058BEB6 /* Luminance.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = Luminance.metal; sourceTree = "<group>"; };
 		4A4CADB1225310CB0058BEB6 /* BBMetalShaderTypes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMetalShaderTypes.h; sourceTree = "<group>"; };
+		4A4CADD8225322920058BEB6 /* BBMetalStaticImageSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalStaticImageSource.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -87,6 +90,7 @@
 			children = (
 				4A4CADA52252CC260058BEB6 /* BBMetalDevice.swift */,
 				4A4CADA2225288E60058BEB6 /* BBMetalBaseFilter.swift */,
+				4A4CADD8225322920058BEB6 /* BBMetalStaticImageSource.swift */,
 				4A4CADA822530E440058BEB6 /* BBMetalLuminanceFilter.swift */,
 				4A4CADAE22530ED90058BEB6 /* Luminance.metal */,
 				4A4CADB1225310CB0058BEB6 /* BBMetalShaderTypes.h */,
@@ -219,6 +223,7 @@
 				4A4CADA3225288E60058BEB6 /* BBMetalBaseFilter.swift in Sources */,
 				4A4CADA62252CC260058BEB6 /* BBMetalDevice.swift in Sources */,
 				4A4CADA922530E440058BEB6 /* BBMetalLuminanceFilter.swift in Sources */,
+				4A4CADD9225322920058BEB6 /* BBMetalStaticImageSource.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -228,6 +233,7 @@
 			files = (
 				4A4CADAA22530E440058BEB6 /* BBMetalLuminanceFilter.swift in Sources */,
 				4A4CADA72252CC260058BEB6 /* BBMetalDevice.swift in Sources */,
+				4A4CADDA225322920058BEB6 /* BBMetalStaticImageSource.swift in Sources */,
 				4A4CADA4225288E60058BEB6 /* BBMetalBaseFilter.swift in Sources */,
 				4A4CADB022530ED90058BEB6 /* Luminance.metal in Sources */,
 				4A4CAD97225285E60058BEB6 /* BBMetalImageTests.swift in Sources */,
