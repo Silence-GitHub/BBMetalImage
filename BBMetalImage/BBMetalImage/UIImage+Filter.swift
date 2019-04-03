@@ -9,9 +9,16 @@
 import UIKit
 
 public extension UIImage {
+    public func bb_brightnessFiltered(withBrightness brightness: Float) -> UIImage? {
+        return filtered(with: BBMetalBrightnessFilter(brightness: brightness))
+    }
+    
     public func bb_luminanceFiltered() -> UIImage? {
+        return filtered(with: BBMetalLuminanceFilter())
+    }
+    
+    private func filtered(with filter: BBMetalBaseFilter) -> UIImage? {
         let source = BBMetalStaticImageSource(image: self)
-        let filter = BBMetalLuminanceFilter()
         filter.runSynchronously = true
         source.add(consumer: filter)
         source.transmitTexture()

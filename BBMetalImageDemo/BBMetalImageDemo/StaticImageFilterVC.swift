@@ -57,8 +57,8 @@ class StaticImageFilterVC: UIViewController {
     
     private var filteredImage: UIImage? {
         switch type {
-        case .luminance:
-            return image.bb_luminanceFiltered()
+        case .brightness: return image.bb_brightnessFiltered(withBrightness: 0.5)
+        case .luminance: return image.bb_luminanceFiltered()
         }
     }
 }

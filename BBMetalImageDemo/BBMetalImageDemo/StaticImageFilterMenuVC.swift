@@ -16,10 +16,14 @@ class StaticImageFilterMenuVC: UIViewController {
 
         view.backgroundColor = .gray
         
+        let brightness = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .brightness), animated: true) }
+        }
         let luminance = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .luminance), animated: true) }
         }
-        list = [("luminance", luminance)]
+        list = [("Brightness", brightness),
+                ("Luminance", luminance)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -49,5 +53,6 @@ extension StaticImageFilterMenuVC: UITableViewDelegate {
 }
 
 enum FilterType {
+    case brightness
     case luminance
 }
