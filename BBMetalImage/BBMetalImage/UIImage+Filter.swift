@@ -13,6 +13,10 @@ public extension UIImage {
         return filtered(with: BBMetalBrightnessFilter(brightness: brightness))
     }
     
+    public func bb_exposureFiltered(withExposure exposure: Float) -> UIImage? {
+        return filtered(with: BBMetalExposureFilter(exposure: exposure))
+    }
+    
     public func bb_luminanceFiltered() -> UIImage? {
         return filtered(with: BBMetalLuminanceFilter())
     }
