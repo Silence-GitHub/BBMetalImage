@@ -22,6 +22,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let exposure = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .exposure), animated: true) }
         }
+        let contrast = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .contrast), animated: true) }
+        }
         let lookup = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .lookup), animated: true) }
         }
@@ -30,6 +33,7 @@ class StaticImageFilterMenuVC: UIViewController {
         }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
+                ("Contrast", contrast),
                 ("Lookup", lookup),
                 ("Luminance", luminance)]
         
@@ -63,6 +67,7 @@ extension StaticImageFilterMenuVC: UITableViewDelegate {
 enum FilterType {
     case brightness
     case exposure
+    case contrast
     case lookup
     case luminance
 }

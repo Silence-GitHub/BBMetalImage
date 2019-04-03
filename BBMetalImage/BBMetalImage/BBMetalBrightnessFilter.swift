@@ -11,10 +11,10 @@ import UIKit
 
 /// Adjusts the brightness of the image
 public class BBMetalBrightnessFilter: BBMetalBaseFilter {
-    /// The adjusted brightness (-1.0 ~ 1.0)
+    /// The adjusted brightness (-1.0 ~ 1.0, with 0.0 as the default)
     public var brightness: Float
     
-    public init(brightness: Float) {
+    public init(brightness: Float = 0) {
         self.brightness = brightness
         super.init(kernelFunctionName: "brightnessKernel")
     }

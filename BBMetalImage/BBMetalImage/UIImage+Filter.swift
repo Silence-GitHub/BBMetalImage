@@ -9,12 +9,16 @@
 import UIKit
 
 public extension UIImage {
-    public func bb_brightnessFiltered(withBrightness brightness: Float) -> UIImage? {
+    public func bb_brightnessFiltered(withBrightness brightness: Float = 0) -> UIImage? {
         return filtered(with: BBMetalBrightnessFilter(brightness: brightness))
     }
     
-    public func bb_exposureFiltered(withExposure exposure: Float) -> UIImage? {
+    public func bb_exposureFiltered(withExposure exposure: Float = 0) -> UIImage? {
         return filtered(with: BBMetalExposureFilter(exposure: exposure))
+    }
+    
+    public func bb_contrastFiltered(withContrast contrast: Float = 1) -> UIImage? {
+        return filtered(with: BBMetalContrastFilter(contrast: contrast))
     }
     
     public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {

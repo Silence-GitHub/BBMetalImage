@@ -10,10 +10,10 @@ import UIKit
 
 /// Adjusts the exposure of the image
 public class BBMetalExposureFilter: BBMetalBaseFilter {
-    /// The adjusted exposure (-10.0 ~ 10.0)
+    /// The adjusted exposure (-10.0 ~ 10.0, with 0.0 as the default)
     public var exposure: Float
     
-    public init(exposure: Float) {
+    public init(exposure: Float = 0) {
         self.exposure = exposure
         super.init(kernelFunctionName: "exposureKernel")
     }
