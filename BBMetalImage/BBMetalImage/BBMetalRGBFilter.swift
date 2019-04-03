@@ -8,7 +8,9 @@
 
 import UIKit
 
+/// Adjusts the individual RGB channels of an image
 public class BBMetalRGBFilter: BBMetalBaseFilter {
+    /// Normalized values by which each color channel is multiplied. The range is from 0.0 up, with 1.0 as the default.
     public var red: Float
     public var green: Float
     public var blue: Float
