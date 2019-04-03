@@ -59,11 +59,12 @@ class StaticImageFilterVC: UIViewController {
         switch type {
         case .brightness: return image.bb_brightnessFiltered(withBrightness: 0.15)
         case .exposure: return image.bb_exposureFiltered(withExposure: 0.5)
+        case .contrast: return image.bb_contrastFiltered(withContrast: 1.5)
+        case .saturation: return image.bb_saturationFiltered(withSaturaton: 2)
         case .lookup:
             let url = Bundle.main.url(forResource: "test_lookup", withExtension: "png")!
             let data = try! Data(contentsOf: url)
             return image.bb_lookupFiltered(withLookupTable: data.bb_metalTexture!, intensity: 1)
-        case .contrast: return image.bb_contrastFiltered(withContrast: 1.5)
         case .luminance: return image.bb_luminanceFiltered()
         }
     }

@@ -14,7 +14,7 @@ kernel void contrastKernel(texture2d<half, access::write> outputTexture [[textur
                            device float *contrast [[buffer(0)]],
                            uint2 gid [[thread_position_in_grid]]) {
     
-    half4 inColor = inputTexture.read(gid);
-    half4 outColor(((inColor.rgb - half3(0.5)) * half3(*contrast) + half3(0.5)), inColor.a);
+    const half4 inColor = inputTexture.read(gid);
+    const half4 outColor(((inColor.rgb - half3(0.5)) * half3(*contrast) + half3(0.5)), inColor.a);
     outputTexture.write(outColor, gid);
 }
