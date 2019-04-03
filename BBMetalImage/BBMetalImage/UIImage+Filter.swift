@@ -37,6 +37,10 @@ public extension UIImage {
         return filtered(with: BBMetalHueFilter(hue: hue))
     }
     
+    public func bb_vibranceFiltered(withVibrance vibrance: Float = 0) -> UIImage? {
+        return filtered(with: BBMetalVibranceFilter(vibrance: vibrance))
+    }
+    
     public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {
         return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
     }
