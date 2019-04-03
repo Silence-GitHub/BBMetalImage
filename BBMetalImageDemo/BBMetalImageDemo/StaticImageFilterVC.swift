@@ -28,7 +28,7 @@ class StaticImageFilterVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        image = UIImage(named: "multicolour_flowers.jpg")
+        image = UIImage(named: "sunflower.jpg")
         
         view.backgroundColor = .gray
         
@@ -59,6 +59,10 @@ class StaticImageFilterVC: UIViewController {
         switch type {
         case .brightness: return image.bb_brightnessFiltered(withBrightness: 0.15)
         case .exposure: return image.bb_exposureFiltered(withExposure: 0.5)
+        case .lookup:
+            let url = Bundle.main.url(forResource: "test_lookup", withExtension: "png")!
+            let data = try! Data(contentsOf: url)
+            return image.bb_lookupFiltered(withLookupTable: data.bb_metalTexture!, intensity: 1)
         case .luminance: return image.bb_luminanceFiltered()
         }
     }

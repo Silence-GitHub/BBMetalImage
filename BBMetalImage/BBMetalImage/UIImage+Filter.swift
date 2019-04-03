@@ -17,6 +17,10 @@ public extension UIImage {
         return filtered(with: BBMetalExposureFilter(exposure: exposure))
     }
     
+    public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {
+        return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
+    }
+    
     public func bb_luminanceFiltered() -> UIImage? {
         return filtered(with: BBMetalLuminanceFilter())
     }

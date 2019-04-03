@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MetalKit
 
 public class BBMetalStaticImageSource {
     public private(set) var consumers: [BBMetalImageConsumer] = []
@@ -45,29 +46,36 @@ extension BBMetalStaticImageSource: BBMetalImageSource {
 
 public extension UIImage {
     public var bb_metalTexture: MTLTexture? {
-        guard let sourceImage = cgImage else { return nil }
+        if let cgimage = cgImage { return cgimage.bb_metalTexture }
+        return nil
+    }
+}
+
+public extension CGImage {
+    public var bb_metalTexture: MTLTexture? {
+        let loader = MTKTextureLoader(device: BBMetalDevice.sharedDevice)
+        return try? loader.newTexture(cgImage: self, options: [MTKTextureLoader.Option.SRGB : false])
+        /*
         let descriptor = MTLTextureDescriptor()
         descriptor.pixelFormat = .rgba8Unorm
-        descriptor.width = sourceImage.width
-        descriptor.height = sourceImage.height
+        descriptor.width = width
+        descriptor.height = height
         descriptor.usage = .shaderRead
-        let bytesPerRow: Int = sourceImage.width * 4
-        let bitmapInfo: UInt32 = CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue
+        let bytesPerRow: Int = width * 4
+        let bitmapInfo: UInt32 = CGImageAlphaInfo.premultipliedLast.rawValue
         if let currentTexture = BBMetalDevice.sharedDevice.makeTexture(descriptor: descriptor),
             let context = CGContext(data: nil,
-                                    width: sourceImage.width,
-                                    height: sourceImage.height,
+                                    width: width,
+                                    height: height,
                                     bitsPerComponent: 8,
                                     bytesPerRow: bytesPerRow,
                                     space: CGColorSpaceCreateDeviceRGB(), // TODO: Use share color space
                                     bitmapInfo: bitmapInfo) {
             
-            context.translateBy(x: 0, y: CGFloat(sourceImage.height))
-            context.scaleBy(x: 1, y: -1)
-            context.draw(sourceImage, in: CGRect(x: 0, y: 0, width: sourceImage.width, height: sourceImage.height))
+            context.draw(self, in: CGRect(x: 0, y: 0, width: width, height: height))
             
             if let data = context.data {
-                currentTexture.replace(region: MTLRegionMake3D(0, 0, 0, sourceImage.width, sourceImage.height, 1),
+                currentTexture.replace(region: MTLRegionMake3D(0, 0, 0, width, height, 1),
                                        mipmapLevel: 0,
                                        withBytes: data,
                                        bytesPerRow: bytesPerRow)
@@ -76,6 +84,14 @@ public extension UIImage {
             }
         }
         return nil
+         */
+    }
+}
+
+public extension Data {
+    public var bb_metalTexture: MTLTexture? {
+        let loader = MTKTextureLoader(device: BBMetalDevice.sharedDevice)
+        return try? loader.newTexture(data: self, options: [MTKTextureLoader.Option.SRGB : false])
     }
 }
 
@@ -85,18 +101,14 @@ public extension MTLTexture {
         let bytesPerRow: Int = width * bytesPerPixel
         var data = [UInt8](repeating: 0, count: Int(width * height * bytesPerPixel))
         getBytes(&data, bytesPerRow: bytesPerRow, from: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0)
-        let bitmapInfo: UInt32 = CGBitmapInfo.byteOrder32Little.rawValue | CGImageAlphaInfo.premultipliedFirst.rawValue
+        let bitmapInfo: UInt32 = CGImageAlphaInfo.premultipliedLast.rawValue
         if let context = CGContext(data: &data,
                                    width: width,
                                    height: height,
                                    bitsPerComponent: 8,
                                    bytesPerRow: bytesPerRow,
                                    space: CGColorSpaceCreateDeviceRGB(),
-                                   bitmapInfo: bitmapInfo),
-            let sourceImage = context.makeImage() {
-            context.translateBy(x: 0, y: CGFloat(height))
-            context.scaleBy(x: 1, y: -1)
-            context.draw(sourceImage, in: CGRect(x: 0, y: 0, width: width, height: height))
+                                   bitmapInfo: bitmapInfo) {
             return context.makeImage()
         }
         return nil
