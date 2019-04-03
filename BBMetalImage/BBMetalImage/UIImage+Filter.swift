@@ -33,6 +33,10 @@ public extension UIImage {
         return filtered(with: BBMetalRGBFilter(red: red, green: green, blue: blue))
     }
     
+    public func bb_hueFiltered(withHue hue: Float = 0) -> UIImage? {
+        return filtered(with: BBMetalHueFilter(hue: hue))
+    }
+    
     public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {
         return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
     }
