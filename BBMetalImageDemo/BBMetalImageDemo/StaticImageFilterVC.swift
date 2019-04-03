@@ -30,6 +30,7 @@ class StaticImageFilterVC: UIViewController {
 
         image = UIImage(named: "sunflower.jpg")
         
+        title = "\(type)"
         view.backgroundColor = .gray
         
         imageView = UIImageView(frame: CGRect(x: 10, y: 100, width: view.bounds.width - 20, height: view.bounds.height - 200))
@@ -61,6 +62,7 @@ class StaticImageFilterVC: UIViewController {
         case .exposure: return image.bb_exposureFiltered(withExposure: 0.5)
         case .contrast: return image.bb_contrastFiltered(withContrast: 1.5)
         case .saturation: return image.bb_saturationFiltered(withSaturaton: 2)
+        case .gamma: return image.bb_gammaFiltered(withGamma: 1.5)
         case .lookup:
             let url = Bundle.main.url(forResource: "test_lookup", withExtension: "png")!
             let data = try! Data(contentsOf: url)

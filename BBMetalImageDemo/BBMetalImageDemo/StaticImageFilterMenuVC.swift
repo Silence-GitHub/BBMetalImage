@@ -28,6 +28,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let saturation = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .saturation), animated: true) }
         }
+        let gamma = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .gamma), animated: true) }
+        }
         let lookup = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .lookup), animated: true) }
         }
@@ -38,6 +41,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Exposure", exposure),
                 ("Contrast", contrast),
                 ("Saturation", saturation),
+                ("Gamma", gamma),
                 ("Lookup", lookup),
                 ("Luminance", luminance)]
         
@@ -73,6 +77,7 @@ enum FilterType {
     case exposure
     case contrast
     case saturation
+    case gamma
     case lookup
     case luminance
 }

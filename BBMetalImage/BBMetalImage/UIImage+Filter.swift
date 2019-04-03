@@ -25,6 +25,10 @@ public extension UIImage {
         return filtered(with: BBMetalSaturationFilter(saturation: saturation))
     }
     
+    public func bb_gammaFiltered(withGamma gamma: Float = 1) -> UIImage? {
+        return filtered(with: BBMetalGammaFilter(gamma: gamma))
+    }
+    
     public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {
         return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
     }

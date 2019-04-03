@@ -10,7 +10,7 @@ import UIKit
 
 /// Adjusts the saturation of an image
 public class BBMetalSaturationFilter: BBMetalBaseFilter {
-    /// The degree of saturation or desaturation to apply to the image (0.0 - 2.0, with 1.0 as the default)
+    /// The degree of saturation or desaturation to apply to the image (0.0 ~ 2.0, with 1.0 as the default)
     public var saturation: Float
     
     public init(saturation: Float = 1) {
