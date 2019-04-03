@@ -132,8 +132,8 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         
         encoder.label = name
         encoder.setComputePipelineState(computePipeline)
-        for i in 0..<sources.count { encoder.setTexture(sources[i].texture, index: i) }
-        encoder.setTexture(outputTexture, index: sources.count)
+        encoder.setTexture(outputTexture, index: 0)
+        for i in 0..<sources.count { encoder.setTexture(sources[i].texture, index: i + 1) }
         updateParameters(forComputeCommandEncoder: encoder)
         encoder.dispatchThreadgroups(threadgroupCount!, threadsPerThreadgroup: threadgroupSize)
         encoder.endEncoding()

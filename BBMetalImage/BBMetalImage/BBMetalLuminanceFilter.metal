@@ -10,8 +10,8 @@
 #include "BBMetalShaderTypes.h"
 using namespace metal;
 
-kernel void luminanceKernel(texture2d<half, access::read> inputTexture [[texture(0)]],
-                            texture2d<half, access::write> outputTexture [[texture(1)]],
+kernel void luminanceKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
+                            texture2d<half, access::read> inputTexture [[texture(1)]],
                             uint2 gid [[thread_position_in_grid]]) {
     
     half4 inColor = inputTexture.read(gid);

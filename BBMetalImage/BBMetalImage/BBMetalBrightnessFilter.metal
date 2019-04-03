@@ -9,8 +9,8 @@
 #include <metal_stdlib>
 using namespace metal;
 
-kernel void brightnessKernel(texture2d<half, access::read> inputTexture [[texture(0)]],
-                             texture2d<half, access::write> outputTexture [[texture(1)]],
+kernel void brightnessKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
+                             texture2d<half, access::read> inputTexture [[texture(1)]],
                              device float *brightness [[buffer(0)]],
                              uint2 gid [[thread_position_in_grid]]) {
     
