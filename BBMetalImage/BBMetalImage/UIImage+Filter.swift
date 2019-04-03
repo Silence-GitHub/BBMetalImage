@@ -29,6 +29,10 @@ public extension UIImage {
         return filtered(with: BBMetalGammaFilter(gamma: gamma))
     }
     
+    public func bb_rgbFiltered(withRed red: Float = 1, green: Float = 1, blue: Float = 1) -> UIImage? {
+        return filtered(with: BBMetalRGBFilter(red: red, green: green, blue: blue))
+    }
+    
     public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {
         return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
     }
