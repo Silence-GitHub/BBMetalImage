@@ -22,9 +22,6 @@ kernel void whiteBalanceKernel(texture2d<half, access::write> outputTexture [[te
     const half3x3 RGBtoYIQ = half3x3(half3(0.299, 0.587, 0.114), half3(0.596, -0.274, -0.322), half3(0.212, -0.523, 0.311));
     const half3x3 YIQtoRGB = half3x3(half3(1.0, 0.956, 0.621), half3(1.0, -0.272, -0.647), half3(1.0, -1.105, 1.702));
     
-//    const half3x3 RGBtoYIQ = half3x3(half3(0.299, 0.596, 0.212), half3(0.587, -0.274, -0.523), half3(0.114, -0.322, 0.311));
-//    const half3x3 YIQtoRGB = half3x3(half3(1.0, 1.0, 1.0), half3(0.956, -0.272, -1.105), half3(0.621, -0.647, 1.702));
-    
     half3 yiq = RGBtoYIQ * inColor.rgb;
     yiq.b = clamp(yiq.b + half(*tint) * 0.5226 * 0.1, -0.5226, 0.5226);
     const half3 rgb = YIQtoRGB * yiq;

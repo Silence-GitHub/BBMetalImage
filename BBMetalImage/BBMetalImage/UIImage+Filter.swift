@@ -45,6 +45,10 @@ public extension UIImage {
         return filtered(with: BBMetalWhiteBalanceFilter(temperature: temperature, tint: tint))
     }
     
+    public func bb_highlightShadowFiltered(withShadows shadows: Float = 0, highlihgts: Float = 1) -> UIImage? {
+        return filtered(with: BBMetalHighlightShadowFilter(shadows: shadows, highlights: highlihgts))
+    }
+    
     public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {
         return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
     }
