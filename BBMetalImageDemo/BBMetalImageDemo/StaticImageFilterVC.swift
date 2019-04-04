@@ -63,7 +63,7 @@ class StaticImageFilterVC: UIViewController {
         case .contrast: return image.bb_contrastFiltered(withContrast: 1.5)
         case .saturation: return image.bb_saturationFiltered(withSaturaton: 2)
         case .gamma: return image.bb_gammaFiltered(withGamma: 1.5)
-        case .rgb: return image.bb_rgbFiltered(withRed: 1.2, green: 1, blue: 1)
+        case .rgba: return image.bb_rgbaFiltered(withRed: 1.2, green: 1, blue: 1, alpha: 1)
         case .hue: return image.bb_hueFiltered(withHue: 90)
         case .vibrance: return image.bb_vibranceFiltered(withVibrance: 1)
         case .whiteBalance: return image.bb_whiteBalanceFiltered(withTemperature: 7000, tint: 0)

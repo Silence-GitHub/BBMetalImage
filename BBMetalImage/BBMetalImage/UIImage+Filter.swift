@@ -29,8 +29,8 @@ public extension UIImage {
         return filtered(with: BBMetalGammaFilter(gamma: gamma))
     }
     
-    public func bb_rgbFiltered(withRed red: Float = 1, green: Float = 1, blue: Float = 1) -> UIImage? {
-        return filtered(with: BBMetalRGBFilter(red: red, green: green, blue: blue))
+    public func bb_rgbaFiltered(withRed red: Float = 1, green: Float = 1, blue: Float = 1, alpha: Float = 1) -> UIImage? {
+        return filtered(with: BBMetalRGBAFilter(red: red, green: green, blue: blue, alpha: alpha))
     }
     
     public func bb_hueFiltered(withHue hue: Float = 0) -> UIImage? {
