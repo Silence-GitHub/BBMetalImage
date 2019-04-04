@@ -40,6 +40,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let vibrance = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .vibrance), animated: true) }
         }
+        let whiteBalance = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .whiteBalance), animated: true) }
+        }
         let lookup = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .lookup), animated: true) }
         }
@@ -54,6 +57,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("RGB", rgb),
                 ("Hue", hue),
                 ("Vibrance", vibrance),
+                ("White balance", whiteBalance),
                 ("Lookup", lookup),
                 ("Luminance", luminance)]
         
@@ -93,6 +97,7 @@ enum FilterType {
     case rgb
     case hue
     case vibrance
+    case whiteBalance
     case lookup
     case luminance
 }

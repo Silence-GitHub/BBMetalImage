@@ -66,6 +66,7 @@ class StaticImageFilterVC: UIViewController {
         case .rgb: return image.bb_rgbFiltered(withRed: 1.2, green: 1, blue: 1)
         case .hue: return image.bb_hueFiltered(withHue: 90)
         case .vibrance: return image.bb_vibranceFiltered(withVibrance: 1)
+        case .whiteBalance: return image.bb_whiteBalanceFiltered(withTemperature: 7000, tint: 0)
         case .lookup:
             let url = Bundle.main.url(forResource: "test_lookup", withExtension: "png")!
             let data = try! Data(contentsOf: url)
