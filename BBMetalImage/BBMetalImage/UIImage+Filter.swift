@@ -49,6 +49,17 @@ public extension UIImage {
         return filtered(with: BBMetalHighlightShadowFilter(shadows: shadows, highlights: highlihgts))
     }
     
+    public func bb_HighlightShadowTintFiltered(withShadowTintColor shadowTintColor: BBMetalColor = .red,
+                                               shadowTintIntensity: Float = 0,
+                                               highlightTintColor: BBMetalColor = .blue,
+                                               highlightTintIntensity: Float = 0) -> UIImage? {
+        
+        return filtered(with: BBMetalHighlightShadowTintFilter(shadowTintColor: shadowTintColor,
+                                                               shadowTintIntensity: shadowTintIntensity,
+                                                               highlightTintColor: highlightTintColor,
+                                                               highlightTintIntensity: highlightTintIntensity))
+    }
+    
     public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {
         return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
     }
