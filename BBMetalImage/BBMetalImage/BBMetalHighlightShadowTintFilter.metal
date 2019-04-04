@@ -18,13 +18,13 @@ kernel void highlightShadowTintKernel(texture2d<half, access::write> outputTextu
                                       device float *highlightTintIntensity [[buffer(3)]],
                                       uint2 gid [[thread_position_in_grid]]) {
     
-    half4 inColor = inputTexture.read(gid);
+    const half4 inColor = inputTexture.read(gid);
     
-    half luminance = dot(inColor.rgb, kLuminanceWeighting);
+    const half luminance = dot(inColor.rgb, kLuminanceWeighting);
     
-    half4 shadowResult = mix(inColor, max(inColor, half4(mix(half3(*shadowTintColor), inColor.rgb, luminance), inColor.a)), half(*shadowTintIntensity));
-    half4 highlightResult = mix(inColor, min(shadowResult, half4(mix(shadowResult.rgb, half3(*highlightTintColor), luminance), inColor.a)), half(*highlightTintIntensity));
+    const half4 shadowResult = mix(inColor, max(inColor, half4(mix(half3(*shadowTintColor), inColor.rgb, luminance), inColor.a)), half(*shadowTintIntensity));
+    const half4 highlightResult = mix(inColor, min(shadowResult, half4(mix(shadowResult.rgb, half3(*highlightTintColor), luminance), inColor.a)), half(*highlightTintIntensity));
     
-    half4 outColor(mix(shadowResult.rgb, highlightResult.rgb, luminance), inColor.a);
+    const half4 outColor(mix(shadowResult.rgb, highlightResult.rgb, luminance), inColor.a);
     outputTexture.write(outColor, gid);
 }

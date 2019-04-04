@@ -64,6 +64,10 @@ public extension UIImage {
         return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
     }
     
+    public func bb_colorInversionFiltered() -> UIImage? {
+        return filtered(with: BBMetalColorInversionFilter())
+    }
+    
     public func bb_luminanceFiltered() -> UIImage? {
         return filtered(with: BBMetalLuminanceFilter())
     }
