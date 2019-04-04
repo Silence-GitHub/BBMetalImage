@@ -79,6 +79,7 @@ class StaticImageFilterVC: UIViewController {
         case .colorInversion: return image.bb_colorInversionFiltered()
         case .monochrome: return image.bb_monochromeFiltered(withColor: BBMetalColor(red: 0.7, green: 0.6, blue: 0.5), intensity: 1)
         case .falseColor: return image.bb_falseColorFiltered(withFirstColor: .red, secondColor: .blue)
+        case .haze: return image.bb_haseFiltered(withDistance: 0.2, slope: 0)
         case .luminance: return image.bb_luminanceFiltered()
         }
     }

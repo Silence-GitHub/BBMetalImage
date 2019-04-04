@@ -76,6 +76,10 @@ public extension UIImage {
         return filtered(with: BBMetalFalseColorFilter(firstColor: firstColor, secondColor: secondColor))
     }
     
+    public func bb_haseFiltered(withDistance distance: Float = 0, slope: Float = 0) -> UIImage? {
+        return filtered(with: BBMetalHazeFilter(distance: distance, slope: slope))
+    }
+    
     public func bb_luminanceFiltered() -> UIImage? {
         return filtered(with: BBMetalLuminanceFilter())
     }
