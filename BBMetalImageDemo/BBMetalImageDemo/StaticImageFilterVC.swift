@@ -78,6 +78,7 @@ class StaticImageFilterVC: UIViewController {
             return image.bb_lookupFiltered(withLookupTable: data.bb_metalTexture!, intensity: 1)
         case .colorInversion: return image.bb_colorInversionFiltered()
         case .monochrome: return image.bb_monochromeFiltered(withColor: BBMetalColor(red: 0.7, green: 0.6, blue: 0.5), intensity: 1)
+        case .falseColor: return image.bb_falseColorFiltered(withFirstColor: .red, secondColor: .blue)
         case .luminance: return image.bb_luminanceFiltered()
         }
     }

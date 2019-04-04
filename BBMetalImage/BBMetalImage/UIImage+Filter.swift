@@ -72,6 +72,10 @@ public extension UIImage {
         return filtered(with: BBMetalMonochromeFilter(color: color, intensity: intensity))
     }
     
+    public func bb_falseColorFiltered(withFirstColor firstColor: BBMetalColor = .red, secondColor: BBMetalColor = .blue) -> UIImage? {
+        return filtered(with: BBMetalFalseColorFilter(firstColor: firstColor, secondColor: secondColor))
+    }
+    
     public func bb_luminanceFiltered() -> UIImage? {
         return filtered(with: BBMetalLuminanceFilter())
     }
