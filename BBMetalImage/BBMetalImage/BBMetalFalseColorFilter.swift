@@ -8,7 +8,9 @@
 
 import UIKit
 
+/// Uses the luminance of the image to mix between two user-specified colors
 public class BBMetalFalseColorFilter: BBMetalBaseFilter {
+    /// The first and second colors specify what colors replace the dark and light areas of the image, respectively. The defaults are red and blue.
     public var firstColor: BBMetalColor
     public var secondColor: BBMetalColor
     
