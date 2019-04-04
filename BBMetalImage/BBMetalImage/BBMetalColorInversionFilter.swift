@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Inverts the colors of an image
 public class BBMetalColorInversionFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "colorInversionKernel") }
     override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}

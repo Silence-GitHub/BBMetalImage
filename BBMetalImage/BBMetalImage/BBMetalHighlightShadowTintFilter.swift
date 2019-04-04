@@ -23,11 +23,16 @@ public struct BBMetalColor {
     public static let transparent = BBMetalColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 0.0)
 }
 
+/// Allows you to tint the shadows and highlights of an image independently using a color and intensity
 public class BBMetalHighlightShadowTintFilter: BBMetalBaseFilter {
+    /// Shadow tint RGB color, with red as the default
     public var shadowTintColor: BBMetalColor
+    /// Shadow tint intensity, from 0.0 to 1.0, with 0.0 as the default
     public var shadowTintIntensity: Float
     
+    /// Highlight tint RGB color, with blue as the default
     public var highlightTintColor: BBMetalColor
+    /// Highlight tint intensity, from 0.0 to 1.0, with 0.0 as the default
     public var highlightTintIntensity: Float
     
     public init(shadowTintColor: BBMetalColor = .red,
