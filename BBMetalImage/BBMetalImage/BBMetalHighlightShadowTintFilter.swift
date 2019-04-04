@@ -15,6 +15,13 @@ public struct BBMetalColor {
     public var blue: Float
     public var alpha: Float
     
+    public init(red: Float, green: Float, blue: Float, alpha: Float = 1) {
+        self.red = red
+        self.green = green
+        self.blue = blue
+        self.alpha = alpha
+    }
+    
     public static let black = BBMetalColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
     public static let white = BBMetalColor(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     public static let red = BBMetalColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)

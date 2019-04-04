@@ -55,6 +55,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let colorInversion = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .colorInversion), animated: true) }
         }
+        let monochrome = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .monochrome), animated: true) }
+        }
         let luminance = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .luminance), animated: true) }
         }
@@ -71,6 +74,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Highlight shadow tint", highlightShadowTint),
                 ("Lookup", lookup),
                 ("Color inversion", colorInversion),
+                ("Monochrome", monochrome),
                 ("Luminance", luminance)]
         
         let tableView = UITableView(frame: view.bounds)
@@ -114,5 +118,6 @@ enum FilterType {
     case highlightShadowTint
     case lookup
     case colorInversion
+    case monochrome
     case luminance
 }
