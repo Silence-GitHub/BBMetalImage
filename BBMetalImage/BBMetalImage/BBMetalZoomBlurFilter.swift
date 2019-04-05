@@ -8,8 +8,11 @@
 
 import UIKit
 
+/// Applies a zoom blur to an image
 public class BBMetalZoomBlurFilter: BBMetalBaseFilter {
+    /// A multiplier for the blur size, ranging from 0.0 on up, with a default of 0.0
     public var blurSize: Float
+    /// The normalized center of the blur. (0.5, 0.5) by default
     public var blurCenter: BBMetalPosition
     
     public init(blurSize: Float = 0, blurCenter: BBMetalPosition = .center) {

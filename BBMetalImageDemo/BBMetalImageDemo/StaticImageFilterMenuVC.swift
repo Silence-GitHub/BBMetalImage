@@ -82,6 +82,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let zoomBlur = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .zoomBlur), animated: true) }
         }
+        let motionBlur = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .motionBlur), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -103,7 +106,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Chroma key", chromaKey),
                 ("Sharpen", sharpen),
                 ("Gaussian blur", gaussianBlur),
-                ("Zoom blur", zoomBlur)]
+                ("Zoom blur", zoomBlur),
+                ("Motion blur", motionBlur)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -155,4 +159,5 @@ enum FilterType {
     case sharpen
     case gaussianBlur
     case zoomBlur
+    case motionBlur
 }
