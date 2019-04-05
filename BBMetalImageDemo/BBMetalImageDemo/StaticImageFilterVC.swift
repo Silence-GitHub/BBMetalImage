@@ -87,6 +87,11 @@ class StaticImageFilterVC: UIViewController {
         case .gaussianBlur: return image.bb_gaussianBlurFiltered(withSigma: 3)
         case .zoomBlur: return image.bb_zoomBlurFiltered(withBlurSize: 3, blurCenter: BBMetalPosition(x: 0.35, y: 0.55))
         case .motionBlur: return image.bb_motionBlurFiltered(withBlurSize: 5, blurAngle: 30)
+        case .normalBlend: return image.bb_normalBlendFiltered(withImage: topBlendImage)
         }
+    }
+    
+    private var topBlendImage: UIImage {
+        return UIImage(named: "multicolour_flowers.jpg")!.bb_rgbaFiltered(alpha: 0.1)!
     }
 }

@@ -108,11 +108,15 @@ public extension UIImage {
         return filtered(with: BBMetalMotionBlurFilter(blurSize: blurSize, blurAngle: blurAngle))
     }
     
-    private func filtered(with filter: BBMetalBaseFilter) -> UIImage? {
-        let source = BBMetalStaticImageSource(image: self)
+    public func bb_normalBlendFiltered(withImage image: UIImage) -> UIImage? {
+        return filtered(with: BBMetalNormalBlendFilter(), image: image)
+    }
+    
+    private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
-        source.add(consumer: filter)
-        source.transmitTexture()
+        let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
+        for source in sources { source.add(consumer: filter) }
+        for source in sources { source.transmitTexture() }
         return filter.outputTexture?.bb_image
     }
 }
