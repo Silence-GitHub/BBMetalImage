@@ -96,23 +96,27 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
     public func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource) {
         // Check whether all input textures are ready
         var foundSource = false
+        var empty = false
         for i in 0..<sources.count {
             if sources[i].source === source {
                 sources[i].texture = texture
                 foundSource = true
             } else if sources[i].texture == nil {
                 if foundSource { return }
+                empty = true
             }
         }
+        if !foundSource || empty { return }
         
         // Check whether output texture has the same size as input texture
+        let firstTexture = sources.first!.texture!
         if outputTexture == nil ||
-            outputTexture!.width != texture.width ||
-            outputTexture!.height != texture.height {
+            outputTexture!.width != firstTexture.width ||
+            outputTexture!.height != firstTexture.height {
             let descriptor = MTLTextureDescriptor()
             descriptor.pixelFormat = .rgba8Unorm
-            descriptor.width = texture.width
-            descriptor.height = texture.height
+            descriptor.width = firstTexture.width
+            descriptor.height = firstTexture.height
             descriptor.usage = [.shaderRead, .shaderWrite]
             if let output = BBMetalDevice.sharedDevice.makeTexture(descriptor: descriptor) {
                 outputTexture = output
@@ -123,8 +127,8 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         
         // Update thread group count if needed
         if threadgroupCount == nil {
-            threadgroupCount = MTLSize(width: (texture.width + threadgroupSize.width - 1) / threadgroupSize.width,
-                                       height: (texture.height + threadgroupSize.height - 1) / threadgroupSize.height,
+            threadgroupCount = MTLSize(width: (firstTexture.width + threadgroupSize.width - 1) / threadgroupSize.width,
+                                       height: (firstTexture.height + threadgroupSize.height - 1) / threadgroupSize.height,
                                        depth: 1)
         }
         
@@ -132,7 +136,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
         
         if useMPSKernel {
-            encodeMPSKernel(into: commandBuffer, inputTexture: texture)
+            encodeMPSKernel(into: commandBuffer, inputTexture: firstTexture)
         } else {
             guard let encoder = commandBuffer.makeComputeCommandEncoder() else { return }
             
