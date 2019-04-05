@@ -8,8 +8,11 @@
 
 import UIKit
 
+/// Selectively replaces a color in the first image with the second image
 public class BBMetalChromaKeyBlendFilter: BBMetalBaseFilter {
+    /// How close a color match needs to exist to the target color to be replaced (default of 0.4)
     public var thresholdSensitivity: Float
+    /// How smoothly to blend for the color match (default of 0.1)
     public var smoothing: Float
     public var colorToReplace: BBMetalColor
     

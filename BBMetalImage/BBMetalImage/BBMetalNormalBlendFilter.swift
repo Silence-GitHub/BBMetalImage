@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// Applies a normal blend of two images
 public class BBMetalNormalBlendFilter: BBMetalBaseFilter {
     public init() {
         super.init(kernelFunctionName: "normalBlendKernel")
