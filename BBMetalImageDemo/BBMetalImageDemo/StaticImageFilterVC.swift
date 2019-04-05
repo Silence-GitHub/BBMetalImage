@@ -83,6 +83,7 @@ class StaticImageFilterVC: UIViewController {
         case .luminance: return image.bb_luminanceFiltered()
         case .luminanceThreshold: return image.bb_luminanceThresholdFiltered(withThreshold: 0.6)
         case .chromaKey: return image.bb_chromaKeyFiltered(withThresholdSensitivity: 0.4, smoothing: 0.1, colorToReplace: .green)
+        case .sharpen: return image.bb_sharpenFiltered(withSharpeness: 0.5)
         }
     }
 }

@@ -92,6 +92,10 @@ public extension UIImage {
         return filtered(with: BBMetalChromaKeyFilter(thresholdSensitivity: thresholdSensitivity, smoothing: smoothing, colorToReplace: colorToReplace))
     }
     
+    public func bb_sharpenFiltered(withSharpeness sharpeness: Float = 0) -> UIImage? {
+        return filtered(with: BBMetalSharpenFilter(sharpeness: sharpeness))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter) -> UIImage? {
         let source = BBMetalStaticImageSource(image: self)
         filter.runSynchronously = true
