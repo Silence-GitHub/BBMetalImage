@@ -88,6 +88,10 @@ public extension UIImage {
         return filtered(with: BBMetalLuminanceThresholdFilter(threshold: threshold))
     }
     
+    public func bb_chromaKeyFiltered(withThresholdSensitivity thresholdSensitivity: Float = 0.4, smoothing: Float = 0.1, colorToReplace: BBMetalColor = .green) -> UIImage? {
+        return filtered(with: BBMetalChromaKeyFilter(thresholdSensitivity: thresholdSensitivity, smoothing: smoothing, colorToReplace: colorToReplace))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter) -> UIImage? {
         let source = BBMetalStaticImageSource(image: self)
         filter.runSynchronously = true

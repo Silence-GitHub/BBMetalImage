@@ -70,6 +70,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let luminanceThreshold = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .luminanceThreshold), animated: true) }
         }
+        let chromaKey = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .chromaKey), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -87,7 +90,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("False color", falseColor),
                 ("Haze", haze),
                 ("Luminance", luminance),
-                ("Luminance threshold", luminanceThreshold)]
+                ("Luminance threshold", luminanceThreshold),
+                ("Chroma key", chromaKey)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -135,4 +139,5 @@ enum FilterType {
     case haze
     case luminance
     case luminanceThreshold
+    case chromaKey
 }
