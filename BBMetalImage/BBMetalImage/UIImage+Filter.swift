@@ -100,6 +100,10 @@ public extension UIImage {
         return filtered(with: BBMetalGaussianBlurFilter(sigma: sigma))
     }
     
+    public func bb_zoomBlurFiltered(withBlurSize blurSize: Float = 0, blurCenter: BBMetalPosition = .center) -> UIImage? {
+        return filtered(with: BBMetalZoomBlurFilter(blurSize: blurSize, blurCenter: blurCenter))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter) -> UIImage? {
         let source = BBMetalStaticImageSource(image: self)
         filter.runSynchronously = true

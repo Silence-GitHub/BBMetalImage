@@ -85,6 +85,7 @@ class StaticImageFilterVC: UIViewController {
         case .chromaKey: return image.bb_chromaKeyFiltered(withThresholdSensitivity: 0.4, smoothing: 0.1, colorToReplace: .green)
         case .sharpen: return image.bb_sharpenFiltered(withSharpeness: 0.5)
         case .gaussianBlur: return image.bb_gaussianBlurFiltered(withSigma: 3)
+        case .zoomBlur: return image.bb_zoomBlurFiltered(withBlurSize: 3, blurCenter: BBMetalPosition(x: 0.35, y: 0.55))
         }
     }
 }
