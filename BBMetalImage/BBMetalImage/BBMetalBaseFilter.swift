@@ -35,18 +35,22 @@ public class BBMetalBaseFilter {
     public var threadgroupSize: MTLSize { didSet { threadgroupCount = nil } }
     public var threadgroupCount: MTLSize?
     public var runSynchronously: Bool
+    public let useMPSKernel: Bool
     
-    private let computePipeline: MTLComputePipelineState
+    private var computePipeline: MTLComputePipelineState!
     private var completions: [(MTLCommandBuffer) -> Void]
     
-    public init(kernelFunctionName: String) {
+    public init(kernelFunctionName: String, useMPSKernel: Bool = false) {
         consumers = []
         sources = []
         name = kernelFunctionName
+        self.useMPSKernel = useMPSKernel
         
-        let library = try! BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: Bundle(for: BBMetalBaseFilter.self))
-        let kernelFunction = library.makeFunction(name: kernelFunctionName)!
-        computePipeline = try! BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
+        if !useMPSKernel {
+            let library = try! BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: Bundle(for: BBMetalBaseFilter.self))
+            let kernelFunction = library.makeFunction(name: kernelFunctionName)!
+            computePipeline = try! BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
+        }
         threadgroupSize = MTLSize(width: 16, height: 16, depth: 1)
         runSynchronously = false
         completions = []
@@ -125,18 +129,23 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         }
         
         // Render image to output texture
-        guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer(),
-            let encoder = commandBuffer.makeComputeCommandEncoder() else { return }
+        guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
         
-        for completion in completions { commandBuffer.addCompletedHandler(completion) }
-        
-        encoder.label = name
-        encoder.setComputePipelineState(computePipeline)
-        encoder.setTexture(outputTexture, index: 0)
-        for i in 0..<sources.count { encoder.setTexture(sources[i].texture, index: i + 1) }
-        updateParameters(forComputeCommandEncoder: encoder)
-        encoder.dispatchThreadgroups(threadgroupCount!, threadsPerThreadgroup: threadgroupSize)
-        encoder.endEncoding()
+        if useMPSKernel {
+            encodeMPSKernel(into: commandBuffer, inputTexture: texture)
+        } else {
+            guard let encoder = commandBuffer.makeComputeCommandEncoder() else { return }
+            
+            for completion in completions { commandBuffer.addCompletedHandler(completion) }
+            
+            encoder.label = name
+            encoder.setComputePipelineState(computePipeline)
+            encoder.setTexture(outputTexture, index: 0)
+            for i in 0..<sources.count { encoder.setTexture(sources[i].texture, index: i + 1) }
+            updateParameters(forComputeCommandEncoder: encoder)
+            encoder.dispatchThreadgroups(threadgroupCount!, threadsPerThreadgroup: threadgroupSize)
+            encoder.endEncoding()
+        }
         
         commandBuffer.commit()
         if runSynchronously { commandBuffer.waitUntilCompleted() }
@@ -146,6 +155,10 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         
         // Transmit output texture to image consumers
         for consumer in consumers { consumer.newTextureAvailable(outputTexture!, from: self) }
+    }
+    
+    @objc func encodeMPSKernel(into commandBuffer: MTLCommandBuffer, inputTexture: MTLTexture) {
+        fatalError("\(#function) must be overridden by subclass")
     }
     
     @objc func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {

@@ -96,6 +96,10 @@ public extension UIImage {
         return filtered(with: BBMetalSharpenFilter(sharpeness: sharpeness))
     }
     
+    public func bb_gaussianBlurFiltered(withSigma sigma: Float) -> UIImage? {
+        return filtered(with: BBMetalGaussianBlurFilter(sigma: sigma))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter) -> UIImage? {
         let source = BBMetalStaticImageSource(image: self)
         filter.runSynchronously = true
