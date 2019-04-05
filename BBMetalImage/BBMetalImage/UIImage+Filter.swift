@@ -112,6 +112,17 @@ public extension UIImage {
         return filtered(with: BBMetalNormalBlendFilter(), image: image)
     }
     
+    public func bb_chromaKeyBlendFiltered(withThresholdSensitivity thresholdSensitivity: Float = 0.4,
+                                          smoothing: Float = 0.1,
+                                          colorToReplace: BBMetalColor = .green,
+                                          image: UIImage) -> UIImage? {
+        
+        return filtered(with: BBMetalChromaKeyBlendFilter(thresholdSensitivity: thresholdSensitivity,
+                                                          smoothing: smoothing,
+                                                          colorToReplace: colorToReplace),
+                        image: image)
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
