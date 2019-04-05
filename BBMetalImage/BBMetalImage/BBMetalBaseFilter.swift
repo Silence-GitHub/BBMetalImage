@@ -136,7 +136,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
         
         if useMPSKernel {
-            encodeMPSKernel(into: commandBuffer, inputTexture: firstTexture)
+            encodeMPSKernel(into: commandBuffer)
         } else {
             guard let encoder = commandBuffer.makeComputeCommandEncoder() else { return }
             
@@ -161,7 +161,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         for consumer in consumers { consumer.newTextureAvailable(outputTexture!, from: self) }
     }
     
-    @objc func encodeMPSKernel(into commandBuffer: MTLCommandBuffer, inputTexture: MTLTexture) {
+    @objc func encodeMPSKernel(into commandBuffer: MTLCommandBuffer) {
         fatalError("\(#function) must be overridden by subclass")
     }
     

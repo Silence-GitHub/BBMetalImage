@@ -20,7 +20,7 @@ public class BBMetalGaussianBlurFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "", useMPSKernel: true)
     }
     
-    override func encodeMPSKernel(into commandBuffer: MTLCommandBuffer, inputTexture: MTLTexture) {
-        kernel.encode(commandBuffer: commandBuffer, sourceTexture: inputTexture, destinationTexture: outputTexture!)
+    override func encodeMPSKernel(into commandBuffer: MTLCommandBuffer) {
+        kernel.encode(commandBuffer: commandBuffer, sourceTexture: sources.first!.texture!, destinationTexture: outputTexture!)
     }
 }
