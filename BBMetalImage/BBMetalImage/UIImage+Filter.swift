@@ -84,6 +84,10 @@ public extension UIImage {
         return filtered(with: BBMetalLuminanceFilter())
     }
     
+    public func bb_luminanceThresholdFiltered(withThreshold threshold: Float = 0.5) -> UIImage? {
+        return filtered(with: BBMetalLuminanceThresholdFilter(threshold: threshold))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter) -> UIImage? {
         let source = BBMetalStaticImageSource(image: self)
         filter.runSynchronously = true

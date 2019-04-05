@@ -81,6 +81,7 @@ class StaticImageFilterVC: UIViewController {
         case .falseColor: return image.bb_falseColorFiltered(withFirstColor: .red, secondColor: .blue)
         case .haze: return image.bb_haseFiltered(withDistance: 0.2, slope: 0)
         case .luminance: return image.bb_luminanceFiltered()
+        case .luminanceThreshold: return image.bb_luminanceThresholdFiltered(withThreshold: 0.6)
         }
     }
 }
