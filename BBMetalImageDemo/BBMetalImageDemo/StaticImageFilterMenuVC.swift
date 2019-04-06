@@ -115,6 +115,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let lightenBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .lightenBlend), animated: true) }
         }
+        let colorBlend = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .colorBlend), animated: true) }
+        }
         let colorBurnBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .colorBurnBlend), animated: true) }
         }
@@ -175,6 +178,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Overlay blend", overlayBlend),
                 ("Darken blend", darkenBlend),
                 ("Lighten blend", lightenBlend),
+                ("Color blend", colorBlend),
                 ("Color burn blend", colorBurnBlend),
                 ("Color dodge blend", colorDodgeBlend),
                 ("Screen blend", screenBlend),
@@ -246,6 +250,7 @@ enum FilterType {
     case overlayBlend
     case darkenBlend
     case lightenBlend
+    case colorBlend
     case colorBurnBlend
     case colorDodgeBlend
     case screenBlend

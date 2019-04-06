@@ -155,6 +155,10 @@ public extension UIImage {
         return filtered(with: BBMetalLightenBlendFilter(), image: image)
     }
     
+    public func bb_colorBlendFiltered(withImage image: UIImage) -> UIImage? {
+        return filtered(with: BBMetalColorBlendFilter(), image: image)
+    }
+    
     public func bb_colorBurnBlendFiltered(withImage image: UIImage) -> UIImage? {
         return filtered(with: BBMetalColorBurnBlendFilter(), image: image)
     }

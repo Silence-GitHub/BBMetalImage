@@ -14,9 +14,9 @@ kernel void sourceOverBlendKernel(texture2d<half, access::write> outputTexture [
                                   texture2d<half, access::sample> inputTexture2 [[texture(2)]],
                                   uint2 gid [[thread_position_in_grid]]) {
     
-    half4 textureColor = inputTexture.read(gid);
+    const half4 textureColor = inputTexture.read(gid);
     constexpr sampler quadSampler;
-    half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
+    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
     
     const half4 outColor = mix(textureColor, textureColor2, textureColor2.a);
     outputTexture.write(outColor, gid);
