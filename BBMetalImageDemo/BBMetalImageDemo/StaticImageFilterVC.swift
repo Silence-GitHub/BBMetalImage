@@ -103,6 +103,7 @@ class StaticImageFilterVC: UIViewController {
         case .colorBurnBlend: return image.bb_colorBurnBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
         case .colorDodgeBlend: return image.bb_colorDodgeBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
         case .screenBlend: return image.bb_screenBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
+        case .exclusionBlend: return image.bb_exclusionBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
         }
     }
     

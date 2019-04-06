@@ -124,6 +124,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let screenBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .screenBlend), animated: true) }
         }
+        let exclusionBlend = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .exclusionBlend), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -159,7 +162,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Lighten blend", lightenBlend),
                 ("Color burn blend", colorBurnBlend),
                 ("Color dodge blend", colorDodgeBlend),
-                ("Screen blend", screenBlend)]
+                ("Screen blend", screenBlend),
+                ("Exclusion blend", exclusionBlend)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -225,4 +229,5 @@ enum FilterType {
     case colorBurnBlend
     case colorDodgeBlend
     case screenBlend
+    case exclusionBlend
 }
