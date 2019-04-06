@@ -154,6 +154,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let luminosityBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .luminosityBlend), animated: true) }
         }
+        let linearBurnBlend = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .linearBurnBlend), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -199,7 +202,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Source over blend", sourceOverBlend),
                 ("Hue blend", hueBlend),
                 ("Saturation blend", saturationBlend),
-                ("Luminosity blend", luminosityBlend)]
+                ("Luminosity blend", luminosityBlend),
+                ("Linear burn blend", linearBurnBlend)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -275,4 +279,5 @@ enum FilterType {
     case hueBlend
     case saturationBlend
     case luminosityBlend
+    case linearBurnBlend
 }
