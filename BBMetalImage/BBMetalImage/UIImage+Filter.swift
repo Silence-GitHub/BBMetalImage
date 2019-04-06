@@ -127,6 +127,10 @@ public extension UIImage {
         return filtered(with: BBMetalDissolveBlendFilter(mixturePercent: mixturePercent), image: image)
     }
     
+    public func bb_multiplyBlendFiltered(withImage image: UIImage) -> UIImage? {
+        return filtered(with: BBMetalMultiplyBlendFilter(), image: image)
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
