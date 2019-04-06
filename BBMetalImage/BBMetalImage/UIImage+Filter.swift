@@ -199,6 +199,10 @@ public extension UIImage {
         return filtered(with: BBMetalHueBlendFilter(), image: image)
     }
     
+    public func bb_saturationBlendFiltered(withImage image: UIImage) -> UIImage? {
+        return filtered(with: BBMetalSaturationBlendFilter(), image: image)
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
