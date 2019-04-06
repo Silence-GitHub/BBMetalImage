@@ -147,6 +147,10 @@ public extension UIImage {
         return filtered(with: BBMetalOverlayBlendFilter(), image: image)
     }
     
+    public func bb_darkenBlendFiltered(withImage image: UIImage) -> UIImage? {
+        return filtered(with: BBMetalDarkenBlendFilter(), image: image)
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
