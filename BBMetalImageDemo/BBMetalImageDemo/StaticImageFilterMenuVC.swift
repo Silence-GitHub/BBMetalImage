@@ -145,6 +145,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let sourceOverBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .sourceOverBlend), animated: true) }
         }
+        let hueBlend = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .hueBlend), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -187,7 +190,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Hard light blend", hardLightBlend),
                 ("Soft light blend", softLightBlend),
                 ("Alpha blend", alphaBlend),
-                ("Source over blend", sourceOverBlend)]
+                ("Source over blend", sourceOverBlend),
+                ("Hue blend", hueBlend)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -260,4 +264,5 @@ enum FilterType {
     case softLightBlend
     case alphaBlend
     case sourceOverBlend
+    case hueBlend
 }

@@ -110,6 +110,7 @@ class StaticImageFilterVC: UIViewController {
         case .softLightBlend: return image.bb_softLightBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
         case .alphaBlend: return image.bb_alphaBlendFiltered(withMixturePercent: 0.5, image: topBlendImage(withAlpha: 0.5))
         case .sourceOverBlend: return image.bb_sourceOverBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
+        case .hueBlend: return image.bb_hueBlendFiltered(withImage: topBlendImage(withAlpha: 1))
         }
     }
     
