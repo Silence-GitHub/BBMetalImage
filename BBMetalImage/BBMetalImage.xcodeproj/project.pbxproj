@@ -81,6 +81,10 @@
 		4A2730D9225856C9002F90F4 /* BBMetalLightenBlendFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2730D7225856C9002F90F4 /* BBMetalLightenBlendFilter.swift */; };
 		4A2730DB225856D8002F90F4 /* BBMetalLightenBlendFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A2730DA225856D8002F90F4 /* BBMetalLightenBlendFilter.metal */; };
 		4A2730DC225856D8002F90F4 /* BBMetalLightenBlendFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A2730DA225856D8002F90F4 /* BBMetalLightenBlendFilter.metal */; };
+		4A2730DE2258592D002F90F4 /* BBMetalColorBurnBlendFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A2730DD2258592D002F90F4 /* BBMetalColorBurnBlendFilter.metal */; };
+		4A2730DF2258592D002F90F4 /* BBMetalColorBurnBlendFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A2730DD2258592D002F90F4 /* BBMetalColorBurnBlendFilter.metal */; };
+		4A2730E122585943002F90F4 /* BBMetalColorBurnBlendFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2730E022585943002F90F4 /* BBMetalColorBurnBlendFilter.swift */; };
+		4A2730E222585943002F90F4 /* BBMetalColorBurnBlendFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A2730E022585943002F90F4 /* BBMetalColorBurnBlendFilter.swift */; };
 		4A4CAD92225285E60058BEB6 /* BBMetalImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4CAD88225285E60058BEB6 /* BBMetalImage.framework */; };
 		4A4CAD97225285E60058BEB6 /* BBMetalImageTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CAD96225285E60058BEB6 /* BBMetalImageTests.swift */; };
 		4A4CAD99225285E60058BEB6 /* BBMetalImage.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A4CAD8B225285E60058BEB6 /* BBMetalImage.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -203,6 +207,8 @@
 		4A2730D4225854EC002F90F4 /* BBMetalDarkenBlendFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalDarkenBlendFilter.swift; sourceTree = "<group>"; };
 		4A2730D7225856C9002F90F4 /* BBMetalLightenBlendFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalLightenBlendFilter.swift; sourceTree = "<group>"; };
 		4A2730DA225856D8002F90F4 /* BBMetalLightenBlendFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BBMetalLightenBlendFilter.metal; sourceTree = "<group>"; };
+		4A2730DD2258592D002F90F4 /* BBMetalColorBurnBlendFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BBMetalColorBurnBlendFilter.metal; sourceTree = "<group>"; };
+		4A2730E022585943002F90F4 /* BBMetalColorBurnBlendFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalColorBurnBlendFilter.swift; sourceTree = "<group>"; };
 		4A4CAD88225285E60058BEB6 /* BBMetalImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = BBMetalImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A4CAD8B225285E60058BEB6 /* BBMetalImage.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = BBMetalImage.h; sourceTree = "<group>"; };
 		4A4CAD8C225285E60058BEB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -356,6 +362,8 @@
 				4A2730D1225854D8002F90F4 /* BBMetalDarkenBlendFilter.metal */,
 				4A2730D7225856C9002F90F4 /* BBMetalLightenBlendFilter.swift */,
 				4A2730DA225856D8002F90F4 /* BBMetalLightenBlendFilter.metal */,
+				4A2730E022585943002F90F4 /* BBMetalColorBurnBlendFilter.swift */,
+				4A2730DD2258592D002F90F4 /* BBMetalColorBurnBlendFilter.metal */,
 				4AFC4670225428D6009D37A1 /* UIImage+Filter.swift */,
 				4A4CADB1225310CB0058BEB6 /* BBMetalShaderTypes.h */,
 				4A4CAD8B225285E60058BEB6 /* BBMetalImage.h */,
@@ -497,6 +505,7 @@
 				4A4CADA3225288E60058BEB6 /* BBMetalBaseFilter.swift in Sources */,
 				4A2730A52257DBBC002F90F4 /* BBMetalNormalBlendFilter.swift in Sources */,
 				4AFC467A225434F5009D37A1 /* BBMetalExposureFilter.swift in Sources */,
+				4A2730DE2258592D002F90F4 /* BBMetalColorBurnBlendFilter.metal in Sources */,
 				4A6835442256FABE0089872B /* BBMetalLuminanceThresholdFilter.metal in Sources */,
 				4AC5795F2255386D00F7BCAC /* BBMetalGammaFilter.swift in Sources */,
 				4A2730D8225856C9002F90F4 /* BBMetalLightenBlendFilter.swift in Sources */,
@@ -513,6 +522,7 @@
 				4AFD06F522566876006763C9 /* BBMetalHazeFilter.metal in Sources */,
 				4A2730C022582AFF002F90F4 /* BBMetalSubtractBlendFilter.swift in Sources */,
 				4A2730C92258503A002F90F4 /* BBMetalDivideBlendFilter.swift in Sources */,
+				4A2730E122585943002F90F4 /* BBMetalColorBurnBlendFilter.swift in Sources */,
 				4A2730932257B934002F90F4 /* BBMetalZoomFilter.metal in Sources */,
 				4A2730BD22582853002F90F4 /* BBMetalAddBlendFilter.swift in Sources */,
 				4AC5796B22556FD100F7BCAC /* BBMetalHueFilter.swift in Sources */,
@@ -567,6 +577,7 @@
 				4A2730A922581909002F90F4 /* BBMetalChromaKeyBlendFilter.swift in Sources */,
 				4A2730D9225856C9002F90F4 /* BBMetalLightenBlendFilter.swift in Sources */,
 				4AC5796322556B8800F7BCAC /* BBMetalRGBAFilter.swift in Sources */,
+				4A2730E222585943002F90F4 /* BBMetalColorBurnBlendFilter.swift in Sources */,
 				4A2730AC22581916002F90F4 /* BBMetalChromaKeyBlendFilter.metal in Sources */,
 				4AC579602255386D00F7BCAC /* BBMetalGammaFilter.swift in Sources */,
 				4AFC467E2254358E009D37A1 /* BBMetalExposureFilter.metal in Sources */,
@@ -611,6 +622,7 @@
 				4A4CAD97225285E60058BEB6 /* BBMetalImageTests.swift in Sources */,
 				4AFC46812254637F009D37A1 /* BBMetalLookupFilter.swift in Sources */,
 				4A1B94A82255815B0068675A /* BBMetalWhiteBalanceFilter.metal in Sources */,
+				4A2730DF2258592D002F90F4 /* BBMetalColorBurnBlendFilter.metal in Sources */,
 				4A1B94AE2255ADBC0068675A /* BBMetalHighlightShadowFilter.metal in Sources */,
 				4AC5795122552E6000F7BCAC /* BBMetalContrastFilter.metal in Sources */,
 				4AC579572255341800F7BCAC /* BBMetalSaturationFilter.swift in Sources */,

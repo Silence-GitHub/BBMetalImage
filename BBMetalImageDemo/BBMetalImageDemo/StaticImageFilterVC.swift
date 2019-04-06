@@ -100,6 +100,7 @@ class StaticImageFilterVC: UIViewController {
         case .overlayBlend: return image.bb_overlayBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
         case .darkenBlend: return image.bb_darkenBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
         case .lightenBlend: return image.bb_lightenBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
+        case .colorBurnBlend: return image.bb_colorBurnBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
         }
     }
     
