@@ -79,6 +79,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let gaussianBlur = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .gaussianBlur), animated: true) }
         }
+        let boxBlur = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .boxBlur), animated: true) }
+        }
         let zoomBlur = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .zoomBlur), animated: true) }
         }
@@ -181,6 +184,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Chroma key", chromaKey),
                 ("Sharpen", sharpen),
                 ("Gaussian blur", gaussianBlur),
+                ("Box blur", boxBlur),
                 ("Zoom blur", zoomBlur),
                 ("Motion blur", motionBlur),
                 ("Normal blend", normalBlend),
@@ -258,6 +262,7 @@ enum FilterType {
     case chromaKey
     case sharpen
     case gaussianBlur
+    case boxBlur
     case zoomBlur
     case motionBlur
     case normalBlend

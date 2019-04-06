@@ -100,6 +100,10 @@ public extension UIImage {
         return filtered(with: BBMetalGaussianBlurFilter(sigma: sigma))
     }
     
+    public func bb_boxBlurFiltered(withKernelWidth kernelWidth: Int = 1, kernelHeight: Int = 1) -> UIImage? {
+        return filtered(with: BBMetalBoxBlurFilter(kernelWidth: kernelWidth, kernelHeight: kernelHeight))
+    }
+    
     public func bb_zoomBlurFiltered(withBlurSize blurSize: Float = 0, blurCenter: BBMetalPosition = .center) -> UIImage? {
         return filtered(with: BBMetalZoomBlurFilter(blurSize: blurSize, blurCenter: blurCenter))
     }
