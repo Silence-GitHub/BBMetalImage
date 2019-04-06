@@ -183,6 +183,10 @@ public extension UIImage {
         return filtered(with: BBMetalSoftLightBlendFilter(), image: image)
     }
     
+    public func bb_alphaBlendFiltered(withMixturePercent mixturePercent: Float = 0, image: UIImage) -> UIImage? {
+        return filtered(with: BBMetalAlphaBlendFilter(mixturePercent: mixturePercent), image: image)
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
