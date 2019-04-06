@@ -89,6 +89,7 @@ class StaticImageFilterVC: UIViewController {
         case .motionBlur: return image.bb_motionBlurFiltered(withBlurSize: 5, blurAngle: 30)
         case .normalBlend: return image.bb_normalBlendFiltered(withImage: topBlendImage)
         case .chromaKeyBlend: return image.bb_chromaKeyBlendFiltered(withThresholdSensitivity: 0.4, smoothing: 0.1, colorToReplace: .blue, image: topBlendImage)
+        case .dissolveBlend: return image.bb_dissolveBlendFiltered(withMixturePercent: 0.3, image: topBlendImage)
         }
     }
     

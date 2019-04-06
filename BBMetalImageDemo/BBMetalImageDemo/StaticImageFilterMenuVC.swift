@@ -91,6 +91,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let chromaKeyBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .chromaKeyBlend), animated: true) }
         }
+        let dissolveBlend = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .dissolveBlend), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -115,7 +118,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Zoom blur", zoomBlur),
                 ("Motion blur", motionBlur),
                 ("Normal blend", normalBlend),
-                ("Chroma key blend", chromaKeyBlend)]
+                ("Chroma key blend", chromaKeyBlend),
+                ("Dissolve blend", dissolveBlend)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -170,4 +174,5 @@ enum FilterType {
     case motionBlur
     case normalBlend
     case chromaKeyBlend
+    case dissolveBlend
 }
