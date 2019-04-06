@@ -114,6 +114,7 @@ class StaticImageFilterVC: UIViewController {
         case .saturationBlend: return image.bb_saturationBlendFiltered(withImage: topBlendImage(withAlpha: 1))
         case .luminosityBlend: return image.bb_luminosityBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
         case .linearBurnBlend: return image.bb_linearBurnBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
+        case .maskBlend: return image.bb_maskBlendFiltered(withImage: topBlendImage(withAlpha: 1))
         }
     }
     

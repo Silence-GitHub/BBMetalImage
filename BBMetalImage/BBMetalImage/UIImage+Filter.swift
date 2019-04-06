@@ -211,6 +211,10 @@ public extension UIImage {
         return filtered(with: BBMetalLinearBurnBlendFilter(), image: image)
     }
     
+    public func bb_maskBlendFiltered(withImage image: UIImage) -> UIImage? {
+        return filtered(with: BBMetalMaskBlendFilter(), image: image)
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
