@@ -8,7 +8,9 @@
 
 import UIKit
 
+/// Applies a dissolve blend of two images
 public class BBMetalDissolveBlendFilter: BBMetalBaseFilter {
+    /// The degree with which the second image overrides the first (0.0 ~ 1.0, with 0.0 as the default)
     public var mixturePercent: Float
     
     public init(mixturePercent: Float = 0) {
