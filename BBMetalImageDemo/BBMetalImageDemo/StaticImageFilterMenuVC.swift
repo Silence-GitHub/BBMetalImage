@@ -112,6 +112,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let darkenBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .darkenBlend), animated: true) }
         }
+        let lightenBlend = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .lightenBlend), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -143,7 +146,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Multiply blend", multiplyBlend),
                 ("Divide blend", divideBlend),
                 ("Overlay blend", overlayBlend),
-                ("Darken blend", darkenBlend)]
+                ("Darken blend", darkenBlend),
+                ("Lighten blend", lightenBlend)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -205,4 +209,5 @@ enum FilterType {
     case divideBlend
     case overlayBlend
     case darkenBlend
+    case lightenBlend
 }
