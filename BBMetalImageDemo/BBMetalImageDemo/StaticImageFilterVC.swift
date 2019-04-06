@@ -95,6 +95,7 @@ class StaticImageFilterVC: UIViewController {
         case .dissolveBlend: return image.bb_dissolveBlendFiltered(withMixturePercent: 0.3, image: topBlendImage(withAlpha: 0.1))
         case .multiplyBlend: return image.bb_multiplyBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
         case .addBlend: return image.bb_addBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
+        case .subtractBlend: return image.bb_subtractBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
         }
     }
     
