@@ -87,14 +87,18 @@ class StaticImageFilterVC: UIViewController {
         case .gaussianBlur: return image.bb_gaussianBlurFiltered(withSigma: 3)
         case .zoomBlur: return image.bb_zoomBlurFiltered(withBlurSize: 3, blurCenter: BBMetalPosition(x: 0.35, y: 0.55))
         case .motionBlur: return image.bb_motionBlurFiltered(withBlurSize: 5, blurAngle: 30)
-        case .normalBlend: return image.bb_normalBlendFiltered(withImage: topBlendImage)
-        case .chromaKeyBlend: return image.bb_chromaKeyBlendFiltered(withThresholdSensitivity: 0.4, smoothing: 0.1, colorToReplace: .blue, image: topBlendImage)
-        case .dissolveBlend: return image.bb_dissolveBlendFiltered(withMixturePercent: 0.3, image: topBlendImage)
-        case .multiplyBlend: return image.bb_multiplyBlendFiltered(withImage: topBlendImage)
+        case .normalBlend: return image.bb_normalBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
+        case .chromaKeyBlend: return image.bb_chromaKeyBlendFiltered(withThresholdSensitivity: 0.4,
+                                                                     smoothing: 0.1,
+                                                                     colorToReplace: .blue,
+                                                                     image: topBlendImage(withAlpha: 0.1))
+        case .dissolveBlend: return image.bb_dissolveBlendFiltered(withMixturePercent: 0.3, image: topBlendImage(withAlpha: 0.1))
+        case .multiplyBlend: return image.bb_multiplyBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
+        case .addBlend: return image.bb_addBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
         }
     }
     
-    private var topBlendImage: UIImage {
-        return UIImage(named: "multicolour_flowers.jpg")!.bb_rgbaFiltered(alpha: 0.1)!
+    private func topBlendImage(withAlpha alpha: Float) -> UIImage {
+        return UIImage(named: "multicolour_flowers.jpg")!.bb_rgbaFiltered(alpha: alpha)!
     }
 }

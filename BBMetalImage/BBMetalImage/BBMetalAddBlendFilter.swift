@@ -1,5 +1,5 @@
 //
-//  BBMetalMultiplyBlendFilter.swift
+//  BBMetalAddBlendFilter.swift
 //  BBMetalImage
 //
 //  Created by Kaibo Lu on 4/5/19.
@@ -8,8 +8,8 @@
 
 import UIKit
 
-/// Applies a multiply blend of two images
-public class BBMetalMultiplyBlendFilter: BBMetalBaseFilter {
-    public init() { super.init(kernelFunctionName: "multiplyBlendKernel") }
+/// Applies an additive blend of two images
+public class BBMetalAddBlendFilter: BBMetalBaseFilter {
+    public init() { super.init(kernelFunctionName: "addBlendKernel") }
     override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

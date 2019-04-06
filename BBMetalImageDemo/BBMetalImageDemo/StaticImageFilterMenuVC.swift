@@ -97,6 +97,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let multiplyBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .multiplyBlend), animated: true) }
         }
+        let addBlend = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .addBlend), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -123,7 +126,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Normal blend", normalBlend),
                 ("Chroma key blend", chromaKeyBlend),
                 ("Dissolve blend", dissolveBlend),
-                ("Multiply blend", multiplyBlend)]
+                ("Multiply blend", multiplyBlend),
+                ("Add blend", addBlend)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -180,4 +184,5 @@ enum FilterType {
     case chromaKeyBlend
     case dissolveBlend
     case multiplyBlend
+    case addBlend
 }
