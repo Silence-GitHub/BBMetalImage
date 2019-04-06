@@ -94,14 +94,14 @@ class StaticImageFilterMenuVC: UIViewController {
         let dissolveBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .dissolveBlend), animated: true) }
         }
-        let multiplyBlend = { [weak self] in
-            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .multiplyBlend), animated: true) }
-        }
         let addBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .addBlend), animated: true) }
         }
         let subtractBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .subtractBlend), animated: true) }
+        }
+        let multiplyBlend = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .multiplyBlend), animated: true) }
         }
         let divideBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .divideBlend), animated: true) }
@@ -132,9 +132,9 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Normal blend", normalBlend),
                 ("Chroma key blend", chromaKeyBlend),
                 ("Dissolve blend", dissolveBlend),
-                ("Multiply blend", multiplyBlend),
                 ("Add blend", addBlend),
                 ("Subtract blend", subtractBlend),
+                ("Multiply blend", multiplyBlend),
                 ("Divide blend", divideBlend)]
         
         let tableView = UITableView(frame: view.bounds)
@@ -191,8 +191,8 @@ enum FilterType {
     case normalBlend
     case chromaKeyBlend
     case dissolveBlend
-    case multiplyBlend
     case addBlend
     case subtractBlend
+    case multiplyBlend
     case divideBlend
 }

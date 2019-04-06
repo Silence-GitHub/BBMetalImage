@@ -127,16 +127,16 @@ public extension UIImage {
         return filtered(with: BBMetalDissolveBlendFilter(mixturePercent: mixturePercent), image: image)
     }
     
-    public func bb_multiplyBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalMultiplyBlendFilter(), image: image)
-    }
-    
     public func bb_addBlendFiltered(withImage image: UIImage) -> UIImage? {
         return filtered(with: BBMetalAddBlendFilter(), image: image)
     }
     
     public func bb_subtractBlendFiltered(withImage image: UIImage) -> UIImage? {
         return filtered(with: BBMetalSubtractBlendFilter(), image: image)
+    }
+    
+    public func bb_multiplyBlendFiltered(withImage image: UIImage) -> UIImage? {
+        return filtered(with: BBMetalMultiplyBlendFilter(), image: image)
     }
     
     public func bb_divideBlendFiltered(withImage image: UIImage) -> UIImage? {
