@@ -1,5 +1,5 @@
 //
-//  BBMetalDifferenceBlendFilter.swift
+//  BBMetalHardLightBlendFilter.swift
 //  BBMetalImage
 //
 //  Created by Kaibo Lu on 4/5/19.
@@ -8,8 +8,8 @@
 
 import UIKit
 
-/// Applies a difference blend of two images
-public class BBMetalDifferenceBlendFilter: BBMetalBaseFilter {
-    public init() { super.init(kernelFunctionName: "differenceBlendKernel") }
+/// Applies a hard light blend of two images
+public class BBMetalHardLightBlendFilter: BBMetalBaseFilter {
+    public init() { super.init(kernelFunctionName: "hardLightBlendKernel") }
     override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

@@ -130,6 +130,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let differenceBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .differenceBlend), animated: true) }
         }
+        let hardLightBlend = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .hardLightBlend), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -167,7 +170,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Color dodge blend", colorDodgeBlend),
                 ("Screen blend", screenBlend),
                 ("Exclusion blend", exclusionBlend),
-                ("Difference blend", differenceBlend)]
+                ("Difference blend", differenceBlend),
+                ("Hard light blend", hardLightBlend)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
@@ -235,4 +239,5 @@ enum FilterType {
     case screenBlend
     case exclusionBlend
     case differenceBlend
+    case hardLightBlend
 }
