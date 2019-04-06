@@ -171,6 +171,10 @@ public extension UIImage {
         return filtered(with: BBMetalExclusionBlendFilter(), image: image)
     }
     
+    public func bb_differenceBlendFiltered(withImage image: UIImage) -> UIImage? {
+        return filtered(with: BBMetalDifferenceBlendFilter(), image: image)
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
