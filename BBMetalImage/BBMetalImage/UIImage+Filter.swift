@@ -29,6 +29,19 @@ public extension UIImage {
         return filtered(with: BBMetalGammaFilter(gamma: gamma))
     }
     
+    public func bb_levelsFiltered(withMinimun minimum: BBMetalColor = .black,
+                                  middle: BBMetalColor = .white,
+                                  maximum: BBMetalColor = .white,
+                                  minOutput: BBMetalColor = .black,
+                                  maxOutput: BBMetalColor = .white) -> UIImage? {
+        
+        return filtered(with: BBMetalLevelsFilter(minimum: minimum,
+                                                  middle: middle,
+                                                  maximum: maximum,
+                                                  minOutput: minOutput,
+                                                  maxOutput: maxOutput))
+    }
+    
     public func bb_colorMatrixFiltered(withColorMatrix colorMatrix: BBMetalMatrix4x4 = .identity, intensity: Float = 1) -> UIImage? {
         return filtered(with: BBMetalColorMatrixFilter(colorMatrix: colorMatrix, intensity: intensity))
     }

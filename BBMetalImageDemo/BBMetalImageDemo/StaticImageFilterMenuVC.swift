@@ -31,6 +31,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let gamma = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .gamma), animated: true) }
         }
+        let levels = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .levels), animated: true) }
+        }
         let colorMatrix = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .colorMatrix), animated: true) }
         }
@@ -171,6 +174,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Contrast", contrast),
                 ("Saturation", saturation),
                 ("Gamma", gamma),
+                ("Levels", levels),
                 ("Color matrix", colorMatrix),
                 ("RGBA", rgba),
                 ("Hue", hue),
@@ -250,6 +254,7 @@ enum FilterType {
     case contrast
     case saturation
     case gamma
+    case levels
     case colorMatrix
     case rgba
     case hue
