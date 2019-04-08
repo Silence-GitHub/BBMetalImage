@@ -65,7 +65,7 @@ class StaticImageFilterVC: UIViewController {
         case .gamma: return image.bb_gammaFiltered(withGamma: 1.5)
         case .colorMatrix:
             var matrix: BBMetalMatrix4x4 = .identity
-            matrix.m22 = 1
+            matrix.m12 = 1
             matrix.m32 = 1
             matrix.m42 = 1
             return image.bb_colorMatrixFiltered(withColorMatrix: matrix, intensity: 1)
