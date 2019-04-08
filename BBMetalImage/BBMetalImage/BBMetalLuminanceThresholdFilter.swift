@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Pixels with a luminance above the threshold will appear white, and those below will be black
 public class BBMetalLuminanceThresholdFilter: BBMetalBaseFilter {
     /// The luminance threshold, from 0.0 to 1.0, with a default of 0.5

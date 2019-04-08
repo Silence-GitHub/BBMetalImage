@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Adjusts the exposure of the image
 public class BBMetalExposureFilter: BBMetalBaseFilter {
     /// The adjusted exposure (-10.0 ~ 10.0, with 0.0 as the default)

@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Applies a luminosity blend of two images
 public class BBMetalLuminosityBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "luminosityBlendKernel") }

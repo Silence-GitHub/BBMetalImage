@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Blends the second image over the first, based on the second's alpha channel
 public class BBMetalAlphaBlendFilter: BBMetalBaseFilter {
     /// The degree with which the second image overrides the first (0.0 ~ 1.0, with 0.0 as the default)

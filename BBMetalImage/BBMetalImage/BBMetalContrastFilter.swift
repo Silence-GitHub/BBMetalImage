@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Adjusts the contrast of the image
 public class BBMetalContrastFilter: BBMetalBaseFilter {
     /// The adjusted contrast (0.0 ~ 4.0, with 1.0 as the default)

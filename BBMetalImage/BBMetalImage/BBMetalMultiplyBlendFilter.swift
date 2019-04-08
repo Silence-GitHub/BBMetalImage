@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Applies a multiply blend of two images
 public class BBMetalMultiplyBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "multiplyBlendKernel") }

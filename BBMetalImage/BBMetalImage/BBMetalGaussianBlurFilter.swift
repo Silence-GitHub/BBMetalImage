@@ -6,7 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
 import MetalPerformanceShaders
 
 /// A filter that convolves an image with a Gaussian blur of a given sigma in both the x and y directions

@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Applies a subtractive blend of two images
 public class BBMetalSubtractBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "subtractBlendKernel") }

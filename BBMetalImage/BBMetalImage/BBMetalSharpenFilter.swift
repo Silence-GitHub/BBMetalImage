@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Sharpens the image
 public class BBMetalSharpenFilter: BBMetalBaseFilter {
     /// The sharpness adjustment to apply (-4.0 - 4.0, with 0.0 as the default)

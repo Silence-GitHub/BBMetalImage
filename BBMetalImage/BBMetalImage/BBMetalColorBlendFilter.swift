@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Applies a color blend of two images
 public class BBMetalColorBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "colorBlendKernel") }

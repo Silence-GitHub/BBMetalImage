@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Allows you to tint the shadows and highlights of an image independently using a color and intensity
 public class BBMetalHighlightShadowTintFilter: BBMetalBaseFilter {
     /// Shadow tint RGB color, with red as the default

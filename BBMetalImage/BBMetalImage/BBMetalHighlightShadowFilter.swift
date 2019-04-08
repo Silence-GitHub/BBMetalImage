@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Adjusts the shadows and highlights of an image
 public class BBMetalHighlightShadowFilter: BBMetalBaseFilter {
     /// Increase to lighten shadows, from 0.0 to 1.0, with 0.0 as the default.

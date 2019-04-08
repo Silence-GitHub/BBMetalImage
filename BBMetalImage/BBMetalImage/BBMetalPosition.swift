@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Normalized position with coordinate values from 0.0 to 1.0
 public struct BBMetalPosition {
     public var x: Float

@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Adjusts the saturation of an image
 public class BBMetalSaturationFilter: BBMetalBaseFilter {
     /// The degree of saturation or desaturation to apply to the image (0.0 ~ 2.0, with 1.0 as the default)

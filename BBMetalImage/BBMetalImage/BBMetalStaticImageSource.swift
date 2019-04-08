@@ -6,7 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
 import MetalKit
 
 public class BBMetalStaticImageSource {

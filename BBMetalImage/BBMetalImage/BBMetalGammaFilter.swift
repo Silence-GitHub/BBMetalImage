@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Adjusts the gamma of an image
 public class BBMetalGammaFilter: BBMetalBaseFilter {
     /// The gamma adjustment to apply (0.0 ~ 3.0, with 1.0 as the default)

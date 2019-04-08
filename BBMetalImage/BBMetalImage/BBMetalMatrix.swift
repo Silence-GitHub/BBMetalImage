@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 public struct BBMetalMatrix4x4 {
     public var m11:Float, m12:Float, m13:Float, m14:Float
     public var m21:Float, m22:Float, m23:Float, m24:Float

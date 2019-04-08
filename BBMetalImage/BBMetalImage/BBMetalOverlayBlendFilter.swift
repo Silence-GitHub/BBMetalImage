@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Applies an overlay blend of two images
 public class BBMetalOverlayBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "overlayBlendKernel") }

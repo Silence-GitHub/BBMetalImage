@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Used to add or remove haze (similar to a UV filter)
 public class BBMetalHazeFilter: BBMetalBaseFilter {
     /// Strength of the color applied. Default 0. Values between -0.3 and 0.3 are best

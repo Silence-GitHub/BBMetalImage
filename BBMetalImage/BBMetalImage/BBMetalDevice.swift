@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 public class BBMetalDevice {
     public static let shared: BBMetalDevice = BBMetalDevice()
     public static var sharedDevice: MTLDevice { return shared.device }

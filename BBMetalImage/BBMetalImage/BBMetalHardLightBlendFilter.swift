@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Applies a hard light blend of two images
 public class BBMetalHardLightBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "hardLightBlendKernel") }

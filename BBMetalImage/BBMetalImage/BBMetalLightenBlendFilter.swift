@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Blends two images by taking the maximum value of each color component between the images
 public class BBMetalLightenBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "lightenBlendKernel") }

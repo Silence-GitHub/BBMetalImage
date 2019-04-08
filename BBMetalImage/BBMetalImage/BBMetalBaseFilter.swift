@@ -6,20 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
-public protocol BBMetalImageSource: AnyObject {
-    func add<T: BBMetalImageConsumer>(consumer: T) -> T
-    func add(consumer: BBMetalImageConsumer, at index: Int)
-    func remove(consumer: BBMetalImageConsumer)
-}
-
-public protocol BBMetalImageConsumer: AnyObject {
-    func add(source: BBMetalImageSource)
-    func remove(source: BBMetalImageSource)
-    func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource)
-}
-
 public struct BBMetalWeakImageSource {
     public weak var source: BBMetalImageSource?
     public var texture: MTLTexture?

@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Adjusts the hue of an image
 public class BBMetalHueFilter: BBMetalBaseFilter {
     /// The hue angle, in degrees. 0 degrees by default

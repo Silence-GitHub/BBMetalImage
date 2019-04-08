@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Applies a division blend of two images
 public class BBMetalDivideBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "divideBlendKernel") }
