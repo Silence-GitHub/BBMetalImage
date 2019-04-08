@@ -9,11 +9,14 @@
 import MetalKit
 
 public class BBMetalStaticImageSource {
-    public private(set) var consumers: [BBMetalImageConsumer] = []
+    public private(set) var consumers: [BBMetalImageConsumer]
     public private(set) var texture: MTLTexture?
     private let image: UIImage
     
-    public init(image: UIImage) { self.image = image }
+    public init(image: UIImage) {
+        consumers = []
+        self.image = image
+    }
     
     public func transmitTexture() {
         if texture == nil { texture = image.bb_metalTexture }
