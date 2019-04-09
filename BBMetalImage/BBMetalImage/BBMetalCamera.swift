@@ -13,6 +13,7 @@ public class BBMetalCamera: NSObject {
     
     private var session: AVCaptureSession!
     private var camera: AVCaptureDevice!
+    private var videoOutputQueue: DispatchQueue!
     
     private var textureCache: CVMetalTextureCache!
     
@@ -38,7 +39,8 @@ public class BBMetalCamera: NSObject {
         
         let videoDataOutput = AVCaptureVideoDataOutput()
         videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA]
-        videoDataOutput.setSampleBufferDelegate(self, queue: nil)
+        videoOutputQueue = DispatchQueue(label: "com.Kaibo.BBMetalImage.Camera.videoOutput")
+        videoDataOutput.setSampleBufferDelegate(self, queue: videoOutputQueue)
         if !session.canAddOutput(videoDataOutput) {
             session.commitConfiguration()
             return nil
