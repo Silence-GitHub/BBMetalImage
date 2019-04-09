@@ -101,7 +101,7 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
                                                                textureCache,
                                                                imageBuffer,
                                                                nil,
-                                                               .rgba8Unorm,
+                                                               .bgra8Unorm, // camera ouput BGRA
                                                                width,
                                                                height,
                                                                0,

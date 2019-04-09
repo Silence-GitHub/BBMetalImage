@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A00949E225C53C50089941C /* CameraFilterVC.swift */; };
 		4A4CADC2225317C20058BEB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADC1225317C20058BEB6 /* AppDelegate.swift */; };
 		4A4CADC4225317C20058BEB6 /* MainMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADC3225317C20058BEB6 /* MainMenuVC.swift */; };
 		4A4CADC7225317C20058BEB6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A4CADC5225317C20058BEB6 /* Main.storyboard */; };
@@ -36,6 +37,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		4A00949E225C53C50089941C /* CameraFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterVC.swift; sourceTree = "<group>"; };
 		4A4CADBE225317C20058BEB6 /* BBMetalImageDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BBMetalImageDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A4CADC1225317C20058BEB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4A4CADC3225317C20058BEB6 /* MainMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuVC.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				4A4CADC3225317C20058BEB6 /* MainMenuVC.swift */,
 				4AFC464C2253CA08009D37A1 /* StaticImageFilterMenuVC.swift */,
 				4AFC464E2253CDDC009D37A1 /* StaticImageFilterVC.swift */,
+				4A00949E225C53C50089941C /* CameraFilterVC.swift */,
 				4AC5794B225529B900F7BCAC /* sunflower.jpg */,
 				4AC5794C225529B900F7BCAC /* test_lookup.png */,
 				4AFC46502253D1A6009D37A1 /* multicolour_flowers.jpg */,
@@ -177,6 +180,7 @@
 				4A4CADC4225317C20058BEB6 /* MainMenuVC.swift in Sources */,
 				4AFC464F2253CDDC009D37A1 /* StaticImageFilterVC.swift in Sources */,
 				4A4CADC2225317C20058BEB6 /* AppDelegate.swift in Sources */,
+				4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

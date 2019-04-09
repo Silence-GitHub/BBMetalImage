@@ -26,29 +26,20 @@ public class BBMetalView: MTKView {
         descriptor.vertexFunction = library.makeFunction(name: "vertexPassThrough")!
         descriptor.fragmentFunction = library.makeFunction(name: "fragmentPassThrough")!
         descriptor.colorAttachments[0].pixelFormat = colorPixelFormat
-        return try! metalDevice.makeRenderPipelineState(descriptor: descriptor)
+        return try! device!.makeRenderPipelineState(descriptor: descriptor)
     }()
     
     private lazy var vertexCoordinateBuffer: MTLBuffer = {
-        return metalDevice.makeBuffer(bytes: &vertexCoordinate,
-                                      length: MemoryLayout<Float>.size * vertexCoordinate.count,
-                                      options: .storageModeShared)!
+        return device!.makeBuffer(bytes: &vertexCoordinate,
+                                  length: MemoryLayout<Float>.size * vertexCoordinate.count,
+                                  options: .storageModeShared)!
     }()
     
     private lazy var textureCoordinateBuffer: MTLBuffer = {
-        return metalDevice.makeBuffer(bytes: &textureCoordinate,
-                                      length: MemoryLayout<Float>.size * textureCoordinate.count,
-                                      options: .storageModeShared)!
+        return device!.makeBuffer(bytes: &textureCoordinate,
+                                  length: MemoryLayout<Float>.size * textureCoordinate.count,
+                                  options: .storageModeShared)!
     }()
-    
-    private var metalDevice: MTLDevice {
-        var d = device
-        if d == nil {
-            d = BBMetalDevice.sharedDevice
-            device =  d
-        }
-        return d!
-    }
 }
 
 extension BBMetalView: BBMetalImageConsumer {
@@ -77,7 +68,7 @@ extension BBMetalView: BBMetalImageConsumer {
         encoder.setVertexBuffer(textureCoordinateBuffer, offset: 0, index: 1)
         encoder.setFragmentTexture(texture, index: 0)
         
-        encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: vertexCoordinate.count)
+        encoder.drawPrimitives(type: .triangleStrip, vertexStart: 0, vertexCount: vertexCoordinate.count / 2)
         
         encoder.endEncoding()
         
