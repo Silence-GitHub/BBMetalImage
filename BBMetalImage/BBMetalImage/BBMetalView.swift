@@ -52,7 +52,9 @@ extension BBMetalView: BBMetalImageConsumer {
             let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer(),
             let encoder = commandBuffer.makeRenderCommandEncoder(descriptor: descriptor) else { return }
         
-        encoder.label = "RenderPassThrough"
+        commandBuffer.label = "RenderPassThroughCommand"
+        
+        encoder.label = "RenderPassThroughEncoder"
         
         // Set the region of the drawable to which we'll draw
         encoder.setViewport(MTLViewport(originX: 0,

@@ -120,6 +120,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         
         // Render image to output texture
         guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
+        commandBuffer.label = name + "Command"
         
         if useMPSKernel {
             encodeMPSKernel(into: commandBuffer)
@@ -128,7 +129,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
             
             for completion in completions { commandBuffer.addCompletedHandler(completion) }
             
-            encoder.label = name
+            encoder.label = name + "Encoder"
             encoder.setComputePipelineState(computePipeline)
             encoder.setTexture(outputTexture, index: 0)
             for i in 0..<sources.count { encoder.setTexture(sources[i].texture, index: i + 1) }
