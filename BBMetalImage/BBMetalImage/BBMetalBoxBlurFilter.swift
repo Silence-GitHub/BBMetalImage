@@ -28,6 +28,6 @@ public class BBMetalBoxBlurFilter: BBMetalBaseFilter {
     }
     
     override func encodeMPSKernel(into commandBuffer: MTLCommandBuffer) {
-        kernel.encode(commandBuffer: commandBuffer, sourceTexture: _sources.first!.texture!, destinationTexture: outputTexture!)
+        kernel.encode(commandBuffer: commandBuffer, sourceTexture: _sources.first!.texture!, destinationTexture: _outputTexture!)
     }
 }

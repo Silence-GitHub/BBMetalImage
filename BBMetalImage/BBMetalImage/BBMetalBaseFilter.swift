@@ -31,10 +31,33 @@ public class BBMetalBaseFilter {
     public private(set) var _sources: [BBMetalWeakImageSource]
     
     public let name: String
-    public private(set) var outputTexture: MTLTexture?
-    public var threadgroupSize: MTLSize { didSet { threadgroupCount = nil } }
-    public var threadgroupCount: MTLSize?
-    public var runSynchronously: Bool
+    
+    public var outputTexture: MTLTexture? {
+        lock.wait()
+        let o = _outputTexture
+        lock.signal()
+        return o
+    }
+    public private(set) var _outputTexture: MTLTexture?
+    
+    private let threadgroupSize: MTLSize
+    private var threadgroupCount: MTLSize?
+    
+    public var runSynchronously: Bool {
+        get {
+            lock.wait()
+            let r = _runSynchronously
+            lock.signal()
+            return r
+        }
+        set {
+            lock.wait()
+            _runSynchronously = newValue
+            lock.signal()
+        }
+    }
+    private var _runSynchronously: Bool
+    
     public let useMPSKernel: Bool
     
     private var computePipeline: MTLComputePipelineState!
@@ -53,7 +76,7 @@ public class BBMetalBaseFilter {
             computePipeline = try! BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
         }
         threadgroupSize = MTLSize(width: 16, height: 16, depth: 1)
-        runSynchronously = false
+        _runSynchronously = false
         completions = []
         lock = DispatchSemaphore(value: 1)
     }
@@ -134,20 +157,21 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         
         // Check whether output texture has the same size as input texture
         let firstTexture = _sources.first!.texture!
-        if outputTexture == nil ||
-            outputTexture!.width != firstTexture.width ||
-            outputTexture!.height != firstTexture.height {
+        if _outputTexture == nil ||
+            _outputTexture!.width != firstTexture.width ||
+            _outputTexture!.height != firstTexture.height {
             let descriptor = MTLTextureDescriptor()
             descriptor.pixelFormat = .rgba8Unorm
             descriptor.width = firstTexture.width
             descriptor.height = firstTexture.height
             descriptor.usage = [.shaderRead, .shaderWrite]
             if let output = BBMetalDevice.sharedDevice.makeTexture(descriptor: descriptor) {
-                outputTexture = output
+                _outputTexture = output
             } else {
                 lock.signal()
                 return
             }
+            threadgroupCount = nil
         }
         
         // Update thread group count if needed
@@ -170,7 +194,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
             
             encoder.label = name + "Encoder"
             encoder.setComputePipelineState(computePipeline)
-            encoder.setTexture(outputTexture, index: 0)
+            encoder.setTexture(_outputTexture, index: 0)
             for i in 0..<_sources.count { encoder.setTexture(_sources[i].texture, index: i + 1) }
             updateParameters(forComputeCommandEncoder: encoder)
             encoder.dispatchThreadgroups(threadgroupCount!, threadsPerThreadgroup: threadgroupSize)
@@ -178,7 +202,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         }
         
         commandBuffer.commit()
-        if runSynchronously { commandBuffer.waitUntilCompleted() }
+        if _runSynchronously { commandBuffer.waitUntilCompleted() }
         
         // Clear old input texture
         for i in 0..<_sources.count { _sources[i].texture = nil }
@@ -187,7 +211,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         lock.signal()
         
         // Transmit output texture to image consumers
-        for consumer in consumers { consumer.newTextureAvailable(outputTexture!, from: self) }
+        for consumer in consumers { consumer.newTextureAvailable(_outputTexture!, from: self) }
     }
     
     @objc func encodeMPSKernel(into commandBuffer: MTLCommandBuffer) {
