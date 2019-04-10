@@ -11,14 +11,14 @@ import UIKit
 /// Applies a pixellation effect on an image
 public class BBMetalPixellateFilter: BBMetalBaseFilter {
     /// How large the pixels are, as a fraction of the width and height of the image (0.0 ~ 1.0, default 0.05)
-    public var fractionalWidth: Float
+    public var pixelSize: BBMetalSize
     
-    public init(fractionalWidth: Float = 0.05) {
-        self.fractionalWidth = fractionalWidth
+    public init(pixelSize: BBMetalSize = BBMetalSize(width: 0.05, height: 0.05)) {
+        self.pixelSize = pixelSize
         super.init(kernelFunctionName: "pixellateKernel")
     }
     
     override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
-        encoder.setBytes(&fractionalWidth, length: MemoryLayout<Float>.size, index: 0)
+        encoder.setBytes(&pixelSize, length: MemoryLayout<BBMetalSize>.size, index: 0)
     }
 }

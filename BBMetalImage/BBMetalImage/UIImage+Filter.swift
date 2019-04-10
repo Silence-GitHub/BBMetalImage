@@ -236,8 +236,8 @@ public extension UIImage {
         return filtered(with: BBMetalMaskBlendFilter(), image: image)
     }
     
-    public func bb_pixellateFiltered(withFractionalWidth fractionalWidth: Float = 0.05) -> UIImage? {
-        return filtered(with: BBMetalPixellateFilter(fractionalWidth: fractionalWidth))
+    public func bb_pixellateFiltered(withPixelSize pixelSize: BBMetalSize = BBMetalSize(width: 0.05, height: 0.05)) -> UIImage? {
+        return filtered(with: BBMetalPixellateFilter(pixelSize: pixelSize))
     }
     
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
