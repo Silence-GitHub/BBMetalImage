@@ -236,6 +236,10 @@ public extension UIImage {
         return filtered(with: BBMetalMaskBlendFilter(), image: image)
     }
     
+    public func bb_pixellateFiltered(withFractionalWidth fractionalWidth: Float = 0.05) -> UIImage? {
+        return filtered(with: BBMetalPixellateFilter(fractionalWidth: fractionalWidth))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }

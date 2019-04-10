@@ -58,4 +58,5 @@ enum FilterType {
     case luminosityBlend
     case linearBurnBlend
     case maskBlend
+    case pixellate
 }
