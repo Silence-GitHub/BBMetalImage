@@ -124,6 +124,7 @@ class StaticImageFilterVC: UIViewController {
         case .linearBurnBlend: return image.bb_linearBurnBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
         case .maskBlend: return image.bb_maskBlendFiltered(withImage: topBlendImage(withAlpha: 1))
         case .pixellate: return image.bb_pixellateFiltered(withPixelSize: BBMetalSize(width: 0.05, height: 0.07))
+        case .polarPixellate: return image.bb_polarPixellateFiltered(withPixelSize: BBMetalSize(width: 0.05, height: 0.07), center: BBMetalPosition(x: 0.35, y: 0.55))
         }
     }
     

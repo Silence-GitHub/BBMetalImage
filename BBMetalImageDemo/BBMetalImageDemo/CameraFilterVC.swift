@@ -180,6 +180,7 @@ class CameraFilterVC: UIViewController {
             imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 1))
             return BBMetalMaskBlendFilter()
         case .pixellate: return BBMetalPixellateFilter(pixelSize: BBMetalSize(width: 0.05, height: 0.03))
+        case .polarPixellate: return BBMetalPolarPixellateFilter(pixelSize: BBMetalSize(width: 0.05, height: 0.03), center: BBMetalPosition(x: 0.35, y: 0.55))
         }
     }
     

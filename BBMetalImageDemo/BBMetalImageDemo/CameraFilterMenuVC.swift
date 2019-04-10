@@ -172,6 +172,9 @@ class CameraFilterMenuVC: UIViewController {
         let pixellate = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .pixellate), animated: true) }
         }
+        let polarPixellate = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .polarPixellate), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -223,7 +226,8 @@ class CameraFilterMenuVC: UIViewController {
                 ("Luminosity blend", luminosityBlend),
                 ("Linear burn blend", linearBurnBlend),
                 ("Mask blend", maskBlend),
-                ("Pixellate", pixellate)]
+                ("Pixellate", pixellate),
+                ("Polar pixellate", polarPixellate)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())

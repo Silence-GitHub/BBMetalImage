@@ -240,6 +240,10 @@ public extension UIImage {
         return filtered(with: BBMetalPixellateFilter(pixelSize: pixelSize))
     }
     
+    public func bb_polarPixellateFiltered(withPixelSize pixelSize: BBMetalSize = BBMetalSize(width: 0.05, height: 0.05), center: BBMetalPosition = .center) -> UIImage? {
+        return filtered(with: BBMetalPolarPixellateFilter(pixelSize: pixelSize, center: center))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
