@@ -11,9 +11,11 @@ using namespace metal;
 
 kernel void lookupKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                          texture2d<half, access::read> inputTexture [[texture(1)]],
-                         texture2d<half, access::read> lookupTexture [[texture(2)]],
+                         texture2d<half, access::sample> lookupTexture [[texture(2)]],
                          device float *intensity [[buffer(0)]],
                          uint2 gid [[thread_position_in_grid]]) {
+    
+    if ((gid.x >= inputTexture.get_width()) || (gid.y >= inputTexture.get_height())) { return; }
     
     const half4 base = inputTexture.read(gid);
     
@@ -30,18 +32,18 @@ kernel void lookupKernel(texture2d<half, access::write> outputTexture [[texture(
     const float A = 0.125;
     const float B = 0.5 / 512.0;
     const float C = 0.125 - 1.0 / 512.0;
-    const float D = 512.0;
     
     float2 texPos1;
-    texPos1.x = (A * quad1.x + B + C * base.r) * D;
-    texPos1.y = (A * quad1.y + B + C * base.g) * D;
+    texPos1.x = A * quad1.x + B + C * base.r;
+    texPos1.y = A * quad1.y + B + C * base.g;
     
     float2 texPos2;
-    texPos2.x = (A * quad2.x + B + C * base.r) * D;
-    texPos2.y = (A * quad2.y + B + C * base.g) * D;
+    texPos2.x = A * quad2.x + B + C * base.r;
+    texPos2.y = A * quad2.y + B + C * base.g;
     
-    const half4 newColor1 = lookupTexture.read(uint2(texPos1));
-    const half4 newColor2 = lookupTexture.read(uint2(texPos2));
+    constexpr sampler quadSampler;
+    const half4 newColor1 = lookupTexture.sample(quadSampler, texPos1);
+    const half4 newColor2 = lookupTexture.sample(quadSampler, texPos2);
     
     const half4 newColor = mix(newColor1, newColor2, fract(blueColor));
     const half4 outColor(mix(base, half4(newColor.rgb, base.a), half(*intensity)));
