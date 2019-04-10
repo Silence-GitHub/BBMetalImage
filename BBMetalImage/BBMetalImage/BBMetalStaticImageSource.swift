@@ -19,7 +19,6 @@ public class BBMetalStaticImageSource {
     
     public private(set) var texture: MTLTexture?
     
-    
     private let image: UIImage
     private let lock: DispatchSemaphore
     

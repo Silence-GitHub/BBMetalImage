@@ -16,6 +16,22 @@ public class BBMetalCamera: NSObject {
         return c
     }
     private var _consumers: [BBMetalImageConsumer]
+    
+    public var willTransmitTexture: ((MTLTexture) -> Void)? {
+        get {
+            lock.wait()
+            let w = _willTransmitTexture
+            lock.signal()
+            return w
+        }
+        set {
+            lock.wait()
+            _willTransmitTexture = newValue
+            lock.signal()
+        }
+    }
+    private var _willTransmitTexture: ((MTLTexture) -> Void)?
+    
     private let lock: DispatchSemaphore
     
     private var session: AVCaptureSession!
@@ -114,9 +130,13 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         lock.wait()
         let consumers = _consumers
+        let willTransmit = _willTransmitTexture
         lock.signal()
+        
         guard !consumers.isEmpty,
             let texture = texture(with: sampleBuffer) else { return }
+        
+        willTransmit?(texture)
         for consumer in consumers { consumer.newTextureAvailable(texture, from: self) }
     }
     

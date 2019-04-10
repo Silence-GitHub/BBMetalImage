@@ -13,6 +13,7 @@ class CameraFilterVC: UIViewController {
     private let type: FilterType
     private var camera: BBMetalCamera!
     private var metalView: BBMetalView!
+    private var imageSource: BBMetalStaticImageSource?
     
     init(type: FilterType) {
         self.type = type
@@ -26,6 +27,7 @@ class CameraFilterVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        title = "\(type)"
         view.backgroundColor = .gray
         
         metalView = BBMetalView(frame: CGRect(x: 10, y: 100, width: view.bounds.width - 20, height: view.bounds.height - 200),
@@ -49,8 +51,17 @@ class CameraFilterVC: UIViewController {
         camera.removeAllConsumers()
         if button.isSelected, let filter = self.filter {
             camera.add(consumer: filter).add(consumer: metalView)
+            if let source = imageSource {
+                camera.willTransmitTexture = { [weak self] texture in
+                    guard self != nil else { return }
+                    source.transmitTexture()
+                }
+                source.add(consumer: filter)
+            }
         } else {
             camera.add(consumer: metalView)
+            camera.willTransmitTexture = nil
+            imageSource = nil
         }
     }
     
@@ -93,16 +104,27 @@ class CameraFilterVC: UIViewController {
         case .boxBlur: return BBMetalBoxBlurFilter(kernelWidth: 25, kernelHeight: 65)
         case .zoomBlur: return BBMetalZoomBlurFilter(blurSize: 3, blurCenter: BBMetalPosition(x: 0.35, y: 0.55))
         case .motionBlur: return BBMetalMotionBlurFilter(blurSize: 5, blurAngle: 30)
-//        case .normalBlend: return image.bb_normalBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .chromaKeyBlend: return image.bb_chromaKeyBlendFiltered(withThresholdSensitivity: 0.4,
-//                                                                     smoothing: 0.1,
-//                                                                     colorToReplace: .blue,
-//                                                                     image: topBlendImage(withAlpha: 0.1))
-//        case .dissolveBlend: return image.bb_dissolveBlendFiltered(withMixturePercent: 0.3, image: topBlendImage(withAlpha: 0.1))
-//        case .addBlend: return image.bb_addBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
-//        case .subtractBlend: return image.bb_subtractBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .multiplyBlend: return image.bb_multiplyBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .divideBlend: return image.bb_divideBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
+        case .normalBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalNormalBlendFilter()
+        case .chromaKeyBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalChromaKeyBlendFilter(thresholdSensitivity: 0.4, smoothing: 0.1, colorToReplace: .blue)
+        case .dissolveBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalDissolveBlendFilter(mixturePercent: 0.3)
+        case .addBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.5))
+            return BBMetalAddBlendFilter()
+        case .subtractBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalSubtractBlendFilter()
+        case .multiplyBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalMultiplyBlendFilter()
+        case .divideBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.5))
+            return BBMetalDivideBlendFilter()
 //        case .overlayBlend: return image.bb_overlayBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
 //        case .darkenBlend: return image.bb_darkenBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
 //        case .lightenBlend: return image.bb_lightenBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
