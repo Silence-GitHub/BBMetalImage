@@ -10,21 +10,29 @@
 using namespace metal;
 
 kernel void sharpenKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
-                          texture2d<half, access::read> inputTexture [[texture(1)]],
+                          texture2d<half, access::sample> inputTexture [[texture(1)]],
                           device float *sharpeness [[buffer(0)]],
                           uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= inputTexture.get_width()) || (gid.y >= inputTexture.get_height())) { return; }
+    
+    const float x = float(gid.x);
+    const float y = float(gid.y);
+    const float width = float(inputTexture.get_width());
+    const float height = float(inputTexture.get_height());
+    
+    const float2 leftCoordinate = float2((x - 1) / width, y / height);
+    const float2 rightCoordinate = float2((x + 1) / width, y / height);
+    const float2 topCoordinate = float2(x / width, (y + 1) / height);
+    const float2 bottomCoordinate = float2(x / width, (y - 1) / height);
+    
     const half4 inColor = inputTexture.read(gid);
     
-    if (gid.x < 1 || gid.x >= inputTexture.get_width() - 1 || gid.y < 1 || gid.y >= inputTexture.get_height() - 1) {
-        outputTexture.write(inColor, gid);
-        return;
-    }
-    
-    const half4 leftColor = inputTexture.read(uint2(gid.x - 1, gid.y));
-    const half4 rightColor = inputTexture.read(uint2(gid.x + 1, gid.y));
-    const half4 topColor = inputTexture.read(uint2(gid.x, gid.y + 1));
-    const half4 bottomColor = inputTexture.read(uint2(gid.x, gid.y - 1));
+    constexpr sampler quadSampler;
+    const half4 leftColor = inputTexture.sample(quadSampler, leftCoordinate);
+    const half4 rightColor = inputTexture.sample(quadSampler, rightCoordinate);
+    const half4 topColor = inputTexture.sample(quadSampler, topCoordinate);
+    const half4 bottomColor = inputTexture.sample(quadSampler, bottomCoordinate);
     
     const half centerMultiplier = 1.0 + 4.0 * half(*sharpeness);
     const half edgeMultiplier = half(*sharpeness);
