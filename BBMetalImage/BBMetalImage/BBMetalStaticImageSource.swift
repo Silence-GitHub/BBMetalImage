@@ -17,7 +17,13 @@ public class BBMetalStaticImageSource {
     }
     private var _consumers: [BBMetalImageConsumer]
     
-    public private(set) var texture: MTLTexture?
+    public var texture: MTLTexture? {
+        lock.wait()
+        let t = _texture
+        lock.signal()
+        return t
+    }
+    private var _texture: MTLTexture?
     
     private let image: UIImage
     private let lock: DispatchSemaphore
@@ -30,8 +36,8 @@ public class BBMetalStaticImageSource {
     
     public func transmitTexture() {
         lock.wait()
-        if texture == nil { texture = image.bb_metalTexture }
-        guard let texture = self.texture else {
+        if _texture == nil { _texture = image.bb_metalTexture }
+        guard let texture = _texture else {
             lock.signal()
             return
         }
