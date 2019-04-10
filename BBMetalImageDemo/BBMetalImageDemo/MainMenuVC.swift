@@ -23,7 +23,7 @@ class MainMenuVC: UIViewController {
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterMenuVC(), animated: true) }
         }
         let cameraFilter = { [weak self] in
-            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(), animated: true) }
+            if let self = self { self.navigationController?.pushViewController(CameraFilterMenuVC(), animated: true) }
         }
         list = [("Static image filter", staticImageFilter),
                 ("Camera filter", cameraFilter)]

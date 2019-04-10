@@ -9,7 +9,14 @@
 import AVFoundation
 
 public class BBMetalCamera: NSObject {
-    public private(set) var consumers: [BBMetalImageConsumer]
+    public var consumers: [BBMetalImageConsumer] {
+        lock.wait()
+        let c = _consumers
+        lock.signal()
+        return c
+    }
+    private var _consumers: [BBMetalImageConsumer]
+    private let lock: DispatchSemaphore
     
     private var session: AVCaptureSession!
     private var camera: AVCaptureDevice!
@@ -18,7 +25,8 @@ public class BBMetalCamera: NSObject {
     private var textureCache: CVMetalTextureCache!
     
     public init?(sessionPreset: AVCaptureSession.Preset = .high) {
-        consumers = []
+        _consumers = []
+        lock = DispatchSemaphore(value: 1)
         
         super.init()
         
@@ -56,9 +64,16 @@ public class BBMetalCamera: NSObject {
         
         session.commitConfiguration()
         
-        if CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, BBMetalDevice.sharedDevice, nil, &textureCache) != kCVReturnSuccess {
+        if CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, BBMetalDevice.sharedDevice, nil, &textureCache) != kCVReturnSuccess ||
+            textureCache == nil {
             return nil
         }
+    }
+    
+    public func removeAllConsumers() {
+        lock.wait()
+        _consumers.removeAll()
+        lock.signal()
     }
     
     public func start() { session.startRunning() }
@@ -69,26 +84,37 @@ public class BBMetalCamera: NSObject {
 extension BBMetalCamera: BBMetalImageSource {
     @discardableResult
     public func add<T: BBMetalImageConsumer>(consumer: T) -> T {
-        consumers.append(consumer)
+        lock.wait()
+        _consumers.append(consumer)
+        lock.signal()
         consumer.add(source: self)
         return consumer
     }
     
     public func add(consumer: BBMetalImageConsumer, at index: Int) {
-        consumers.insert(consumer, at: index)
+        lock.wait()
+        _consumers.insert(consumer, at: index)
+        lock.signal()
         consumer.add(source: self)
     }
     
     public func remove(consumer: BBMetalImageConsumer) {
-        if let index = consumers.firstIndex(where: { $0 === consumer }) {
-            consumers.remove(at: index)
+        lock.wait()
+        if let index = _consumers.firstIndex(where: { $0 === consumer }) {
+            _consumers.remove(at: index)
+            lock.signal()
             consumer.remove(source: self)
+        } else {
+            lock.signal()
         }
     }
 }
 
 extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        lock.wait()
+        let consumers = _consumers
+        lock.signal()
         guard !consumers.isEmpty,
             let texture = texture(with: sampleBuffer) else { return }
         for consumer in consumers { consumer.newTextureAvailable(texture, from: self) }

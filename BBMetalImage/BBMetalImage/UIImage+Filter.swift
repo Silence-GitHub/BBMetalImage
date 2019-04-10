@@ -21,7 +21,7 @@ public extension UIImage {
         return filtered(with: BBMetalContrastFilter(contrast: contrast))
     }
     
-    public func bb_saturationFiltered(withSaturaton saturation: Float = 1) -> UIImage? {
+    public func bb_saturationFiltered(withSaturation saturation: Float = 1) -> UIImage? {
         return filtered(with: BBMetalSaturationFilter(saturation: saturation))
     }
     
@@ -29,7 +29,7 @@ public extension UIImage {
         return filtered(with: BBMetalGammaFilter(gamma: gamma))
     }
     
-    public func bb_levelsFiltered(withMinimun minimum: BBMetalColor = .black,
+    public func bb_levelsFiltered(withMinimum minimum: BBMetalColor = .black,
                                   middle: BBMetalColor = .white,
                                   maximum: BBMetalColor = .white,
                                   minOutput: BBMetalColor = .black,
@@ -62,8 +62,8 @@ public extension UIImage {
         return filtered(with: BBMetalWhiteBalanceFilter(temperature: temperature, tint: tint))
     }
     
-    public func bb_highlightShadowFiltered(withShadows shadows: Float = 0, highlihgts: Float = 1) -> UIImage? {
-        return filtered(with: BBMetalHighlightShadowFilter(shadows: shadows, highlights: highlihgts))
+    public func bb_highlightShadowFiltered(withShadows shadows: Float = 0, highlights: Float = 1) -> UIImage? {
+        return filtered(with: BBMetalHighlightShadowFilter(shadows: shadows, highlights: highlights))
     }
     
     public func bb_HighlightShadowTintFiltered(withShadowTintColor shadowTintColor: BBMetalColor = .red,
@@ -93,7 +93,7 @@ public extension UIImage {
         return filtered(with: BBMetalFalseColorFilter(firstColor: firstColor, secondColor: secondColor))
     }
     
-    public func bb_haseFiltered(withDistance distance: Float = 0, slope: Float = 0) -> UIImage? {
+    public func bb_hazeFiltered(withDistance distance: Float = 0, slope: Float = 0) -> UIImage? {
         return filtered(with: BBMetalHazeFilter(distance: distance, slope: slope))
     }
     

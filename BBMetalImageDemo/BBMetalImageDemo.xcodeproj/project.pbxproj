@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A00949E225C53C50089941C /* CameraFilterVC.swift */; };
+		4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */; };
 		4A4CADC2225317C20058BEB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADC1225317C20058BEB6 /* AppDelegate.swift */; };
 		4A4CADC4225317C20058BEB6 /* MainMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADC3225317C20058BEB6 /* MainMenuVC.swift */; };
 		4A4CADC7225317C20058BEB6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A4CADC5225317C20058BEB6 /* Main.storyboard */; };
@@ -38,6 +39,7 @@
 
 /* Begin PBXFileReference section */
 		4A00949E225C53C50089941C /* CameraFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterVC.swift; sourceTree = "<group>"; };
+		4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterMenuVC.swift; sourceTree = "<group>"; };
 		4A4CADBE225317C20058BEB6 /* BBMetalImageDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BBMetalImageDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A4CADC1225317C20058BEB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4A4CADC3225317C20058BEB6 /* MainMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuVC.swift; sourceTree = "<group>"; };
@@ -89,6 +91,7 @@
 				4A4CADC3225317C20058BEB6 /* MainMenuVC.swift */,
 				4AFC464C2253CA08009D37A1 /* StaticImageFilterMenuVC.swift */,
 				4AFC464E2253CDDC009D37A1 /* StaticImageFilterVC.swift */,
+				4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */,
 				4A00949E225C53C50089941C /* CameraFilterVC.swift */,
 				4AC5794B225529B900F7BCAC /* sunflower.jpg */,
 				4AC5794C225529B900F7BCAC /* test_lookup.png */,
@@ -176,6 +179,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */,
 				4AFC464D2253CA08009D37A1 /* StaticImageFilterMenuVC.swift in Sources */,
 				4A4CADC4225317C20058BEB6 /* MainMenuVC.swift in Sources */,
 				4AFC464F2253CDDC009D37A1 /* StaticImageFilterVC.swift in Sources */,

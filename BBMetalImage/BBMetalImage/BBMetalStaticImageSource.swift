@@ -9,18 +9,35 @@
 import MetalKit
 
 public class BBMetalStaticImageSource {
-    public private(set) var consumers: [BBMetalImageConsumer]
+    public var consumers: [BBMetalImageConsumer] {
+        lock.wait()
+        let c = _consumers
+        lock.signal()
+        return c
+    }
+    private var _consumers: [BBMetalImageConsumer]
+    
     public private(set) var texture: MTLTexture?
+    
+    
     private let image: UIImage
+    private let lock: DispatchSemaphore
     
     public init(image: UIImage) {
-        consumers = []
+        _consumers = []
         self.image = image
+        lock = DispatchSemaphore(value: 1)
     }
     
     public func transmitTexture() {
+        lock.wait()
         if texture == nil { texture = image.bb_metalTexture }
-        guard let texture = self.texture else { return }
+        guard let texture = self.texture else {
+            lock.signal()
+            return
+        }
+        let consumers = _consumers
+        lock.signal()
         for consumer in consumers { consumer.newTextureAvailable(texture, from: self) }
     }
 }
@@ -28,20 +45,28 @@ public class BBMetalStaticImageSource {
 extension BBMetalStaticImageSource: BBMetalImageSource {
     @discardableResult
     public func add<T: BBMetalImageConsumer>(consumer: T) -> T {
-        consumers.append(consumer)
+        lock.wait()
+        _consumers.append(consumer)
+        lock.signal()
         consumer.add(source: self)
         return consumer
     }
     
     public func add(consumer: BBMetalImageConsumer, at index: Int) {
-        consumers.insert(consumer, at: index)
+        lock.wait()
+        _consumers.insert(consumer, at: index)
+        lock.signal()
         consumer.add(source: self)
     }
     
     public func remove(consumer: BBMetalImageConsumer) {
-        if let index = consumers.firstIndex(where: { $0 === consumer }) {
-            consumers.remove(at: index)
+        lock.wait()
+        if let index = _consumers.firstIndex(where: { $0 === consumer }) {
+            _consumers.remove(at: index)
+            lock.signal()
             consumer.remove(source: self)
+        } else {
+            lock.signal()
         }
     }
 }
