@@ -21,6 +21,7 @@
 		4AFC464D2253CA08009D37A1 /* StaticImageFilterMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC464C2253CA08009D37A1 /* StaticImageFilterMenuVC.swift */; };
 		4AFC464F2253CDDC009D37A1 /* StaticImageFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC464E2253CDDC009D37A1 /* StaticImageFilterVC.swift */; };
 		4AFC46512253D1A6009D37A1 /* multicolour_flowers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4AFC46502253D1A6009D37A1 /* multicolour_flowers.jpg */; };
+		4AFD9C3A225EA1190000C839 /* FilterType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFD9C39225EA1190000C839 /* FilterType.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -53,6 +54,7 @@
 		4AFC464C2253CA08009D37A1 /* StaticImageFilterMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticImageFilterMenuVC.swift; sourceTree = "<group>"; };
 		4AFC464E2253CDDC009D37A1 /* StaticImageFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticImageFilterVC.swift; sourceTree = "<group>"; };
 		4AFC46502253D1A6009D37A1 /* multicolour_flowers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = multicolour_flowers.jpg; sourceTree = "<group>"; };
+		4AFD9C39225EA1190000C839 /* FilterType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterType.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -88,6 +90,7 @@
 			isa = PBXGroup;
 			children = (
 				4A4CADC1225317C20058BEB6 /* AppDelegate.swift */,
+				4AFD9C39225EA1190000C839 /* FilterType.swift */,
 				4A4CADC3225317C20058BEB6 /* MainMenuVC.swift */,
 				4AFC464C2253CA08009D37A1 /* StaticImageFilterMenuVC.swift */,
 				4AFC464E2253CDDC009D37A1 /* StaticImageFilterVC.swift */,
@@ -179,6 +182,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AFD9C3A225EA1190000C839 /* FilterType.swift in Sources */,
 				4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */,
 				4AFC464D2253CA08009D37A1 /* StaticImageFilterMenuVC.swift in Sources */,
 				4A4CADC4225317C20058BEB6 /* MainMenuVC.swift in Sources */,

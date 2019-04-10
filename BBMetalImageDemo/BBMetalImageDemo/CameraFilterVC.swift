@@ -125,25 +125,60 @@ class CameraFilterVC: UIViewController {
         case .divideBlend:
             imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.5))
             return BBMetalDivideBlendFilter()
-//        case .overlayBlend: return image.bb_overlayBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .darkenBlend: return image.bb_darkenBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
-//        case .lightenBlend: return image.bb_lightenBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .colorBlend: return image.bb_colorBlendFiltered(withImage: topBlendImage(withAlpha: 1))
-//        case .colorBurnBlend: return image.bb_colorBurnBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .colorDodgeBlend: return image.bb_colorDodgeBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
-//        case .screenBlend: return image.bb_screenBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .exclusionBlend: return image.bb_exclusionBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .differenceBlend: return image.bb_differenceBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .hardLightBlend: return image.bb_hardLightBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .softLightBlend: return image.bb_softLightBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .alphaBlend: return image.bb_alphaBlendFiltered(withMixturePercent: 0.5, image: topBlendImage(withAlpha: 0.5))
-//        case .sourceOverBlend: return image.bb_sourceOverBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
-//        case .hueBlend: return image.bb_hueBlendFiltered(withImage: topBlendImage(withAlpha: 1))
-//        case .saturationBlend: return image.bb_saturationBlendFiltered(withImage: topBlendImage(withAlpha: 1))
-//        case .luminosityBlend: return image.bb_luminosityBlendFiltered(withImage: topBlendImage(withAlpha: 0.5))
-//        case .linearBurnBlend: return image.bb_linearBurnBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
-//        case .maskBlend: return image.bb_maskBlendFiltered(withImage: topBlendImage(withAlpha: 1))
-        default: return nil
+        case .overlayBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalOverlayBlendFilter()
+        case .darkenBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.5))
+            return BBMetalDarkenBlendFilter()
+        case .lightenBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalLightenBlendFilter()
+        case .colorBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 1))
+            return BBMetalColorBlendFilter()
+        case .colorBurnBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalColorBurnBlendFilter()
+        case .colorDodgeBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.5))
+            return BBMetalColorDodgeBlendFilter()
+        case .screenBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalScreenBlendFilter()
+        case .exclusionBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalExclusionBlendFilter()
+        case .differenceBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalDifferenceBlendFilter()
+        case .hardLightBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalHardLightBlendFilter()
+        case .softLightBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalSoftLightBlendFilter()
+        case .alphaBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.5))
+            return BBMetalAlphaBlendFilter(mixturePercent: 0.5)
+        case .sourceOverBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.5))
+            return BBMetalSourceOverBlendFilter()
+        case .hueBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 1))
+            return BBMetalHueBlendFilter()
+        case .saturationBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 1))
+            return BBMetalSaturationBlendFilter()
+        case .luminosityBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.5))
+            return BBMetalLuminosityBlendFilter()
+        case .linearBurnBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
+            return BBMetalLinearBurnBlendFilter()
+        case .maskBlend:
+            imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 1))
+            return BBMetalMaskBlendFilter()
         }
     }
     
