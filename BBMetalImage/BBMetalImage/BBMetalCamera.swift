@@ -47,6 +47,13 @@ public class BBMetalCamera: NSObject {
         }
         session.addOutput(videoDataOutput)
         
+        guard let connection = videoDataOutput.connections.first,
+            connection.isVideoOrientationSupported else {
+                session.commitConfiguration()
+                return nil
+        }
+        connection.videoOrientation = .portrait
+        
         session.commitConfiguration()
         
         if CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, BBMetalDevice.sharedDevice, nil, &textureCache) != kCVReturnSuccess {
