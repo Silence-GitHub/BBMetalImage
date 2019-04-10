@@ -14,8 +14,22 @@ public struct BBMetalWeakImageSource {
 }
 
 public class BBMetalBaseFilter {
-    public private(set) var consumers: [BBMetalImageConsumer]
-    public private(set) var sources: [BBMetalWeakImageSource]
+    public var consumers: [BBMetalImageConsumer] {
+        lock.wait()
+        let c = _consumers
+        lock.signal()
+        return c
+    }
+    private var _consumers: [BBMetalImageConsumer]
+    
+    public var sources: [BBMetalWeakImageSource] {
+        lock.wait()
+        let s = _sources
+        lock.signal()
+        return s
+    }
+    public private(set) var _sources: [BBMetalWeakImageSource]
+    
     public let name: String
     public private(set) var outputTexture: MTLTexture?
     public var threadgroupSize: MTLSize { didSet { threadgroupCount = nil } }
@@ -25,10 +39,11 @@ public class BBMetalBaseFilter {
     
     private var computePipeline: MTLComputePipelineState!
     private var completions: [(MTLCommandBuffer) -> Void]
+    private let lock: DispatchSemaphore
     
     public init(kernelFunctionName: String, useMPSKernel: Bool = false) {
-        consumers = []
-        sources = []
+        _consumers = []
+        _sources = []
         name = kernelFunctionName
         self.useMPSKernel = useMPSKernel
         
@@ -40,62 +55,85 @@ public class BBMetalBaseFilter {
         threadgroupSize = MTLSize(width: 16, height: 16, depth: 1)
         runSynchronously = false
         completions = []
+        lock = DispatchSemaphore(value: 1)
     }
     
     public func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer) -> Void) {
+        lock.wait()
         completions.append(handler)
+        lock.signal()
     }
 }
 
 extension BBMetalBaseFilter: BBMetalImageSource {
     @discardableResult
     public func add<T: BBMetalImageConsumer>(consumer: T) -> T {
-        consumers.append(consumer)
+        lock.wait()
+        _consumers.append(consumer)
+        lock.signal()
         consumer.add(source: self)
         return consumer
     }
     
     public func add(consumer: BBMetalImageConsumer, at index: Int) {
-        consumers.insert(consumer, at: index)
+        lock.wait()
+        _consumers.insert(consumer, at: index)
+        lock.signal()
         consumer.add(source: self)
     }
     
     public func remove(consumer: BBMetalImageConsumer) {
-        if let index = consumers.firstIndex(where: { $0 === consumer }) {
-            consumers.remove(at: index)
+        lock.wait()
+        if let index = _consumers.firstIndex(where: { $0 === consumer }) {
+            _consumers.remove(at: index)
+            lock.signal()
             consumer.remove(source: self)
+        } else {
+            lock.signal()
         }
     }
 }
 
 extension BBMetalBaseFilter: BBMetalImageConsumer {
     public func add(source: BBMetalImageSource) {
-        sources.append(BBMetalWeakImageSource(source: source))
+        lock.wait()
+        _sources.append(BBMetalWeakImageSource(source: source))
+        lock.signal()
     }
     
     public func remove(source: BBMetalImageSource) {
-        if let index = sources.firstIndex(where: { $0.source === source }) {
-            sources.remove(at: index)
+        lock.wait()
+        if let index = _sources.firstIndex(where: { $0.source === source }) {
+            _sources.remove(at: index)
         }
+        lock.signal()
     }
     
     public func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource) {
+        lock.wait()
+        
         // Check whether all input textures are ready
         var foundSource = false
         var empty = false
-        for i in 0..<sources.count {
-            if sources[i].source === source {
-                sources[i].texture = texture
+        for i in 0..<_sources.count {
+            if _sources[i].source === source {
+                _sources[i].texture = texture
                 foundSource = true
-            } else if sources[i].texture == nil {
-                if foundSource { return }
+            } else if _sources[i].texture == nil {
+                if foundSource {
+                    lock.signal()
+                    return
+                }
                 empty = true
             }
         }
-        if !foundSource || empty { return }
+        if !foundSource || empty {
+            lock.signal()
+            return
+        }
         
         // Check whether output texture has the same size as input texture
-        let firstTexture = sources.first!.texture!
+        let firstTexture = _sources.first!.texture!
         if outputTexture == nil ||
             outputTexture!.width != firstTexture.width ||
             outputTexture!.height != firstTexture.height {
@@ -107,6 +145,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
             if let output = BBMetalDevice.sharedDevice.makeTexture(descriptor: descriptor) {
                 outputTexture = output
             } else {
+                lock.signal()
                 return
             }
         }
@@ -132,7 +171,7 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
             encoder.label = name + "Encoder"
             encoder.setComputePipelineState(computePipeline)
             encoder.setTexture(outputTexture, index: 0)
-            for i in 0..<sources.count { encoder.setTexture(sources[i].texture, index: i + 1) }
+            for i in 0..<_sources.count { encoder.setTexture(_sources[i].texture, index: i + 1) }
             updateParameters(forComputeCommandEncoder: encoder)
             encoder.dispatchThreadgroups(threadgroupCount!, threadsPerThreadgroup: threadgroupSize)
             encoder.endEncoding()
@@ -142,7 +181,10 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         if runSynchronously { commandBuffer.waitUntilCompleted() }
         
         // Clear old input texture
-        for i in 0..<sources.count { sources[i].texture = nil }
+        for i in 0..<_sources.count { _sources[i].texture = nil }
+        
+        let consumers = _consumers
+        lock.signal()
         
         // Transmit output texture to image consumers
         for consumer in consumers { consumer.newTextureAvailable(outputTexture!, from: self) }

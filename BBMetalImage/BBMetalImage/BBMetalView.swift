@@ -78,8 +78,8 @@ public class BBMetalView: MTKView {
     private var textureContentMode: TextureContentMode = .aspectRatioFill // for internal drawing
     private var tempTextureContentMode: TextureContentMode = .aspectRatioFill // for external setter
     
-    private var lock: DispatchSemaphore = DispatchSemaphore(value: 1)
     private var texture: MTLTexture?
+    private let lock: DispatchSemaphore = DispatchSemaphore(value: 1)
     
     private lazy var renderPipeline: MTLRenderPipelineState = {
         let library = try! device!.makeDefaultLibrary(bundle: Bundle(for: BBMetalView.self))
