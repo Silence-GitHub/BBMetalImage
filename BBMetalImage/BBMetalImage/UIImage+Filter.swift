@@ -113,6 +113,10 @@ public extension UIImage {
         return filtered(with: BBMetalSharpenFilter(sharpeness: sharpeness))
     }
     
+    public func bb_unsharpMaskFiltered(withSigma sigma: Float = 4, intensity: Float = 1) -> UIImage? {
+        return filtered(with: BBMetalUnsharpMaskFilter(sigma: sigma, intensity: intensity))
+    }
+    
     public func bb_gaussianBlurFiltered(withSigma sigma: Float) -> UIImage? {
         return filtered(with: BBMetalGaussianBlurFilter(sigma: sigma))
     }

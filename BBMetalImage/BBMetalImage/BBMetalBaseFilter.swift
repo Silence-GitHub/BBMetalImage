@@ -70,10 +70,10 @@ public class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         name = kernelFunctionName
         self.useMPSKernel = useMPSKernel
         
-        if !useMPSKernel {
-            let library = try! BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: Bundle(for: BBMetalBaseFilter.self))
-            let kernelFunction = library.makeFunction(name: kernelFunctionName)!
-            computePipeline = try! BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
+        if !useMPSKernel,
+            let library = try? BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: Bundle(for: BBMetalBaseFilter.self)),
+            let kernelFunction = library.makeFunction(name: kernelFunctionName) {
+            computePipeline = try? BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
         }
         threadgroupSize = MTLSize(width: 16, height: 16, depth: 1)
         _runSynchronously = false

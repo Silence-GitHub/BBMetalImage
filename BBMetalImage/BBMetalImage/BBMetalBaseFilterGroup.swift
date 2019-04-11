@@ -9,8 +9,12 @@
 import UIKit
 
 public class BBMetalBaseFilterGroup: BBMetalBaseFilter {
-    public private(set) var initialFilters: [BBMetalBaseFilter]!
-    public private(set) var terminalFilter: BBMetalBaseFilter!
+    public var initialFilters: [BBMetalBaseFilter]!
+    public var terminalFilter: BBMetalBaseFilter!
+    
+    public override var outputTexture: MTLTexture? {
+        return terminalFilter.outputTexture
+    }
     
     // MARK: - BBMetalImageSource
     

@@ -100,6 +100,7 @@ class CameraFilterVC: UIViewController {
         case .luminanceThreshold: return BBMetalLuminanceThresholdFilter(threshold: 0.6)
         case .chromaKey: return BBMetalChromaKeyFilter(thresholdSensitivity: 0.4, smoothing: 0.1, colorToReplace: .blue)
         case .sharpen: return BBMetalSharpenFilter(sharpeness: 0.5)
+        case .unsharpMask: return BBMetalUnsharpMaskFilter(sigma: 4, intensity: 4)
         case .gaussianBlur: return BBMetalGaussianBlurFilter(sigma: 3)
         case .boxBlur: return BBMetalBoxBlurFilter(kernelWidth: 25, kernelHeight: 65)
         case .zoomBlur: return BBMetalZoomBlurFilter(blurSize: 3, blurCenter: BBMetalPosition(x: 0.35, y: 0.55))
