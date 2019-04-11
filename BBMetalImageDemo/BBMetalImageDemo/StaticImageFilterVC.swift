@@ -131,6 +131,7 @@ class StaticImageFilterVC: UIViewController {
         case .sketch: return image.bb_sketchFiltered(withEdgeStrength: 1)
         case .thresholdSketch: return image.bb_thresholdSketchFiltered(withEdgeStrength: 1, threshold: 0.15)
         case .toon: return image.bb_toonFiltered(withThreshold: 0.2, quantizationLevels: 10)
+        case .posterize: return image.bb_posterizeFiltered(withColorLevels: 10)
         case .swirl: return image.bb_swirlFiltered(withCenter: BBMetalPosition(x: 0.35, y: 0.55), radius: 0.25, angle: 1)
         }
     }

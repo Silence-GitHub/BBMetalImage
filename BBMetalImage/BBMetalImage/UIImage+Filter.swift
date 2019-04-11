@@ -268,6 +268,10 @@ public extension UIImage {
         return filtered(with: BBMetalToonFilter(threshold: threshold, quantizationLevels: quantizationLevels))
     }
     
+    public func bb_posterizeFiltered(withColorLevels colorLevels: Float = 10) -> UIImage? {
+        return filtered(with: BBMetalPosterizeFilter(colorLevels: colorLevels))
+    }
+    
     public func bb_swirlFiltered(withCenter center: BBMetalPosition = .center, radius: Float = 0.5, angle: Float = 1) -> UIImage? {
         return filtered(with: BBMetalSwirlFilter(center: center, radius: radius, angle: angle))
     }

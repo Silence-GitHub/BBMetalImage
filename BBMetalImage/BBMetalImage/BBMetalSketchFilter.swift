@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// Converts image to look like a sketch. This is just the Sobel edge detection filter with the colors inverted
 public class BBMetalSketchFilter: BBMetalBaseFilter {
     /// Adjusts the dynamic range of the filter. Higher values lead to stronger edges, but can saturate the intensity colorspace. Default is 1.0

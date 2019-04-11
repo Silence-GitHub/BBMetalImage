@@ -193,6 +193,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let toon = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .toon), animated: true) }
         }
+        let posterize = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .posterize), animated: true) }
+        }
         let swirl = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .swirl), animated: true) }
         }
@@ -255,6 +258,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Sketch", sketch),
                 ("Threshold sketch", thresholdSketch),
                 ("Toon", toon),
+                ("Posterize", posterize),
                 ("Swirl", swirl)]
         
         let tableView = UITableView(frame: view.bounds)

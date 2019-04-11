@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// This converts an image into a black-and-white crosshatch pattern
 public class BBMetalCrosshatchFilter: BBMetalBaseFilter {
     /// The fractional width of the image to use as the spacing for the crosshatch. The default is 0.03
