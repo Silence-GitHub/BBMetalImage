@@ -175,6 +175,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let polarPixellate = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .polarPixellate), animated: true) }
         }
+        let polkaDot = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .polkaDot), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -227,7 +230,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Linear burn blend", linearBurnBlend),
                 ("Mask blend", maskBlend),
                 ("Pixellate", pixellate),
-                ("Polar pixellate", polarPixellate)]
+                ("Polar pixellate", polarPixellate),
+                ("Polka dot", polkaDot)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())

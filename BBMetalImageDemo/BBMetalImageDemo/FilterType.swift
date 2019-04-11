@@ -60,4 +60,5 @@ enum FilterType {
     case maskBlend
     case pixellate
     case polarPixellate
+    case polkaDot
 }

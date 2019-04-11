@@ -236,12 +236,16 @@ public extension UIImage {
         return filtered(with: BBMetalMaskBlendFilter(), image: image)
     }
     
-    public func bb_pixellateFiltered(withPixelSize pixelSize: BBMetalSize = BBMetalSize(width: 0.05, height: 0.05)) -> UIImage? {
-        return filtered(with: BBMetalPixellateFilter(pixelSize: pixelSize))
+    public func bb_pixellateFiltered(withFractionalWidth fractionalWidth: Float = 0.05) -> UIImage? {
+        return filtered(with: BBMetalPixellateFilter(fractionalWidth: fractionalWidth))
     }
     
     public func bb_polarPixellateFiltered(withPixelSize pixelSize: BBMetalSize = BBMetalSize(width: 0.05, height: 0.05), center: BBMetalPosition = .center) -> UIImage? {
         return filtered(with: BBMetalPolarPixellateFilter(pixelSize: pixelSize, center: center))
+    }
+    
+    public func bb_polkaDotFiltered(withFractionalWidth fractionalWidth: Float = 0.05, dotScaling: Float = 0.9) -> UIImage? {
+        return filtered(with: BBMetalPolkaDotFilter(fractionalWidth: fractionalWidth, dotScaling: dotScaling))
     }
     
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {

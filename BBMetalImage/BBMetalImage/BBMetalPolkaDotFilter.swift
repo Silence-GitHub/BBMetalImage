@@ -1,22 +1,23 @@
 //
-//  BBMetalPixellateFilter.swift
+//  BBMetalPolkaDotFilter.swift
 //  BBMetalImage
 //
 //  Created by Kaibo Lu on 4/10/19.
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-/// Applies a pixellation effect on an image
-public class BBMetalPixellateFilter: BBMetalBaseFilter {
-    /// How large the pixels are, as a fraction of the width of the image (0.0 ~ 1.0, default 0.05)
+public class BBMetalPolkaDotFilter: BBMetalBaseFilter {
     public var fractionalWidth: Float
+    public var dotScaling: Float
     
-    public init(fractionalWidth: Float = 0.05) {
+    public init(fractionalWidth: Float = 0.05, dotScaling: Float = 0.9) {
         self.fractionalWidth = fractionalWidth
-        super.init(kernelFunctionName: "pixellateKernel")
+        self.dotScaling = dotScaling
+        super.init(kernelFunctionName: "polkaDotKernel")
     }
     
     override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&fractionalWidth, length: MemoryLayout<Float>.size, index: 0)
+        encoder.setBytes(&dotScaling, length: MemoryLayout<Float>.size, index: 1)
     }
 }
