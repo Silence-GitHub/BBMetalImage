@@ -129,6 +129,7 @@ class StaticImageFilterVC: UIViewController {
         case .halftone: return image.bb_halftoneFiltered(withFractionalWidth: 0.01)
         case .crosshatch: return image.bb_crosshatchFiltered(withCrosshatchSpacing: 0.01, lineWidth: 0.003)
         case .sketch: return image.bb_sketchFiltered(withEdgeStrength: 1)
+        case .thresholdSketch: return image.bb_thresholdSketchFiltered(withEdgeStrength: 1, threshold: 0.15)
         }
     }
     

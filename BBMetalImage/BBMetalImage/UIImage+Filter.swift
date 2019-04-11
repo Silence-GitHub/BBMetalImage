@@ -260,6 +260,10 @@ public extension UIImage {
         return filtered(with: BBMetalSketchFilter(edgeStrength: edgeStrength))
     }
     
+    public func bb_thresholdSketchFiltered(withEdgeStrength edgeStrength: Float = 1, threshold: Float = 0.25) -> UIImage? {
+        return filtered(with: BBMetalThresholdSketchFilter(edgeStrength: edgeStrength, threshold: threshold))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }

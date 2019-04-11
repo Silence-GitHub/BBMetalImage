@@ -185,6 +185,7 @@ class CameraFilterVC: UIViewController {
         case .halftone: return BBMetalHalftoneFilter(fractionalWidth: 0.01)
         case .crosshatch: return BBMetalCrosshatchFilter(crosshatchSpacing: 0.01, lineWidth: 0.003)
         case .sketch: return BBMetalSketchFilter(edgeStrength: 1)
+        case .thresholdSketch: return BBMetalThresholdSketchFilter(edgeStrength: 1, threshold: 0.15)
         }
     }
     
