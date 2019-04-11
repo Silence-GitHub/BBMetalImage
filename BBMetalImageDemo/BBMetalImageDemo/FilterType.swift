@@ -65,4 +65,5 @@ enum FilterType {
     case crosshatch
     case sketch
     case thresholdSketch
+    case toon
 }

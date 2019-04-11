@@ -264,6 +264,10 @@ public extension UIImage {
         return filtered(with: BBMetalThresholdSketchFilter(edgeStrength: edgeStrength, threshold: threshold))
     }
     
+    public func bb_toonFiltered(withThreshold threshold: Float = 0.2, quantizationLevels: Float = 10) -> UIImage? {
+        return filtered(with: BBMetalToonFilter(threshold: threshold, quantizationLevels: quantizationLevels))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }

@@ -190,6 +190,9 @@ class CameraFilterMenuVC: UIViewController {
         let thresholdSketch = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .thresholdSketch), animated: true) }
         }
+        let toon = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .toon), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -247,7 +250,8 @@ class CameraFilterMenuVC: UIViewController {
                 ("Halftone", halftone),
                 ("Crosshatch", crosshatch),
                 ("Sketch", sketch),
-                ("Threshold sketch", thresholdSketch)]
+                ("Threshold sketch", thresholdSketch),
+                ("Toon", toon)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
