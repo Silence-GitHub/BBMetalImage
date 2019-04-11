@@ -252,6 +252,10 @@ public extension UIImage {
         return filtered(with: BBMetalHalftoneFilter(fractionalWidth: fractionalWidth))
     }
     
+    public func bb_crosshatchFiltered(withCrosshatchSpacing crosshatchSpacing: Float = 0.03, lineWidth: Float = 0.003) -> UIImage? {
+        return filtered(with: BBMetalCrosshatchFilter(crosshatchSpacing: crosshatchSpacing, lineWidth: lineWidth))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }

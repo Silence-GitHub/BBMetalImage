@@ -127,6 +127,7 @@ class StaticImageFilterVC: UIViewController {
         case .polarPixellate: return image.bb_polarPixellateFiltered(withPixelSize: BBMetalSize(width: 0.05, height: 0.07), center: BBMetalPosition(x: 0.35, y: 0.55))
         case .polkaDot: return image.bb_polkaDotFiltered(withFractionalWidth: 0.05, dotScaling: 0.9)
         case .halftone: return image.bb_halftoneFiltered(withFractionalWidth: 0.01)
+        case .crosshatch: return image.bb_crosshatchFiltered(withCrosshatchSpacing: 0.01, lineWidth: 0.003)
         }
     }
     

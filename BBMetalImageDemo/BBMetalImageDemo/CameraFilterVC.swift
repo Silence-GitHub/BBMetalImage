@@ -183,6 +183,7 @@ class CameraFilterVC: UIViewController {
         case .polarPixellate: return BBMetalPolarPixellateFilter(pixelSize: BBMetalSize(width: 0.05, height: 0.03), center: BBMetalPosition(x: 0.35, y: 0.55))
         case .polkaDot: return BBMetalPolkaDotFilter(fractionalWidth: 0.05, dotScaling: 0.9)
         case .halftone: return BBMetalHalftoneFilter(fractionalWidth: 0.01)
+        case .crosshatch: return BBMetalCrosshatchFilter(crosshatchSpacing: 0.01, lineWidth: 0.003)
         }
     }
     
