@@ -187,6 +187,7 @@ class CameraFilterVC: UIViewController {
         case .sketch: return BBMetalSketchFilter(edgeStrength: 1)
         case .thresholdSketch: return BBMetalThresholdSketchFilter(edgeStrength: 1, threshold: 0.15)
         case .toon: return BBMetalToonFilter(threshold: 0.2, quantizationLevels: 10)
+        case .swirl: return BBMetalSwirlFilter(center: BBMetalPosition(x: 0.35, y: 0.55), radius: 0.25, angle: 1)
         }
     }
     

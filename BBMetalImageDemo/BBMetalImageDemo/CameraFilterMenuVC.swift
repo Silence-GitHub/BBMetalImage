@@ -193,6 +193,9 @@ class CameraFilterMenuVC: UIViewController {
         let toon = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .toon), animated: true) }
         }
+        let swirl = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .swirl), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -251,7 +254,8 @@ class CameraFilterMenuVC: UIViewController {
                 ("Crosshatch", crosshatch),
                 ("Sketch", sketch),
                 ("Threshold sketch", thresholdSketch),
-                ("Toon", toon)]
+                ("Toon", toon),
+                ("Swirl", swirl)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())

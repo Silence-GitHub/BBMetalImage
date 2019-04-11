@@ -66,4 +66,5 @@ enum FilterType {
     case sketch
     case thresholdSketch
     case toon
+    case swirl
 }

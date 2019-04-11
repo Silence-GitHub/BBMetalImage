@@ -268,6 +268,10 @@ public extension UIImage {
         return filtered(with: BBMetalToonFilter(threshold: threshold, quantizationLevels: quantizationLevels))
     }
     
+    public func bb_swirlFiltered(withCenter center: BBMetalPosition = .center, radius: Float = 0.5, angle: Float = 1) -> UIImage? {
+        return filtered(with: BBMetalSwirlFilter(center: center, radius: radius, angle: angle))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
