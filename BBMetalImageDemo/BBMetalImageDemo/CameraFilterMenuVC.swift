@@ -178,6 +178,9 @@ class CameraFilterMenuVC: UIViewController {
         let polkaDot = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .polkaDot), animated: true) }
         }
+        let halftone = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .halftone), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -231,7 +234,8 @@ class CameraFilterMenuVC: UIViewController {
                 ("Mask blend", maskBlend),
                 ("Pixellate", pixellate),
                 ("Polar pixellate", polarPixellate),
-                ("Polka dot", polkaDot)]
+                ("Polka dot", polkaDot),
+                ("Halftone", halftone)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())

@@ -61,4 +61,5 @@ enum FilterType {
     case pixellate
     case polarPixellate
     case polkaDot
+    case halftone
 }

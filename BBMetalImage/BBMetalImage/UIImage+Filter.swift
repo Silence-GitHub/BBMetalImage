@@ -248,6 +248,10 @@ public extension UIImage {
         return filtered(with: BBMetalPolkaDotFilter(fractionalWidth: fractionalWidth, dotScaling: dotScaling))
     }
     
+    public func bb_halftoneFiltered(withFractionalWidth fractionalWidth: Float = 0.01) -> UIImage? {
+        return filtered(with: BBMetalHalftoneFilter(fractionalWidth: fractionalWidth))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }
