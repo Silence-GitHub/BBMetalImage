@@ -13,7 +13,7 @@ public struct BBMetalWeakImageSource {
     public init(source: BBMetalImageSource) { self.source = source }
 }
 
-public class BBMetalBaseFilter {
+public class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     public var consumers: [BBMetalImageConsumer] {
         lock.wait()
         let c = _consumers
@@ -86,9 +86,9 @@ public class BBMetalBaseFilter {
         completions.append(handler)
         lock.signal()
     }
-}
 
-extension BBMetalBaseFilter: BBMetalImageSource {
+    // MARK: - BBMetalImageSource
+    
     @discardableResult
     public func add<T: BBMetalImageConsumer>(consumer: T) -> T {
         lock.wait()
@@ -115,9 +115,9 @@ extension BBMetalBaseFilter: BBMetalImageSource {
             lock.signal()
         }
     }
-}
 
-extension BBMetalBaseFilter: BBMetalImageConsumer {
+    // MARK: - BBMetalImageConsumer
+    
     public func add(source: BBMetalImageSource) {
         lock.wait()
         _sources.append(BBMetalWeakImageSource(source: source))
@@ -214,11 +214,11 @@ extension BBMetalBaseFilter: BBMetalImageConsumer {
         for consumer in consumers { consumer.newTextureAvailable(_outputTexture!, from: self) }
     }
     
-    @objc func encodeMPSKernel(into commandBuffer: MTLCommandBuffer) {
+    func encodeMPSKernel(into commandBuffer: MTLCommandBuffer) {
         fatalError("\(#function) must be overridden by subclass")
     }
     
-    @objc func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         fatalError("\(#function) must be overridden by subclass")
     }
 }
