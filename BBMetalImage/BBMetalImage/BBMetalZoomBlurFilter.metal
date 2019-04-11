@@ -1,5 +1,5 @@
 //
-//  BBMetalZoomFilter.metal
+//  BBMetalZoomBlurFilter.metal
 //  BBMetalImage
 //
 //  Created by Kaibo Lu on 4/5/19.

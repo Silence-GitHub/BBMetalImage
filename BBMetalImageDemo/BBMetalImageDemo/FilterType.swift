@@ -63,4 +63,5 @@ enum FilterType {
     case polkaDot
     case halftone
     case crosshatch
+    case sketch
 }

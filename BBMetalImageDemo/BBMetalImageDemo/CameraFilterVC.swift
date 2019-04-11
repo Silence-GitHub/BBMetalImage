@@ -184,6 +184,7 @@ class CameraFilterVC: UIViewController {
         case .polkaDot: return BBMetalPolkaDotFilter(fractionalWidth: 0.05, dotScaling: 0.9)
         case .halftone: return BBMetalHalftoneFilter(fractionalWidth: 0.01)
         case .crosshatch: return BBMetalCrosshatchFilter(crosshatchSpacing: 0.01, lineWidth: 0.003)
+        case .sketch: return BBMetalSketchFilter(edgeStrength: 1)
         }
     }
     

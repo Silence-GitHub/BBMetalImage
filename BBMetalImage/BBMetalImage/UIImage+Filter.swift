@@ -256,6 +256,10 @@ public extension UIImage {
         return filtered(with: BBMetalCrosshatchFilter(crosshatchSpacing: crosshatchSpacing, lineWidth: lineWidth))
     }
     
+    public func bb_sketchFiltered(withEdgeStrength edgeStrength: Float = 1) -> UIImage? {
+        return filtered(with: BBMetalSketchFilter(edgeStrength: edgeStrength))
+    }
+    
     private func filtered(with filter: BBMetalBaseFilter, image: UIImage...) -> UIImage? {
         filter.runSynchronously = true
         let sources = ([self] + image).map { BBMetalStaticImageSource(image: $0) }

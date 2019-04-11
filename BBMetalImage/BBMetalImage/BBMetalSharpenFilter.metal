@@ -23,8 +23,8 @@ kernel void sharpenKernel(texture2d<half, access::write> outputTexture [[texture
     
     const float2 leftCoordinate = float2((x - 1) / width, y / height);
     const float2 rightCoordinate = float2((x + 1) / width, y / height);
-    const float2 topCoordinate = float2(x / width, (y + 1) / height);
-    const float2 bottomCoordinate = float2(x / width, (y - 1) / height);
+    const float2 topCoordinate = float2(x / width, (y - 1) / height);
+    const float2 bottomCoordinate = float2(x / width, (y + 1) / height);
     
     const half4 inColor = inputTexture.read(gid);
     

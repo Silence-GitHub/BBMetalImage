@@ -184,6 +184,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let crosshatch = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .crosshatch), animated: true) }
         }
+        let sketch = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .sketch), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -239,7 +242,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Polar pixellate", polarPixellate),
                 ("Polka dot", polkaDot),
                 ("Halftone", halftone),
-                ("Crosshatch", crosshatch)]
+                ("Crosshatch", crosshatch),
+                ("Sketch", sketch)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
