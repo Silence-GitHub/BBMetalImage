@@ -31,6 +31,7 @@ enum FilterType {
     case crop
     case resize
     case rotate
+    case flip
     case sharpen
     case unsharpMask
     case gaussianBlur

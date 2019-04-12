@@ -102,6 +102,7 @@ class CameraFilterVC: UIViewController {
         case .crop: return BBMetalCropFilter(rect: BBMetalRect(x: 0.25, y: 0.5, width: 0.5, height: 0.5))
         case .resize: return BBMetalResizeFilter(size: BBMetalSize(width: 0.5, height: 0.8))
         case .rotate: return BBMetalRotateFilter(angle: -120, fitSize: true)
+        case .flip: return BBMetalFlipFilter(horizontal: true, vertical: true)
         case .sharpen: return BBMetalSharpenFilter(sharpeness: 0.5)
         case .unsharpMask: return BBMetalUnsharpMaskFilter(sigma: 4, intensity: 4)
         case .gaussianBlur: return BBMetalGaussianBlurFilter(sigma: 3)
