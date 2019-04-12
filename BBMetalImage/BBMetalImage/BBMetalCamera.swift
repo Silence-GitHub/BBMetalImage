@@ -86,12 +86,6 @@ public class BBMetalCamera: NSObject {
         }
     }
     
-    public func removeAllConsumers() {
-        lock.wait()
-        _consumers.removeAll()
-        lock.signal()
-    }
-    
     public func start() { session.startRunning() }
     
     public func stop() { session.stopRunning() }
@@ -122,6 +116,16 @@ extension BBMetalCamera: BBMetalImageSource {
             consumer.remove(source: self)
         } else {
             lock.signal()
+        }
+    }
+    
+    public func removeAllConsumers() {
+        lock.wait()
+        let consumers = _consumers
+        _consumers.removeAll()
+        lock.signal()
+        for consumer in consumers {
+            consumer.remove(source: self)
         }
     }
 }

@@ -115,6 +115,16 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
             lock.signal()
         }
     }
+    
+    public func removeAllConsumers() {
+        lock.wait()
+        let consumers = _consumers
+        _consumers.removeAll()
+        lock.signal()
+        for consumer in consumers {
+            consumer.remove(source: self)
+        }
+    }
 
     // MARK: - BBMetalImageConsumer
     
