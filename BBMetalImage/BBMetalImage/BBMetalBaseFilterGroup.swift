@@ -16,6 +16,15 @@ public class BBMetalBaseFilterGroup: BBMetalBaseFilter {
         return terminalFilter.outputTexture
     }
     
+    public override var runSynchronously: Bool {
+        get { return terminalFilter.runSynchronously }
+        set { terminalFilter.runSynchronously = newValue }
+    }
+    
+    public override func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer) -> Void) {
+        terminalFilter.addCompletedHandler(handler)
+    }
+    
     // MARK: - BBMetalImageSource
     
     @discardableResult
