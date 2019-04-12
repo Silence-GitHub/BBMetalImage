@@ -16,7 +16,7 @@ public class BBMetalHueFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "hueKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&hue, length: MemoryLayout<Float>.size, index: 0)
     }
 }

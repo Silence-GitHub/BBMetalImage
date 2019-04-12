@@ -16,7 +16,7 @@ public class BBMetalPixellateFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "pixellateKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&fractionalWidth, length: MemoryLayout<Float>.size, index: 0)
     }
 }

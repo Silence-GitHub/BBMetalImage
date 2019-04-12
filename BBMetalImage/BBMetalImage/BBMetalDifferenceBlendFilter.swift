@@ -9,5 +9,5 @@
 /// Applies a difference blend of two images
 public class BBMetalDifferenceBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "differenceBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

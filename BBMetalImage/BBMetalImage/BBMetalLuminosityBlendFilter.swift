@@ -9,5 +9,5 @@
 /// Applies a luminosity blend of two images
 public class BBMetalLuminosityBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "luminosityBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

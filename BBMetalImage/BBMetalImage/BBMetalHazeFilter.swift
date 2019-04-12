@@ -19,7 +19,7 @@ public class BBMetalHazeFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "hazeKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&distance, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&slope, length: MemoryLayout<Float>.size, index: 1)
     }

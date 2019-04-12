@@ -13,7 +13,7 @@ public struct BBMetalWeakImageSource {
     public init(source: BBMetalImageSource) { self.source = source }
 }
 
-public class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
+open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     public var consumers: [BBMetalImageConsumer] {
         lock.wait()
         let c = _consumers
@@ -214,11 +214,11 @@ public class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         for consumer in consumers { consumer.newTextureAvailable(_outputTexture!, from: self) }
     }
     
-    func encodeMPSKernel(into commandBuffer: MTLCommandBuffer) {
+    open func encodeMPSKernel(into commandBuffer: MTLCommandBuffer) {
         fatalError("\(#function) must be overridden by subclass")
     }
     
-    func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    open func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         fatalError("\(#function) must be overridden by subclass")
     }
 }

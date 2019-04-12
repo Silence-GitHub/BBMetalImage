@@ -9,5 +9,5 @@
 /// Masks one image using another
 public class BBMetalMaskBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "maskBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

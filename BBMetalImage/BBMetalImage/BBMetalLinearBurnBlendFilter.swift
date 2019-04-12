@@ -9,5 +9,5 @@
 /// Applies a linear burn blend of two images
 public class BBMetalLinearBurnBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "linearBurnBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

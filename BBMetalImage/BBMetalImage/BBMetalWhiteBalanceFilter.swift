@@ -33,7 +33,7 @@ public class BBMetalWhiteBalanceFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "whiteBalanceKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&_temperature, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&_tint, length: MemoryLayout<Float>.size, index: 1)
     }

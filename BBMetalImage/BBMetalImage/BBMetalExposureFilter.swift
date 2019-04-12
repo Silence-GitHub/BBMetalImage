@@ -16,7 +16,7 @@ public class BBMetalExposureFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "exposureKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&exposure, length: MemoryLayout<Float>.size, index: 0)
     }
 }

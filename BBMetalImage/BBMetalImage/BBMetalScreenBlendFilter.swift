@@ -9,5 +9,5 @@
 /// Applies a screen blend of two images
 public class BBMetalScreenBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "screenBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

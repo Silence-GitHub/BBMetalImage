@@ -19,7 +19,7 @@ public class BBMetalThresholdSketchFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "thresholdSketchKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&edgeStrength, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&threshold, length: MemoryLayout<Float>.size, index: 1)
     }

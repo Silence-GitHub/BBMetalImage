@@ -16,7 +16,7 @@ public class BBMetalHalftoneFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "halftoneKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&fractionalWidth, length: MemoryLayout<Float>.size, index: 0)
     }
 }

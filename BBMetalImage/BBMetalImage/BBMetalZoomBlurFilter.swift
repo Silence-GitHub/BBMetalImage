@@ -19,7 +19,7 @@ public class BBMetalZoomBlurFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "zoomBlurKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&blurSize, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&blurCenter, length: MemoryLayout<BBMetalPosition>.size, index: 1)
     }

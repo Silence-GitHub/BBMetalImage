@@ -16,7 +16,7 @@ public class BBMetalDissolveBlendFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "dissolveBlendKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&mixturePercent, length: MemoryLayout<Float>.size, index: 0)
     }
 }

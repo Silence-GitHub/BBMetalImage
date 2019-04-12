@@ -24,7 +24,7 @@ public class BBMetalSwirlFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "swirlKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&center, length: MemoryLayout<BBMetalPosition>.size, index: 0)
         encoder.setBytes(&radius, length: MemoryLayout<Float>.size, index: 1)
         encoder.setBytes(&angle, length: MemoryLayout<Float>.size, index: 2)

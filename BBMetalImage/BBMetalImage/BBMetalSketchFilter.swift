@@ -16,7 +16,7 @@ public class BBMetalSketchFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "sketchKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&edgeStrength, length: MemoryLayout<Float>.size, index: 0)
     }
 }

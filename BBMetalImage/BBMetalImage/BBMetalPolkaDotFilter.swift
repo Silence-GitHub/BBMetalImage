@@ -19,7 +19,7 @@ public class BBMetalPolkaDotFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "polkaDotKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&fractionalWidth, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&dotScaling, length: MemoryLayout<Float>.size, index: 1)
     }

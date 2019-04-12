@@ -9,5 +9,5 @@
 /// Applies a hard light blend of two images
 public class BBMetalHardLightBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "hardLightBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

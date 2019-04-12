@@ -16,7 +16,7 @@ public class BBMetalLookupFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "lookupKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setTexture(lookupTable, index: 2)
         encoder.setBytes(&intensity, length: MemoryLayout<Float>.size, index: 0)
     }

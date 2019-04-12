@@ -9,5 +9,5 @@
 /// Applies a normal blend of two images
 public class BBMetalNormalBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "normalBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

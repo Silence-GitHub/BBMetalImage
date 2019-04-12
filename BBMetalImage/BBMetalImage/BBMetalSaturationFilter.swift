@@ -16,7 +16,7 @@ public class BBMetalSaturationFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "saturationKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&saturation, length: MemoryLayout<Float>.size, index: 0)
     }
 }

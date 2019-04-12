@@ -9,5 +9,5 @@
 /// Converts an image to grayscale
 public class BBMetalLuminanceFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "luminanceKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

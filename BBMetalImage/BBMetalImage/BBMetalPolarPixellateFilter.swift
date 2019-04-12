@@ -19,7 +19,7 @@ public class BBMetalPolarPixellateFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "polarPixellateKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&pixelSize, length: MemoryLayout<BBMetalSize>.size, index: 0)
         encoder.setBytes(&center, length: MemoryLayout<BBMetalPosition>.size, index: 1)
     }

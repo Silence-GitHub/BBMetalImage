@@ -9,5 +9,5 @@
 /// Applies a hue blend of two images
 public class BBMetalHueBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "hueBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

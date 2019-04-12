@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class BBMetalBaseFilterGroup: BBMetalBaseFilter {
+open class BBMetalBaseFilterGroup: BBMetalBaseFilter {
     public var initialFilters: [BBMetalBaseFilter]!
     public var terminalFilter: BBMetalBaseFilter!
     
@@ -30,18 +30,15 @@ public class BBMetalBaseFilterGroup: BBMetalBaseFilter {
     @discardableResult
     public override func add<T: BBMetalImageConsumer>(consumer: T) -> T {
         terminalFilter.add(consumer: consumer)
-        consumer.add(source: terminalFilter)
         return consumer
     }
     
     public override func add(consumer: BBMetalImageConsumer, at index: Int) {
         terminalFilter.add(consumer: consumer, at: index)
-        consumer.add(source: terminalFilter)
     }
     
     public override func remove(consumer: BBMetalImageConsumer) {
         terminalFilter.remove(consumer: consumer)
-        consumer.remove(source: terminalFilter)
     }
     
     // MARK: - BBMetalImageConsumer

@@ -16,7 +16,7 @@ public class BBMetalAlphaBlendFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "alphaBlendKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&mixturePercent, length: MemoryLayout<Float>.size, index: 0)
     }
 }

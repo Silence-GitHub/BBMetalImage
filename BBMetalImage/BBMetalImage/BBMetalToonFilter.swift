@@ -19,7 +19,7 @@ public class BBMetalToonFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "toonKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&threshold, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&quantizationLevels, length: MemoryLayout<Float>.size, index: 1)
     }

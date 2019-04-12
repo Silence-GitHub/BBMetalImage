@@ -21,7 +21,7 @@ public class BBMetalChromaKeyFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "chromaKeyKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&thresholdSensitivity, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&smoothing, length: MemoryLayout<Float>.size, index: 1)
         encoder.setBytes(&colorToReplace, length: MemoryLayout<BBMetalColor>.size, index: 2)

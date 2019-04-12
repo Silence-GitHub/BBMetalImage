@@ -9,5 +9,5 @@
 /// Applies a color dodge blend of two images
 public class BBMetalColorDodgeBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "colorDodgeBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

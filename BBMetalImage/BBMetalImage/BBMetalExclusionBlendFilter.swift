@@ -9,5 +9,5 @@
 /// Applies an exclusion blend of two images
 public class BBMetalExclusionBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "exclusionBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

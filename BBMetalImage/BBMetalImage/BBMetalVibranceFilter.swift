@@ -16,7 +16,7 @@ public class BBMetalVibranceFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "vibranceKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&vibrance, length: MemoryLayout<Float>.size, index: 0)
     }
 }

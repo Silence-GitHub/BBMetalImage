@@ -16,7 +16,7 @@ public class BBMetalContrastFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "contrastKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&contrast, length: MemoryLayout<Float>.size, index: 0)
     }
 }

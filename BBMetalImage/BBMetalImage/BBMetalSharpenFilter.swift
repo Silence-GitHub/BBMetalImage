@@ -16,7 +16,7 @@ public class BBMetalSharpenFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "sharpenKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&sharpeness, length: MemoryLayout<Float>.size, index: 0)
     }
 }

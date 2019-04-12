@@ -9,5 +9,5 @@
 /// Applies a multiply blend of two images
 public class BBMetalMultiplyBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "multiplyBlendKernel") }
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

@@ -18,7 +18,7 @@ public class BBMetalFalseColorFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "falseColorKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&firstColor, length: MemoryLayout<BBMetalColor>.size, index: 0)
         encoder.setBytes(&secondColor, length: MemoryLayout<BBMetalColor>.size, index: 1)
     }

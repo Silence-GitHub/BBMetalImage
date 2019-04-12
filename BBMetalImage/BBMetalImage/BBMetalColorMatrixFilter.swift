@@ -19,7 +19,7 @@ public class BBMetalColorMatrixFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "colorMatrixKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&intensity, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&colorMatrix, length: MemoryLayout<BBMetalMatrix4x4>.size, index: 1)
     }
