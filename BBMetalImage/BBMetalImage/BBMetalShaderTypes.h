@@ -9,6 +9,8 @@
 #ifndef BBMetalShaderTypes_h
 #define BBMetalShaderTypes_h
 
+#define M_PI 3.14159265358979323846264338327950288
+
 // Luminance Constants
 constant half3 kLuminanceWeighting = half3(0.2125, 0.7154, 0.0721); // Values from "Graphics Shaders: Theory and Practice" by Bailey and Cunningham
 

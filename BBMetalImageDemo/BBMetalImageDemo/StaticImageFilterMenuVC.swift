@@ -85,6 +85,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let resize = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .resize), animated: true) }
         }
+        let rotate = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .rotate), animated: true) }
+        }
         let sharpen = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .sharpen), animated: true) }
         }
@@ -234,6 +237,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Chroma key", chromaKey),
                 ("Crop", crop),
                 ("Resize", resize),
+                ("Rotate", rotate),
                 ("Sharpen", sharpen),
                 ("Unsharp mask", unsharpMask),
                 ("Gaussian blur", gaussianBlur),

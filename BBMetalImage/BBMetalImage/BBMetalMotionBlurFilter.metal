@@ -7,9 +7,8 @@
 //
 
 #include <metal_stdlib>
+#include "BBMetalShaderTypes.h"
 using namespace metal;
-
-#define M_PI 3.14159265358979323846264338327950288
 
 kernel void motionBlurKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                              texture2d<half, access::sample> inputTexture [[texture(1)]],

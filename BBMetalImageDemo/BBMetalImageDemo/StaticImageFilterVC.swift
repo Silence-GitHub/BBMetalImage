@@ -92,6 +92,7 @@ class StaticImageFilterVC: UIViewController {
         case .chromaKey: return image.bb_chromaKeyFiltered(withThresholdSensitivity: 0.4, smoothing: 0.1, colorToReplace: .blue)
         case .crop: return image.bb_cropFiltered(with: BBMetalRect(x: 0.25, y: 0.5, width: 0.5, height: 0.5))
         case .resize: return image.bb_resizeFiltered(with: BBMetalSize(width: 0.5, height: 0.8))
+        case .rotate: return image.bb_rotateFiltered(with: -120, fitSize: true)
         case .sharpen: return image.bb_sharpenFiltered(withSharpeness: 0.5)
         case .unsharpMask: return image.bb_unsharpMaskFiltered(withSigma: 4, intensity: 4)
         case .gaussianBlur: return image.bb_gaussianBlurFiltered(withSigma: 3)

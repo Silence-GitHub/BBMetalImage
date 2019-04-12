@@ -117,6 +117,10 @@ public extension UIImage {
         return filtered(with: BBMetalResizeFilter(size: size))
     }
     
+    public func bb_rotateFiltered(with angle: Float, fitSize: Bool) -> UIImage? {
+        return filtered(with: BBMetalRotateFilter(angle: angle, fitSize: fitSize))
+    }
+    
     public func bb_sharpenFiltered(withSharpeness sharpeness: Float = 0) -> UIImage? {
         return filtered(with: BBMetalSharpenFilter(sharpeness: sharpeness))
     }
