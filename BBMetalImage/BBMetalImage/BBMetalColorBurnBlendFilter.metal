@@ -18,7 +18,7 @@ kernel void colorBurnBlendKernel(texture2d<half, access::write> outputTexture [[
     
     const half4 textureColor = inputTexture.read(gid);
     constexpr sampler quadSampler;
-    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
+    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     const half4 whiteColor = half4(1.0);
     
     const half4 outColor = whiteColor - (whiteColor - textureColor) / textureColor2;

@@ -21,7 +21,7 @@ kernel void halftoneKernel(texture2d<half, access::write> outputTexture [[textur
     const float aspectRatio = float(inputTexture.get_height()) / float(inputTexture.get_width());
     const float2 sampleDivisor = float2(fractionalWidthOfPixel, fractionalWidthOfPixel / aspectRatio);
     
-    const float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
+    const float2 textureCoordinate = float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height());
     const float2 samplePos = textureCoordinate - mod(textureCoordinate, sampleDivisor) + float2(0.5) * sampleDivisor;
     const float2 textureCoordinateToUse = float2(textureCoordinate.x, (textureCoordinate.y * aspectRatio + 0.5 - 0.5 * aspectRatio));
     const float2 adjustedSamplePos = float2(samplePos.x, (samplePos.y * aspectRatio + 0.5 - 0.5 * aspectRatio));

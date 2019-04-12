@@ -24,7 +24,7 @@ kernel void motionBlurKernel(texture2d<half, access::write> outputTexture [[text
     directionalTexelStep.x = float(*blurSize) * cos(float(*blurAngle) * M_PI / 180.0) * aspectRatio / inputTexture.get_width();
     directionalTexelStep.y = float(*blurSize) * sin(float(*blurAngle) * M_PI / 180.0) / inputTexture.get_width();
     
-    const float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
+    const float2 textureCoordinate = float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height());
     const float2 oneStepBackTextureCoordinate = textureCoordinate.xy - directionalTexelStep;
     const float2 twoStepsBackTextureCoordinate = textureCoordinate.xy - 2.0 * directionalTexelStep;
     const float2 threeStepsBackTextureCoordinate = textureCoordinate.xy - 3.0 * directionalTexelStep;

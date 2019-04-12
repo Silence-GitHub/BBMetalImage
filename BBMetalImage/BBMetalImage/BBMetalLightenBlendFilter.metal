@@ -18,7 +18,7 @@ kernel void lightenBlendKernel(texture2d<half, access::write> outputTexture [[te
     
     const half4 textureColor = inputTexture.read(gid);
     constexpr sampler quadSampler;
-    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
+    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     
     const half4 outColor = max(textureColor, textureColor2);
     outputTexture.write(outColor, gid);

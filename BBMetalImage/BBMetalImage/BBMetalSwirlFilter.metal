@@ -22,7 +22,7 @@ kernel void swirlKernel(texture2d<half, access::write> outputTexture [[texture(0
     const float radius = float(*radiusPointer);
     const float angle = float(*anglePointer);
     
-    float2 textureCoordinateToUse = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
+    float2 textureCoordinateToUse = float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height());
     const float dist = distance(center, textureCoordinateToUse);
     
     if (dist < radius) {

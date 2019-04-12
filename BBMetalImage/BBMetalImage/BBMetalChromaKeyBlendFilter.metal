@@ -21,7 +21,7 @@ kernel void chromaKeyBlendKernel(texture2d<half, access::write> outputTexture [[
     
     const half4 textureColor = inputTexture.read(gid);
     constexpr sampler quadSampler;
-    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
+    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     
     const half maskY = 0.2989h * float3(*colorToReplace).r + 0.5866h * float3(*colorToReplace).g + 0.1145h * float3(*colorToReplace).b;
     const half maskCr = 0.7132h * (float3(*colorToReplace).r - maskY);

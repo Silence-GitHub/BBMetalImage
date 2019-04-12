@@ -18,7 +18,7 @@ kernel void crosshatchKernel(texture2d<half, access::write> outputTexture [[text
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
-    const float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
+    const float2 textureCoordinate = float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height());
     const float crossHatchSpacing = float(*crossHatchSpacingPointer);
     const float lineWidth = float(*lineWidthPointer);
     

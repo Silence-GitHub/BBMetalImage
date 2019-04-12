@@ -18,7 +18,7 @@ kernel void maskBlendKernel(texture2d<half, access::write> outputTexture [[textu
     
     const half4 textureColor = inputTexture.read(gid);
     constexpr sampler quadSampler;
-    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
+    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     
     const half newAlpha = dot(textureColor2.rgb, half3(.33333334, .33333334, .33333334)) * textureColor2.a;
     const half4 outColor(textureColor.rgb, newAlpha);

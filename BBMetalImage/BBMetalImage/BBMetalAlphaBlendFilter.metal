@@ -19,7 +19,7 @@ kernel void alphaBlendKernel(texture2d<half, access::write> outputTexture [[text
     
     const half4 textureColor = inputTexture.read(gid);
     constexpr sampler quadSampler;
-    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
+    const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     
     const half4 outColor(mix(textureColor.rgb, textureColor2.rgb, textureColor2.a * half(*mixturePercent)), textureColor.a);
     outputTexture.write(outColor, gid);

@@ -18,7 +18,7 @@ kernel void softLightBlendKernel(texture2d<half, access::write> outputTexture [[
     
     const half4 base = inputTexture.read(gid);
     constexpr sampler quadSampler;
-    const half4 overlay = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
+    const half4 overlay = inputTexture2.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     
     const half alphaDivisor = base.a + step(base.a, 0.0h); // Protect against a divide-by-zero blacking out things in the output
     

@@ -18,7 +18,7 @@ kernel void polarPixellateKernel(texture2d<half, access::write> outputTexture [[
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
-    const float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
+    const float2 textureCoordinate = float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height());
     float2 normCoord = 2.0 * textureCoordinate - 1.0;
     const float2 normCenter = 2.0 * float2(*center) - 1.0;
     

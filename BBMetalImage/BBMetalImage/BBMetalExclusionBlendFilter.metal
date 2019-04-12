@@ -18,7 +18,7 @@ kernel void exclusionBlendKernel(texture2d<half, access::write> outputTexture [[
     
     const half4 base = inputTexture.read(gid);
     constexpr sampler quadSampler;
-    const half4 overlay = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
+    const half4 overlay = inputTexture2.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     
     const half4 outColor((overlay.rgb * base.a + base.rgb * overlay.a - 2.0h * overlay.rgb * base.rgb) + overlay.rgb * (1.0h - base.a) + base.rgb * (1.0h - overlay.a), base.a);
     outputTexture.write(outColor, gid);

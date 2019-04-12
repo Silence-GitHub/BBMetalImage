@@ -18,7 +18,7 @@ kernel void divideBlendKernel(texture2d<half, access::write> outputTexture [[tex
     
     const half4 base = inputTexture.read(gid);
     constexpr sampler quadSampler;
-    const half4 overlay = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
+    const half4 overlay = inputTexture2.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     
     half ra;
     if (overlay.a == 0.0h || ((base.r / overlay.r) > (base.a / overlay.a)))

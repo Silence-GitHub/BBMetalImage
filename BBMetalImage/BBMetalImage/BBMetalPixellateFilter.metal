@@ -18,7 +18,7 @@ kernel void pixellateKernel(texture2d<half, access::write> outputTexture [[textu
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
     const float2 sampleDivisor = float2(float(*fractionalWidth), float(*fractionalWidth) * float(inputTexture.get_width()) / float(inputTexture.get_height()));
-    const float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
+    const float2 textureCoordinate = float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height());
     const float2 samplePos = textureCoordinate - mod(textureCoordinate, sampleDivisor) + float2(0.5) * sampleDivisor;
     
     constexpr sampler quadSampler;
