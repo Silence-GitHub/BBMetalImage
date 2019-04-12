@@ -17,6 +17,8 @@ kernel void rgbaKernel(texture2d<half, access::write> outputTexture [[texture(0)
                        device float *alpha [[buffer(3)]],
                        uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 inColor = inputTexture.read(gid);
     const half4 outColor(inColor.r * half(*red), inColor.g * half(*green), inColor.b * half(*blue), inColor.a * half(*alpha));
     outputTexture.write(outColor, gid);

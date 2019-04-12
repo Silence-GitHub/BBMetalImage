@@ -17,6 +17,8 @@ kernel void whiteBalanceKernel(texture2d<half, access::write> outputTexture [[te
                                device float *tint [[buffer(1)]],
                                uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 inColor = inputTexture.read(gid);
     
     const half3x3 RGBtoYIQ = half3x3(half3(0.299, 0.587, 0.114), half3(0.596, -0.274, -0.322), half3(0.212, -0.523, 0.311));

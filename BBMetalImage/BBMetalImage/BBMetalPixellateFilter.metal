@@ -15,7 +15,7 @@ kernel void pixellateKernel(texture2d<half, access::write> outputTexture [[textu
                             device float *fractionalWidth [[buffer(0)]],
                             uint2 gid [[thread_position_in_grid]]) {
     
-    if ((gid.x >= inputTexture.get_width()) || (gid.y >= inputTexture.get_height())) { return; }
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
     const float2 sampleDivisor = float2(float(*fractionalWidth), float(*fractionalWidth) * float(inputTexture.get_width()) / float(inputTexture.get_height()));
     const float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());

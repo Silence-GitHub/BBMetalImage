@@ -16,6 +16,8 @@ kernel void chromaKeyKernel(texture2d<half, access::write> outputTexture [[textu
                             device float3 *colorToReplace [[buffer(2)]],
                             uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 inColor = inputTexture.read(gid);
     
     const half maskY = 0.2989h * float3(*colorToReplace).r + 0.5866h * float3(*colorToReplace).g + 0.1145h * float3(*colorToReplace).b;

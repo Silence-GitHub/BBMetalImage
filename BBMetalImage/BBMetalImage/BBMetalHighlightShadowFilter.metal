@@ -16,6 +16,8 @@ kernel void highlightShadowKernel(texture2d<half, access::write> outputTexture [
                                   device float *highlights [[buffer(1)]],
                                   uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 inColor = inputTexture.read(gid);
     const half luminance = dot(inColor.rgb, kLuminanceWeighting);
     const half shadow = clamp((pow(luminance, 1.0h / (half(*shadows) + 1.0h)) + (-0.76) * pow(luminance, 2.0h / (half(*shadows) + 1.0h))) - luminance, 0.0, 1.0);

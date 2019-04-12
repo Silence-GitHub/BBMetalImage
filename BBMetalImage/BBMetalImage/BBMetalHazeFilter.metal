@@ -15,6 +15,8 @@ kernel void hazeKernel(texture2d<half, access::write> outputTexture [[texture(0)
                        device float *slope [[buffer(1)]],
                        uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 white = half4(1.0);
     
     const half d = half(gid.y) / half(inputTexture.get_height()) * half(*slope) + half(*hazeDistance);

@@ -14,6 +14,8 @@ kernel void gammaKernel(texture2d<half, access::write> outputTexture [[texture(0
                         device float *gamma [[buffer(0)]],
                         uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 inColor = inputTexture.read(gid);
     const half4 outColor(pow(inColor.rgb, half3(*gamma)), inColor.a);
     outputTexture.write(outColor, gid);

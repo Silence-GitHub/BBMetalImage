@@ -15,7 +15,7 @@ kernel void toonKernel(texture2d<half, access::write> outputTexture [[texture(0)
                        device float *quantizationLevels [[buffer(1)]],
                        uint2 gid [[thread_position_in_grid]]) {
     
-    if ((gid.x >= inputTexture.get_width()) || (gid.y >= inputTexture.get_height())) { return; }
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
     const float x = float(gid.x);
     const float y = float(gid.y);

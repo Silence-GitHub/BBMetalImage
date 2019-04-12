@@ -14,6 +14,8 @@ kernel void luminanceKernel(texture2d<half, access::write> outputTexture [[textu
                             texture2d<half, access::read> inputTexture [[texture(1)]],
                             uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 inColor = inputTexture.read(gid);
     const half luminance = dot(inColor.rgb, kLuminanceWeighting);
     outputTexture.write(half4(half3(luminance), inColor.a), gid);

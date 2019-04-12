@@ -14,11 +14,13 @@ kernel void vibranceKernel(texture2d<half, access::write> outputTexture [[textur
                            device float *vibrance [[buffer(0)]],
                            uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     half4 color = inputTexture.read(gid);
     
-    half average = (color.r + color.g + color.b) / 3.0;
-    half mx = max(color.r, max(color.g, color.b));
-    half amt = (mx - average) * (-half(*vibrance) * 3.0);
+    const half average = (color.r + color.g + color.b) / 3.0;
+    const half mx = max(color.r, max(color.g, color.b));
+    const half amt = (mx - average) * (-half(*vibrance) * 3.0);
     color.rgb = mix(color.rgb, half3(mx), amt);
     
     outputTexture.write(color, gid);

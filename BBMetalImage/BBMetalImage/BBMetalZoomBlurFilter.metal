@@ -15,8 +15,10 @@ kernel void zoomBlurKernel(texture2d<half, access::write> outputTexture [[textur
                            device float2 *blurCenter [[buffer(1)]],
                            uint2 gid [[thread_position_in_grid]]) {
     
-    float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
-    float2 samplingOffset = 1.0 / 100.0 * (float2(*blurCenter) - textureCoordinate) * float(*blurSize);
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
+    const float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
+    const float2 samplingOffset = 1.0 / 100.0 * (float2(*blurCenter) - textureCoordinate) * float(*blurSize);
     
     constexpr sampler quadSampler;
     half4 color = inputTexture.sample(quadSampler, textureCoordinate) * 0.18;

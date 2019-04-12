@@ -15,6 +15,8 @@ kernel void luminanceThresholdKernel(texture2d<half, access::write> outputTextur
                                      device float *threshold [[buffer(0)]],
                                      uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 inColor = inputTexture.read(gid);
 
     const half luminance = dot(inColor.rgb, kLuminanceWeighting);

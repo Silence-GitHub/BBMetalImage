@@ -17,6 +17,8 @@ kernel void chromaKeyBlendKernel(texture2d<half, access::write> outputTexture [[
                                  device float3 *colorToReplace [[buffer(2)]],
                                  uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 textureColor = inputTexture.read(gid);
     constexpr sampler quadSampler;
     const half4 textureColor2 = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));

@@ -16,6 +16,8 @@ kernel void falseColorKernel(texture2d<half, access::write> outputTexture [[text
                              device float3 *secondColor [[buffer(1)]],
                              uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 inColor = inputTexture.read(gid);
     const float luminance = dot(inColor.rgb, kLuminanceWeighting);
     const half4 outColor(mix(half3((*firstColor).rgb), half3((*secondColor).rgb), half3(luminance)), inColor.a);

@@ -14,9 +14,11 @@ kernel void addBlendKernel(texture2d<half, access::write> outputTexture [[textur
                            texture2d<half, access::sample> inputTexture2 [[texture(2)]],
                            uint2 gid [[thread_position_in_grid]]) {
     
-    half4 base = inputTexture.read(gid);
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
+    const half4 base = inputTexture.read(gid);
     constexpr sampler quadSampler;
-    half4 overlay = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
+    const half4 overlay = inputTexture2.sample(quadSampler, float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height()));
     
     half r;
     if (overlay.r * base.a + base.r * overlay.a >= overlay.a * base.a) {
@@ -39,7 +41,7 @@ kernel void addBlendKernel(texture2d<half, access::write> outputTexture [[textur
         b = overlay.b + base.b;
     }
     
-    half a = overlay.a + base.a - overlay.a * base.a;
+    const half a = overlay.a + base.a - overlay.a * base.a;
     
     const half4 outColor(r, g, b, a);
     outputTexture.write(outColor, gid);

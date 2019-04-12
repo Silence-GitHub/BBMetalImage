@@ -14,6 +14,8 @@ kernel void normalBlendKernel(texture2d<half, access::write> outputTexture [[tex
                               texture2d<half, access::sample> inputTexture2 [[texture(2)]],
                               uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const half4 inColor2 = inputTexture.read(gid);
     
     constexpr sampler quadSampler;

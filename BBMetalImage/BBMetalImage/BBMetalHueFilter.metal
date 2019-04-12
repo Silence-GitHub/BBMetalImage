@@ -23,6 +23,8 @@ kernel void hueKernel(texture2d<half, access::write> outputTexture [[texture(0)]
                       device float *hueInput [[buffer(0)]],
                       uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     half4 color = inputTexture.read(gid);
     
     // Convert to YIQ

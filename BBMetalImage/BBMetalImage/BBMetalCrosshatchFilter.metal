@@ -16,7 +16,7 @@ kernel void crosshatchKernel(texture2d<half, access::write> outputTexture [[text
                              device float *lineWidthPointer [[buffer(1)]],
                              uint2 gid [[thread_position_in_grid]]) {
     
-    if ((gid.x >= inputTexture.get_width()) || (gid.y >= inputTexture.get_height())) { return; }
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
     const float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
     const float crossHatchSpacing = float(*crossHatchSpacingPointer);
@@ -25,13 +25,11 @@ kernel void crosshatchKernel(texture2d<half, access::write> outputTexture [[text
     const half4 color = inputTexture.read(gid);
     const half luminance = dot(color.rgb, kLuminanceWeighting);
     
-    half4 outColor = half4(1.0);
-    bool displayBlack = ((luminance < 1.00) && (mod(textureCoordinate.x + textureCoordinate.y, crossHatchSpacing) <= lineWidth)) ||
+    const bool displayBlack = ((luminance < 1.00) && (mod(textureCoordinate.x + textureCoordinate.y, crossHatchSpacing) <= lineWidth)) ||
     ((luminance < 0.75) && (mod(textureCoordinate.x - textureCoordinate.y, crossHatchSpacing) <= lineWidth)) ||
     ((luminance < 0.50) && (mod(textureCoordinate.x + textureCoordinate.y - (crossHatchSpacing / 2.0), crossHatchSpacing) <= lineWidth)) ||
     ((luminance < 0.3) && (mod(textureCoordinate.x - textureCoordinate.y - (crossHatchSpacing / 2.0), crossHatchSpacing) <= lineWidth));
     
-    if (displayBlack) { outColor = half4(0.0, 0.0, 0.0, 1.0); }
-    
+    const half4 outColor = displayBlack ? half4(0.0, 0.0, 0.0, 1.0) : half4(1.0);
     outputTexture.write(outColor, gid);
 }

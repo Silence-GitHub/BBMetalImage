@@ -17,20 +17,22 @@ kernel void motionBlurKernel(texture2d<half, access::write> outputTexture [[text
                              device float *blurAngle [[buffer(1)]],
                              uint2 gid [[thread_position_in_grid]]) {
     
-    float aspectRatio = float(inputTexture.get_height()) / float(inputTexture.get_width());
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
+    const float aspectRatio = float(inputTexture.get_height()) / float(inputTexture.get_width());
     float2 directionalTexelStep;
     directionalTexelStep.x = float(*blurSize) * cos(float(*blurAngle) * M_PI / 180.0) * aspectRatio / inputTexture.get_width();
     directionalTexelStep.y = float(*blurSize) * sin(float(*blurAngle) * M_PI / 180.0) / inputTexture.get_width();
     
-    float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
-    float2 oneStepBackTextureCoordinate = textureCoordinate.xy - directionalTexelStep;
-    float2 twoStepsBackTextureCoordinate = textureCoordinate.xy - 2.0 * directionalTexelStep;
-    float2 threeStepsBackTextureCoordinate = textureCoordinate.xy - 3.0 * directionalTexelStep;
-    float2 fourStepsBackTextureCoordinate = textureCoordinate.xy - 4.0 * directionalTexelStep;
-    float2 oneStepForwardTextureCoordinate = textureCoordinate.xy + directionalTexelStep;
-    float2 twoStepsForwardTextureCoordinate = textureCoordinate.xy + 2.0 * directionalTexelStep;
-    float2 threeStepsForwardTextureCoordinate = textureCoordinate.xy + 3.0 * directionalTexelStep;
-    float2 fourStepsForwardTextureCoordinate = textureCoordinate.xy + 4.0 * directionalTexelStep;
+    const float2 textureCoordinate = float2(float(gid.x) / inputTexture.get_width(), float(gid.y) / inputTexture.get_height());
+    const float2 oneStepBackTextureCoordinate = textureCoordinate.xy - directionalTexelStep;
+    const float2 twoStepsBackTextureCoordinate = textureCoordinate.xy - 2.0 * directionalTexelStep;
+    const float2 threeStepsBackTextureCoordinate = textureCoordinate.xy - 3.0 * directionalTexelStep;
+    const float2 fourStepsBackTextureCoordinate = textureCoordinate.xy - 4.0 * directionalTexelStep;
+    const float2 oneStepForwardTextureCoordinate = textureCoordinate.xy + directionalTexelStep;
+    const float2 twoStepsForwardTextureCoordinate = textureCoordinate.xy + 2.0 * directionalTexelStep;
+    const float2 threeStepsForwardTextureCoordinate = textureCoordinate.xy + 3.0 * directionalTexelStep;
+    const float2 fourStepsForwardTextureCoordinate = textureCoordinate.xy + 4.0 * directionalTexelStep;
     
     constexpr sampler quadSampler;
     half4 color = inputTexture.sample(quadSampler, textureCoordinate) * 0.18;

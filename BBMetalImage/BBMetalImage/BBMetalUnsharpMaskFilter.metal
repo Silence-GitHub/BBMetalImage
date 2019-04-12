@@ -15,7 +15,7 @@ kernel void unsharpMaskKernel(texture2d<half, access::write> outputTexture [[tex
                               device float *intensity [[buffer(0)]],
                               uint2 gid [[thread_position_in_grid]]) {
     
-    if ((gid.x >= inputTexture.get_width()) || (gid.y >= inputTexture.get_height())) { return; }
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
     const half4 inColor = inputTexture.read(gid);
     const half4 blurColor = blurTexture.read(gid);
