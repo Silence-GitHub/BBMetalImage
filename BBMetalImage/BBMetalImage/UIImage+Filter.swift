@@ -113,6 +113,10 @@ public extension UIImage {
         return filtered(with: BBMetalCropFilter(rect: rect))
     }
     
+    public func bb_resizeFiltered(with size: BBMetalSize) -> UIImage? {
+        return filtered(with: BBMetalResizeFilter(size: size))
+    }
+    
     public func bb_sharpenFiltered(withSharpeness sharpeness: Float = 0) -> UIImage? {
         return filtered(with: BBMetalSharpenFilter(sharpeness: sharpeness))
     }
