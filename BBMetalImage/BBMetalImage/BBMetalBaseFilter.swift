@@ -187,8 +187,8 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         
         // Update thread group count if needed
         if threadgroupCount == nil {
-            threadgroupCount = MTLSize(width: (firstTexture.width + threadgroupSize.width - 1) / threadgroupSize.width,
-                                       height: (firstTexture.height + threadgroupSize.height - 1) / threadgroupSize.height,
+            threadgroupCount = MTLSize(width: (outputSize.width + threadgroupSize.width - 1) / threadgroupSize.width,
+                                       height: (outputSize.height + threadgroupSize.height - 1) / threadgroupSize.height,
                                        depth: 1)
         }
         
