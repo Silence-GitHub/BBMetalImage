@@ -96,6 +96,7 @@ class StaticImageFilterVC: UIViewController {
         case .boxBlur: return image.bb_boxBlurFiltered(withKernelWidth: 25, kernelHeight: 65)
         case .zoomBlur: return image.bb_zoomBlurFiltered(withBlurSize: 3, blurCenter: BBMetalPosition(x: 0.35, y: 0.55))
         case .motionBlur: return image.bb_motionBlurFiltered(withBlurSize: 5, blurAngle: 30)
+        case .tiltShift: return image.bb_tiltShiftFiltered()
         case .normalBlend: return image.bb_normalBlendFiltered(withImage: topBlendImage(withAlpha: 0.1))
         case .chromaKeyBlend: return image.bb_chromaKeyBlendFiltered(withThresholdSensitivity: 0.4,
                                                                      smoothing: 0.1,

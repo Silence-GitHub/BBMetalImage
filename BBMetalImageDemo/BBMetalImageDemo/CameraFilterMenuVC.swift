@@ -97,6 +97,9 @@ class CameraFilterMenuVC: UIViewController {
         let motionBlur = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .motionBlur), animated: true) }
         }
+        let tiltShift = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .tiltShift), animated: true) }
+        }
         let normalBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .normalBlend), animated: true) }
         }
@@ -229,6 +232,7 @@ class CameraFilterMenuVC: UIViewController {
                 ("Box blur", boxBlur),
                 ("Zoom blur", zoomBlur),
                 ("Motion blur", motionBlur),
+                ("Tilt shift", tiltShift),
                 ("Normal blend", normalBlend),
                 ("Chroma key blend", chromaKeyBlend),
                 ("Dissolve blend", dissolveBlend),

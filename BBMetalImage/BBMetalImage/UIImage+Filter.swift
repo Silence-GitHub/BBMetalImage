@@ -133,6 +133,17 @@ public extension UIImage {
         return filtered(with: BBMetalMotionBlurFilter(blurSize: blurSize, blurAngle: blurAngle))
     }
     
+    public func bb_tiltShiftFiltered(withSigma sigma: Float = 7,
+                                     topFocusLevel: Float = 0.4,
+                                     bottomFocusLevel: Float = 0.6,
+                                     focusFallOffRate: Float = 0.2) -> UIImage? {
+        
+        return filtered(with: BBMetalTiltShiftFilter(sigma: sigma,
+                                                     topFocusLevel: topFocusLevel,
+                                                     bottomFocusLevel: bottomFocusLevel,
+                                                     focusFallOffRate: focusFallOffRate))
+    }
+    
     public func bb_normalBlendFiltered(withImage image: UIImage) -> UIImage? {
         return filtered(with: BBMetalNormalBlendFilter(), image: image)
     }

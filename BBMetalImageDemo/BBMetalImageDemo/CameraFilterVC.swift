@@ -105,6 +105,7 @@ class CameraFilterVC: UIViewController {
         case .boxBlur: return BBMetalBoxBlurFilter(kernelWidth: 25, kernelHeight: 65)
         case .zoomBlur: return BBMetalZoomBlurFilter(blurSize: 3, blurCenter: BBMetalPosition(x: 0.35, y: 0.55))
         case .motionBlur: return BBMetalMotionBlurFilter(blurSize: 5, blurAngle: 30)
+        case .tiltShift: return BBMetalTiltShiftFilter()
         case .normalBlend:
             imageSource = BBMetalStaticImageSource(image: topBlendImage(withAlpha: 0.1))
             return BBMetalNormalBlendFilter()

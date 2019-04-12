@@ -34,6 +34,7 @@ enum FilterType {
     case boxBlur
     case zoomBlur
     case motionBlur
+    case tiltShift
     case normalBlend
     case chromaKeyBlend
     case dissolveBlend
