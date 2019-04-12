@@ -79,6 +79,9 @@ class CameraFilterMenuVC: UIViewController {
         let chromaKey = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .chromaKey), animated: true) }
         }
+        let crop = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .crop), animated: true) }
+        }
         let sharpen = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .sharpen), animated: true) }
         }
@@ -226,6 +229,7 @@ class CameraFilterMenuVC: UIViewController {
                 ("Luminance", luminance),
                 ("Luminance threshold", luminanceThreshold),
                 ("Chroma key", chromaKey),
+                ("Crop", crop),
                 ("Sharpen", sharpen),
                 ("Unsharp mask", unsharpMask),
                 ("Gaussian blur", gaussianBlur),

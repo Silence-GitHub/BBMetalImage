@@ -28,6 +28,7 @@ enum FilterType {
     case luminance
     case luminanceThreshold
     case chromaKey
+    case crop
     case sharpen
     case unsharpMask
     case gaussianBlur

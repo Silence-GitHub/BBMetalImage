@@ -167,13 +167,14 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         
         // Check whether output texture has the same size as input texture
         let firstTexture = _sources.first!.texture!
+        let outputSize = outputTextureSize(withInputTextureSize: BBMetalIntSize(width: firstTexture.width, height: firstTexture.height))
         if _outputTexture == nil ||
-            _outputTexture!.width != firstTexture.width ||
-            _outputTexture!.height != firstTexture.height {
+            _outputTexture!.width != outputSize.width ||
+            _outputTexture!.height != outputSize.height {
             let descriptor = MTLTextureDescriptor()
             descriptor.pixelFormat = .rgba8Unorm
-            descriptor.width = firstTexture.width
-            descriptor.height = firstTexture.height
+            descriptor.width = outputSize.width
+            descriptor.height = outputSize.height
             descriptor.usage = [.shaderRead, .shaderWrite]
             if let output = BBMetalDevice.sharedDevice.makeTexture(descriptor: descriptor) {
                 _outputTexture = output
@@ -222,6 +223,10 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         
         // Transmit output texture to image consumers
         for consumer in consumers { consumer.newTextureAvailable(_outputTexture!, from: self) }
+    }
+    
+    open func outputTextureSize(withInputTextureSize inputSize: BBMetalIntSize) -> BBMetalIntSize {
+        return inputSize
     }
     
     open func encodeMPSKernel(into commandBuffer: MTLCommandBuffer) {

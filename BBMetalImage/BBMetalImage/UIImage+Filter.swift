@@ -109,6 +109,10 @@ public extension UIImage {
         return filtered(with: BBMetalChromaKeyFilter(thresholdSensitivity: thresholdSensitivity, smoothing: smoothing, colorToReplace: colorToReplace))
     }
     
+    public func bb_cropFiltered(with rect: BBMetalRect) -> UIImage? {
+        return filtered(with: BBMetalCropFilter(rect: rect))
+    }
+    
     public func bb_sharpenFiltered(withSharpeness sharpeness: Float = 0) -> UIImage? {
         return filtered(with: BBMetalSharpenFilter(sharpeness: sharpeness))
     }
