@@ -16,7 +16,7 @@ class TestImageMenuVC: UIViewController {
         super.viewDidLoad()
         
         let testBB = { [weak self] in
-            if let self = self { self.navigationController?.pushViewController(TestImageVC(type: .BBWebImage), animated: true) }
+            if let self = self { self.navigationController?.pushViewController(TestImageVC(type: .BBMetalImage), animated: true) }
         }
         let testGPU = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(TestImageVC(type: .GPUImage), animated: true) }

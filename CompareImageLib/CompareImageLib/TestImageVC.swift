@@ -11,7 +11,7 @@ import BBMetalImage
 import GPUImage
 
 enum TestLib {
-    case BBWebImage
+    case BBMetalImage
     case GPUImage
 }
 
@@ -65,7 +65,7 @@ class TestImageVC: UIViewController {
     
     private var filteredImage: UIImage? {
         switch type {
-        case .BBWebImage:
+        case .BBMetalImage:
             return image.bb_lookupFiltered(withLookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
         case .GPUImage:
             let lookupImageSource = GPUImagePicture(image: UIImage(named: "test_lookup")!)!
