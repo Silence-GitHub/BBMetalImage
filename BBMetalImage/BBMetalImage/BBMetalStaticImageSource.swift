@@ -111,7 +111,7 @@ public extension CGImage {
                                     height: height,
                                     bitsPerComponent: 8,
                                     bytesPerRow: bytesPerRow,
-                                    space: CGColorSpaceCreateDeviceRGB(), // TODO: Use share color space
+                                    space: BBMetalDevice.sharedColorSpace,
                                     bitmapInfo: bitmapInfo) {
             
             context.draw(self, in: CGRect(x: 0, y: 0, width: width, height: height))
@@ -149,7 +149,7 @@ public extension MTLTexture {
                                    height: height,
                                    bitsPerComponent: 8,
                                    bytesPerRow: bytesPerRow,
-                                   space: CGColorSpaceCreateDeviceRGB(),
+                                   space: BBMetalDevice.sharedColorSpace,
                                    bitmapInfo: bitmapInfo) {
             return context.makeImage()
         }
