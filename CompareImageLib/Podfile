@@ -1,0 +1,8 @@
+platform :ios, '10.0'
+
+target 'CompareImageLib' do
+  use_frameworks!
+
+  pod 'GPUImage'
+
+end
