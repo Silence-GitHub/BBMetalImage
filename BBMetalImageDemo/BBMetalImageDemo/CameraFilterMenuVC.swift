@@ -14,6 +14,7 @@ class CameraFilterMenuVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        title = "Camera"
         view.backgroundColor = .gray
         
         let brightness = { [weak self] in

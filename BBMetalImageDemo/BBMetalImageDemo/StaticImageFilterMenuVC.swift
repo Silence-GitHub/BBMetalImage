@@ -13,7 +13,8 @@ class StaticImageFilterMenuVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
+        title = "Static image"
         view.backgroundColor = .gray
         
         let brightness = { [weak self] in
