@@ -185,13 +185,6 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
             threadgroupCount = nil
         }
         
-        // Update thread group count if needed
-        if threadgroupCount == nil {
-            threadgroupCount = MTLSize(width: (outputSize.width + threadgroupSize.width - 1) / threadgroupSize.width,
-                                       height: (outputSize.height + threadgroupSize.height - 1) / threadgroupSize.height,
-                                       depth: 1)
-        }
-        
         // Render image to output texture
         guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
         commandBuffer.label = name + "Command"
@@ -199,6 +192,13 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         if useMPSKernel {
             encodeMPSKernel(into: commandBuffer)
         } else {
+            // Update thread group count if needed
+            if threadgroupCount == nil {
+                threadgroupCount = MTLSize(width: (outputSize.width + threadgroupSize.width - 1) / threadgroupSize.width,
+                                           height: (outputSize.height + threadgroupSize.height - 1) / threadgroupSize.height,
+                                           depth: 1)
+            }
+            
             guard let encoder = commandBuffer.makeComputeCommandEncoder() else { return }
             
             for completion in completions { commandBuffer.addCompletedHandler(completion) }
