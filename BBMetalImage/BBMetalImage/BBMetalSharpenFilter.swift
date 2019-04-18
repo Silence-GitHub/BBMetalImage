@@ -8,7 +8,7 @@
 
 /// Sharpens the image
 public class BBMetalSharpenFilter: BBMetalBaseFilter {
-    /// The sharpness adjustment to apply (-4.0 - 4.0, with 0.0 as the default)
+    /// The sharpness adjustment to apply (-4.0 ~ 4.0, with 0.0 as the default)
     public var sharpeness: Float
     
     public init(sharpeness: Float = 0) {
