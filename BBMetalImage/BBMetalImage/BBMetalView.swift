@@ -96,7 +96,7 @@ public class BBMetalView: MTKView {
     
     public override init(frame frameRect: CGRect, device: MTLDevice?) {
         _bounds = CGRect(origin: .zero, size: frameRect.size)
-        super.init(frame: frameRect, device: device)
+        super.init(frame: frameRect, device: device ?? BBMetalDevice.sharedDevice)
     }
     
     required init(coder: NSCoder) {

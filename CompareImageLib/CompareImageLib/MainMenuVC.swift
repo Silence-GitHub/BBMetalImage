@@ -22,7 +22,11 @@ class MainMenuVC: UIViewController {
         let testImage = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(TestImageMenuVC(), animated: true) }
         }
-        list = [("Test image", testImage)]
+        let testCamera = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(TestCameraMenuVC(), animated: true) }
+        }
+        list = [("Test image", testImage),
+                ("Test camera", testCamera)]
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
         tableView.dataSource = self

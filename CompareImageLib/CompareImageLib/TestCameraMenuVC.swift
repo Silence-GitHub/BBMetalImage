@@ -1,27 +1,27 @@
 //
-//  TestImageMenuVC.swift
+//  TestCameraMenuVC.swift
 //  CompareImageLib
 //
-//  Created by Kaibo Lu on 4/16/19.
+//  Created by Kaibo Lu on 4/17/19.
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
 import UIKit
 
-class TestImageMenuVC: UIViewController {
+class TestCameraMenuVC: UIViewController {
 
     private var list: [(String, NoParamterBlock)]!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        title = "Image"
+        title = "Camera"
         
         let testBB = { [weak self] in
-            if let self = self { self.navigationController?.pushViewController(TestImageVC(type: .BBMetalImage), animated: true) }
+            if let self = self { self.navigationController?.pushViewController(TestCameraVC(type: .BBMetalImage), animated: true) }
         }
         let testGPU = { [weak self] in
-            if let self = self { self.navigationController?.pushViewController(TestImageVC(type: .GPUImage), animated: true) }
+            if let self = self { self.navigationController?.pushViewController(TestCameraVC(type: .GPUImage), animated: true) }
         }
         list = [("BBMetalImage", testBB),
                 ("GPUImage", testGPU)]
@@ -34,7 +34,7 @@ class TestImageMenuVC: UIViewController {
     }
 }
 
-extension TestImageMenuVC: UITableViewDataSource {
+extension TestCameraMenuVC: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return list.count
     }
@@ -46,7 +46,7 @@ extension TestImageMenuVC: UITableViewDataSource {
     }
 }
 
-extension TestImageMenuVC: UITableViewDelegate {
+extension TestCameraMenuVC: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
         list[indexPath.row].1()
