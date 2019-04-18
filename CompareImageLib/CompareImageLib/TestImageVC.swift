@@ -54,13 +54,7 @@ class TestImageVC: UIViewController {
     
     @objc private func clickButton(_ button: UIButton) {
         button.isSelected = !button.isSelected
-        if button.isSelected {
-            let start = CACurrentMediaTime()
-            imageView.image = filteredImage
-            print("\(type) total time \(CACurrentMediaTime() - start)")
-        } else {
-            imageView.image = image
-        }
+        imageView.image = button.isSelected ? filteredImage : image
     }
     
     private var filteredImage: UIImage? {
