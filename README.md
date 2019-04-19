@@ -196,4 +196,4 @@ func process() {
 
 ## License
 
-BBMetalImage is released under the MIT license. See [LICENSE](https://github.com/Silence-GitHub/BBWebImage/blob/master/LICENSE) for details.
+BBMetalImage is released under the MIT license. See [LICENSE](LICENSE) for details.
