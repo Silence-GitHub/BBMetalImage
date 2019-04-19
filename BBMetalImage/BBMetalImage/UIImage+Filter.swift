@@ -77,9 +77,9 @@ public extension UIImage {
                                                                highlightTintIntensity: highlightTintIntensity))
     }
     
-    public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {
-        return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
-    }
+//    public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {
+//        return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
+//    }
     
     public func bb_colorInversionFiltered() -> UIImage? {
         return filtered(with: BBMetalColorInversionFilter())

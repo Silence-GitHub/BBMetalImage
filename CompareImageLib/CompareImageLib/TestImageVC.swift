@@ -68,7 +68,7 @@ class TestImageVC: UIViewController {
     private var filteredImage: UIImage? {
         switch type {
         case .BBMetalImage:
-            return image.bb_lookupFiltered(withLookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
+            return BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!).filteredImage(with: image)
         case .GPUImage:
             let lookupImageSource = GPUImagePicture(image: UIImage(named: "test_lookup")!)!
             let lookupFilter = GPUImageLookupFilter()

@@ -86,6 +86,17 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         completions.append(handler)
         lock.signal()
     }
+    
+    public func filteredImage(with images: UIImage...) -> UIImage? {
+        let sources = images.map { (image) -> BBMetalStaticImageSource in
+            let imageSource = BBMetalStaticImageSource(image: image)
+            imageSource.add(consumer: self)
+            return imageSource
+        }
+        runSynchronously = true
+        for source in sources { source.transmitTexture() }
+        return outputTexture?.bb_image
+    }
 
     // MARK: - BBMetalImageSource
     
