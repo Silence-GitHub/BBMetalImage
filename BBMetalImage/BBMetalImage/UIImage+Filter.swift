@@ -81,84 +81,84 @@ public extension UIImage {
 //        return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))
 //    }
     
-    public func bb_colorInversionFiltered() -> UIImage? {
-        return filtered(with: BBMetalColorInversionFilter())
-    }
-    
-    public func bb_monochromeFiltered(withColor color: BBMetalColor = .red, intensity: Float = 0) -> UIImage? {
-        return filtered(with: BBMetalMonochromeFilter(color: color, intensity: intensity))
-    }
-    
-    public func bb_falseColorFiltered(withFirstColor firstColor: BBMetalColor = .red, secondColor: BBMetalColor = .blue) -> UIImage? {
-        return filtered(with: BBMetalFalseColorFilter(firstColor: firstColor, secondColor: secondColor))
-    }
-    
-    public func bb_hazeFiltered(withDistance distance: Float = 0, slope: Float = 0) -> UIImage? {
-        return filtered(with: BBMetalHazeFilter(distance: distance, slope: slope))
-    }
-    
-    public func bb_luminanceFiltered() -> UIImage? {
-        return filtered(with: BBMetalLuminanceFilter())
-    }
-    
-    public func bb_luminanceThresholdFiltered(withThreshold threshold: Float = 0.5) -> UIImage? {
-        return filtered(with: BBMetalLuminanceThresholdFilter(threshold: threshold))
-    }
-    
-    public func bb_chromaKeyFiltered(withThresholdSensitivity thresholdSensitivity: Float = 0.4, smoothing: Float = 0.1, colorToReplace: BBMetalColor = .green) -> UIImage? {
-        return filtered(with: BBMetalChromaKeyFilter(thresholdSensitivity: thresholdSensitivity, smoothing: smoothing, colorToReplace: colorToReplace))
-    }
-    
-    public func bb_cropFiltered(with rect: BBMetalRect) -> UIImage? {
-        return filtered(with: BBMetalCropFilter(rect: rect))
-    }
-    
-    public func bb_resizeFiltered(with size: BBMetalSize) -> UIImage? {
-        return filtered(with: BBMetalResizeFilter(size: size))
-    }
-    
-    public func bb_rotateFiltered(withAngle angle: Float, fitSize: Bool) -> UIImage? {
-        return filtered(with: BBMetalRotateFilter(angle: angle, fitSize: fitSize))
-    }
-    
-    public func bb_flipFiltered(withHorizontal horizontal: Bool, vertical: Bool) -> UIImage? {
-        return filtered(with: BBMetalFlipFilter(horizontal: horizontal, vertical: vertical))
-    }
-    
-    public func bb_sharpenFiltered(withSharpeness sharpeness: Float = 0) -> UIImage? {
-        return filtered(with: BBMetalSharpenFilter(sharpeness: sharpeness))
-    }
-    
-    public func bb_unsharpMaskFiltered(withSigma sigma: Float = 4, intensity: Float = 1) -> UIImage? {
-        return filtered(with: BBMetalUnsharpMaskFilter(sigma: sigma, intensity: intensity))
-    }
-    
-    public func bb_gaussianBlurFiltered(withSigma sigma: Float) -> UIImage? {
-        return filtered(with: BBMetalGaussianBlurFilter(sigma: sigma))
-    }
-    
-    public func bb_boxBlurFiltered(withKernelWidth kernelWidth: Int = 1, kernelHeight: Int = 1) -> UIImage? {
-        return filtered(with: BBMetalBoxBlurFilter(kernelWidth: kernelWidth, kernelHeight: kernelHeight))
-    }
-    
-    public func bb_zoomBlurFiltered(withBlurSize blurSize: Float = 0, blurCenter: BBMetalPosition = .center) -> UIImage? {
-        return filtered(with: BBMetalZoomBlurFilter(blurSize: blurSize, blurCenter: blurCenter))
-    }
-    
-    public func bb_motionBlurFiltered(withBlurSize blurSize: Float = 0, blurAngle: Float = 0) -> UIImage? {
-        return filtered(with: BBMetalMotionBlurFilter(blurSize: blurSize, blurAngle: blurAngle))
-    }
-    
-    public func bb_tiltShiftFiltered(withSigma sigma: Float = 7,
-                                     topFocusLevel: Float = 0.4,
-                                     bottomFocusLevel: Float = 0.6,
-                                     focusFallOffRate: Float = 0.2) -> UIImage? {
-        
-        return filtered(with: BBMetalTiltShiftFilter(sigma: sigma,
-                                                     topFocusLevel: topFocusLevel,
-                                                     bottomFocusLevel: bottomFocusLevel,
-                                                     focusFallOffRate: focusFallOffRate))
-    }
+//    public func bb_colorInversionFiltered() -> UIImage? {
+//        return filtered(with: BBMetalColorInversionFilter())
+//    }
+//    
+//    public func bb_monochromeFiltered(withColor color: BBMetalColor = .red, intensity: Float = 0) -> UIImage? {
+//        return filtered(with: BBMetalMonochromeFilter(color: color, intensity: intensity))
+//    }
+//    
+//    public func bb_falseColorFiltered(withFirstColor firstColor: BBMetalColor = .red, secondColor: BBMetalColor = .blue) -> UIImage? {
+//        return filtered(with: BBMetalFalseColorFilter(firstColor: firstColor, secondColor: secondColor))
+//    }
+//    
+//    public func bb_hazeFiltered(withDistance distance: Float = 0, slope: Float = 0) -> UIImage? {
+//        return filtered(with: BBMetalHazeFilter(distance: distance, slope: slope))
+//    }
+//    
+//    public func bb_luminanceFiltered() -> UIImage? {
+//        return filtered(with: BBMetalLuminanceFilter())
+//    }
+//    
+//    public func bb_luminanceThresholdFiltered(withThreshold threshold: Float = 0.5) -> UIImage? {
+//        return filtered(with: BBMetalLuminanceThresholdFilter(threshold: threshold))
+//    }
+//    
+//    public func bb_chromaKeyFiltered(withThresholdSensitivity thresholdSensitivity: Float = 0.4, smoothing: Float = 0.1, colorToReplace: BBMetalColor = .green) -> UIImage? {
+//        return filtered(with: BBMetalChromaKeyFilter(thresholdSensitivity: thresholdSensitivity, smoothing: smoothing, colorToReplace: colorToReplace))
+//    }
+//    
+//    public func bb_cropFiltered(with rect: BBMetalRect) -> UIImage? {
+//        return filtered(with: BBMetalCropFilter(rect: rect))
+//    }
+//    
+//    public func bb_resizeFiltered(with size: BBMetalSize) -> UIImage? {
+//        return filtered(with: BBMetalResizeFilter(size: size))
+//    }
+//    
+//    public func bb_rotateFiltered(withAngle angle: Float, fitSize: Bool) -> UIImage? {
+//        return filtered(with: BBMetalRotateFilter(angle: angle, fitSize: fitSize))
+//    }
+//    
+//    public func bb_flipFiltered(withHorizontal horizontal: Bool, vertical: Bool) -> UIImage? {
+//        return filtered(with: BBMetalFlipFilter(horizontal: horizontal, vertical: vertical))
+//    }
+//    
+//    public func bb_sharpenFiltered(withSharpeness sharpeness: Float = 0) -> UIImage? {
+//        return filtered(with: BBMetalSharpenFilter(sharpeness: sharpeness))
+//    }
+//    
+//    public func bb_unsharpMaskFiltered(withSigma sigma: Float = 4, intensity: Float = 1) -> UIImage? {
+//        return filtered(with: BBMetalUnsharpMaskFilter(sigma: sigma, intensity: intensity))
+//    }
+//    
+//    public func bb_gaussianBlurFiltered(withSigma sigma: Float) -> UIImage? {
+//        return filtered(with: BBMetalGaussianBlurFilter(sigma: sigma))
+//    }
+//    
+//    public func bb_boxBlurFiltered(withKernelWidth kernelWidth: Int = 1, kernelHeight: Int = 1) -> UIImage? {
+//        return filtered(with: BBMetalBoxBlurFilter(kernelWidth: kernelWidth, kernelHeight: kernelHeight))
+//    }
+//    
+//    public func bb_zoomBlurFiltered(withBlurSize blurSize: Float = 0, blurCenter: BBMetalPosition = .center) -> UIImage? {
+//        return filtered(with: BBMetalZoomBlurFilter(blurSize: blurSize, blurCenter: blurCenter))
+//    }
+//    
+//    public func bb_motionBlurFiltered(withBlurSize blurSize: Float = 0, blurAngle: Float = 0) -> UIImage? {
+//        return filtered(with: BBMetalMotionBlurFilter(blurSize: blurSize, blurAngle: blurAngle))
+//    }
+//    
+//    public func bb_tiltShiftFiltered(withSigma sigma: Float = 7,
+//                                     topFocusLevel: Float = 0.4,
+//                                     bottomFocusLevel: Float = 0.6,
+//                                     focusFallOffRate: Float = 0.2) -> UIImage? {
+//        
+//        return filtered(with: BBMetalTiltShiftFilter(sigma: sigma,
+//                                                     topFocusLevel: topFocusLevel,
+//                                                     bottomFocusLevel: bottomFocusLevel,
+//                                                     focusFallOffRate: focusFallOffRate))
+//    }
     
     public func bb_normalBlendFiltered(withImage image: UIImage) -> UIImage? {
         return filtered(with: BBMetalNormalBlendFilter(), image: image)
