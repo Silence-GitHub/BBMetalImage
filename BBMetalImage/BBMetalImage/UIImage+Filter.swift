@@ -159,113 +159,113 @@ public extension UIImage {
 //                                                     bottomFocusLevel: bottomFocusLevel,
 //                                                     focusFallOffRate: focusFallOffRate))
 //    }
-    
-    public func bb_normalBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalNormalBlendFilter(), image: image)
-    }
-    
-    public func bb_chromaKeyBlendFiltered(withThresholdSensitivity thresholdSensitivity: Float = 0.4,
-                                          smoothing: Float = 0.1,
-                                          colorToReplace: BBMetalColor = .green,
-                                          image: UIImage) -> UIImage? {
-        
-        return filtered(with: BBMetalChromaKeyBlendFilter(thresholdSensitivity: thresholdSensitivity,
-                                                          smoothing: smoothing,
-                                                          colorToReplace: colorToReplace),
-                        image: image)
-    }
-    
-    public func bb_dissolveBlendFiltered(withMixturePercent mixturePercent: Float = 0, image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalDissolveBlendFilter(mixturePercent: mixturePercent), image: image)
-    }
-    
-    public func bb_addBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalAddBlendFilter(), image: image)
-    }
-    
-    public func bb_subtractBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalSubtractBlendFilter(), image: image)
-    }
-    
-    public func bb_multiplyBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalMultiplyBlendFilter(), image: image)
-    }
-    
-    public func bb_divideBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalDivideBlendFilter(), image: image)
-    }
-    
-    public func bb_overlayBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalOverlayBlendFilter(), image: image)
-    }
-    
-    public func bb_darkenBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalDarkenBlendFilter(), image: image)
-    }
-    
-    public func bb_lightenBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalLightenBlendFilter(), image: image)
-    }
-    
-    public func bb_colorBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalColorBlendFilter(), image: image)
-    }
-    
-    public func bb_colorBurnBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalColorBurnBlendFilter(), image: image)
-    }
-    
-    public func bb_colorDodgeBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalColorDodgeBlendFilter(), image: image)
-    }
-    
-    public func bb_screenBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalScreenBlendFilter(), image: image)
-    }
-    
-    public func bb_exclusionBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalExclusionBlendFilter(), image: image)
-    }
-    
-    public func bb_differenceBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalDifferenceBlendFilter(), image: image)
-    }
-    
-    public func bb_hardLightBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalHardLightBlendFilter(), image: image)
-    }
-    
-    public func bb_softLightBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalSoftLightBlendFilter(), image: image)
-    }
-    
-    public func bb_alphaBlendFiltered(withMixturePercent mixturePercent: Float = 0, image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalAlphaBlendFilter(mixturePercent: mixturePercent), image: image)
-    }
-    
-    public func bb_sourceOverBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalSourceOverBlendFilter(), image: image)
-    }
-    
-    public func bb_hueBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalHueBlendFilter(), image: image)
-    }
-    
-    public func bb_saturationBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalSaturationBlendFilter(), image: image)
-    }
-    
-    public func bb_luminosityBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalLuminosityBlendFilter(), image: image)
-    }
-    
-    public func bb_linearBurnBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalLinearBurnBlendFilter(), image: image)
-    }
-    
-    public func bb_maskBlendFiltered(withImage image: UIImage) -> UIImage? {
-        return filtered(with: BBMetalMaskBlendFilter(), image: image)
-    }
+//    
+//    public func bb_normalBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalNormalBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_chromaKeyBlendFiltered(withThresholdSensitivity thresholdSensitivity: Float = 0.4,
+//                                          smoothing: Float = 0.1,
+//                                          colorToReplace: BBMetalColor = .green,
+//                                          image: UIImage) -> UIImage? {
+//        
+//        return filtered(with: BBMetalChromaKeyBlendFilter(thresholdSensitivity: thresholdSensitivity,
+//                                                          smoothing: smoothing,
+//                                                          colorToReplace: colorToReplace),
+//                        image: image)
+//    }
+//    
+//    public func bb_dissolveBlendFiltered(withMixturePercent mixturePercent: Float = 0, image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalDissolveBlendFilter(mixturePercent: mixturePercent), image: image)
+//    }
+//    
+//    public func bb_addBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalAddBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_subtractBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalSubtractBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_multiplyBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalMultiplyBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_divideBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalDivideBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_overlayBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalOverlayBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_darkenBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalDarkenBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_lightenBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalLightenBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_colorBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalColorBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_colorBurnBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalColorBurnBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_colorDodgeBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalColorDodgeBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_screenBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalScreenBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_exclusionBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalExclusionBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_differenceBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalDifferenceBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_hardLightBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalHardLightBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_softLightBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalSoftLightBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_alphaBlendFiltered(withMixturePercent mixturePercent: Float = 0, image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalAlphaBlendFilter(mixturePercent: mixturePercent), image: image)
+//    }
+//    
+//    public func bb_sourceOverBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalSourceOverBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_hueBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalHueBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_saturationBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalSaturationBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_luminosityBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalLuminosityBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_linearBurnBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalLinearBurnBlendFilter(), image: image)
+//    }
+//    
+//    public func bb_maskBlendFiltered(withImage image: UIImage) -> UIImage? {
+//        return filtered(with: BBMetalMaskBlendFilter(), image: image)
+//    }
     
     public func bb_pixellateFiltered(withFractionalWidth fractionalWidth: Float = 0.05) -> UIImage? {
         return filtered(with: BBMetalPixellateFilter(fractionalWidth: fractionalWidth))
