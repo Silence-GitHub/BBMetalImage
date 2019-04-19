@@ -58,31 +58,31 @@ class StaticImageFilterVC: UIViewController {
     
     private var filteredImage: UIImage? {
         switch type {
-        case .brightness: return image.bb_brightnessFiltered(withBrightness: 0.15)
-        case .exposure: return image.bb_exposureFiltered(withExposure: 0.5)
-        case .contrast: return image.bb_contrastFiltered(withContrast: 1.5)
-        case .saturation: return image.bb_saturationFiltered(withSaturation: 2)
-        case .gamma: return image.bb_gammaFiltered(withGamma: 1.5)
-        case .levels: return image.bb_levelsFiltered(withMinimum: .red)
+        case .brightness: return BBMetalBrightnessFilter(brightness: 0.15).filteredImage(with: image)
+        case .exposure: return BBMetalExposureFilter(exposure: 0.5).filteredImage(with: image)
+        case .contrast: return BBMetalContrastFilter(contrast: 1.5).filteredImage(with: image)
+        case .saturation: return BBMetalSaturationFilter(saturation: 2).filteredImage(with: image)
+        case .gamma: return BBMetalGammaFilter(gamma: 1.5).filteredImage(with: image)
+        case .levels: return BBMetalLevelsFilter(minimum: .red).filteredImage(with: image)
         case .colorMatrix:
             var matrix: BBMetalMatrix4x4 = .identity
             matrix.m12 = 1
             matrix.m32 = 1
             matrix.m42 = 1
-            return image.bb_colorMatrixFiltered(withColorMatrix: matrix, intensity: 1)
-        case .rgba: return image.bb_rgbaFiltered(withRed: 1.2, green: 1, blue: 1, alpha: 1)
-        case .hue: return image.bb_hueFiltered(withHue: 90)
-        case .vibrance: return image.bb_vibranceFiltered(withVibrance: 1)
-        case .whiteBalance: return image.bb_whiteBalanceFiltered(withTemperature: 7000, tint: 0)
-        case .highlightShadow: return image.bb_highlightShadowFiltered(withShadows: 0.5, highlights: 0.5)
-        case .highlightShadowTint: return image.bb_HighlightShadowTintFiltered(withShadowTintColor: .blue,
-                                                                               shadowTintIntensity: 0.5,
-                                                                               highlightTintColor: .red,
-                                                                               highlightTintIntensity: 0.5)
+            return BBMetalColorMatrixFilter(colorMatrix: matrix).filteredImage(with: image)
+        case .rgba: return BBMetalRGBAFilter(red: 1.2).filteredImage(with: image)
+        case .hue: return BBMetalHueFilter(hue: 90).filteredImage(with: image)
+        case .vibrance: return BBMetalVibranceFilter(vibrance: 1).filteredImage(with: image)
+        case .whiteBalance: return BBMetalWhiteBalanceFilter(temperature: 7000).filteredImage(with: image)
+        case .highlightShadow: return BBMetalHighlightShadowFilter(shadows: 0.5, highlights: 0.5).filteredImage(with: image)
+        case .highlightShadowTint: return BBMetalHighlightShadowTintFilter(shadowTintColor: .blue,
+                                                                           shadowTintIntensity: 0.5,
+                                                                           highlightTintColor: .red,
+                                                                           highlightTintIntensity: 0.5).filteredImage(with: image)
         case .lookup:
             let url = Bundle.main.url(forResource: "test_lookup", withExtension: "png")!
             let data = try! Data(contentsOf: url)
-            return image.bb_lookupFiltered(withLookupTable: data.bb_metalTexture!, intensity: 1)
+            return BBMetalLookupFilter(lookupTable: data.bb_metalTexture!).filteredImage(with: image)
         case .colorInversion: return image.bb_colorInversionFiltered()
         case .monochrome: return image.bb_monochromeFiltered(withColor: BBMetalColor(red: 0.7, green: 0.6, blue: 0.5), intensity: 1)
         case .falseColor: return image.bb_falseColorFiltered(withFirstColor: .red, secondColor: .blue)
@@ -143,6 +143,8 @@ class StaticImageFilterVC: UIViewController {
     }
     
     private func topBlendImage(withAlpha alpha: Float) -> UIImage {
-        return UIImage(named: "multicolour_flowers.jpg")!.bb_rgbaFiltered(alpha: alpha)!
+        let image = UIImage(named: "multicolour_flowers.jpg")!
+        if alpha == 1 { return image }
+        return BBMetalRGBAFilter(alpha: alpha).filteredImage(with: image)!
     }
 }

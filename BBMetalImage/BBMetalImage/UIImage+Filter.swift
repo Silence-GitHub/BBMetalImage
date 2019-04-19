@@ -9,73 +9,73 @@
 import UIKit
 
 public extension UIImage {
-    public func bb_brightnessFiltered(withBrightness brightness: Float = 0) -> UIImage? {
-        return filtered(with: BBMetalBrightnessFilter(brightness: brightness))
-    }
-    
-    public func bb_exposureFiltered(withExposure exposure: Float = 0) -> UIImage? {
-        return filtered(with: BBMetalExposureFilter(exposure: exposure))
-    }
-    
-    public func bb_contrastFiltered(withContrast contrast: Float = 1) -> UIImage? {
-        return filtered(with: BBMetalContrastFilter(contrast: contrast))
-    }
-    
-    public func bb_saturationFiltered(withSaturation saturation: Float = 1) -> UIImage? {
-        return filtered(with: BBMetalSaturationFilter(saturation: saturation))
-    }
-    
-    public func bb_gammaFiltered(withGamma gamma: Float = 1) -> UIImage? {
-        return filtered(with: BBMetalGammaFilter(gamma: gamma))
-    }
-    
-    public func bb_levelsFiltered(withMinimum minimum: BBMetalColor = .black,
-                                  middle: BBMetalColor = .white,
-                                  maximum: BBMetalColor = .white,
-                                  minOutput: BBMetalColor = .black,
-                                  maxOutput: BBMetalColor = .white) -> UIImage? {
-        
-        return filtered(with: BBMetalLevelsFilter(minimum: minimum,
-                                                  middle: middle,
-                                                  maximum: maximum,
-                                                  minOutput: minOutput,
-                                                  maxOutput: maxOutput))
-    }
-    
-    public func bb_colorMatrixFiltered(withColorMatrix colorMatrix: BBMetalMatrix4x4 = .identity, intensity: Float = 1) -> UIImage? {
-        return filtered(with: BBMetalColorMatrixFilter(colorMatrix: colorMatrix, intensity: intensity))
-    }
-    
-    public func bb_rgbaFiltered(withRed red: Float = 1, green: Float = 1, blue: Float = 1, alpha: Float = 1) -> UIImage? {
-        return filtered(with: BBMetalRGBAFilter(red: red, green: green, blue: blue, alpha: alpha))
-    }
-    
-    public func bb_hueFiltered(withHue hue: Float = 0) -> UIImage? {
-        return filtered(with: BBMetalHueFilter(hue: hue))
-    }
-    
-    public func bb_vibranceFiltered(withVibrance vibrance: Float = 0) -> UIImage? {
-        return filtered(with: BBMetalVibranceFilter(vibrance: vibrance))
-    }
-    
-    public func bb_whiteBalanceFiltered(withTemperature temperature: Float = 5000, tint: Float = 0) -> UIImage? {
-        return filtered(with: BBMetalWhiteBalanceFilter(temperature: temperature, tint: tint))
-    }
-    
-    public func bb_highlightShadowFiltered(withShadows shadows: Float = 0, highlights: Float = 1) -> UIImage? {
-        return filtered(with: BBMetalHighlightShadowFilter(shadows: shadows, highlights: highlights))
-    }
-    
-    public func bb_HighlightShadowTintFiltered(withShadowTintColor shadowTintColor: BBMetalColor = .red,
-                                               shadowTintIntensity: Float = 0,
-                                               highlightTintColor: BBMetalColor = .blue,
-                                               highlightTintIntensity: Float = 0) -> UIImage? {
-        
-        return filtered(with: BBMetalHighlightShadowTintFilter(shadowTintColor: shadowTintColor,
-                                                               shadowTintIntensity: shadowTintIntensity,
-                                                               highlightTintColor: highlightTintColor,
-                                                               highlightTintIntensity: highlightTintIntensity))
-    }
+//    public func bb_brightnessFiltered(withBrightness brightness: Float = 0) -> UIImage? {
+//        return filtered(with: BBMetalBrightnessFilter(brightness: brightness))
+//    }
+//    
+//    public func bb_exposureFiltered(withExposure exposure: Float = 0) -> UIImage? {
+//        return filtered(with: BBMetalExposureFilter(exposure: exposure))
+//    }
+//    
+//    public func bb_contrastFiltered(withContrast contrast: Float = 1) -> UIImage? {
+//        return filtered(with: BBMetalContrastFilter(contrast: contrast))
+//    }
+//    
+//    public func bb_saturationFiltered(withSaturation saturation: Float = 1) -> UIImage? {
+//        return filtered(with: BBMetalSaturationFilter(saturation: saturation))
+//    }
+//    
+//    public func bb_gammaFiltered(withGamma gamma: Float = 1) -> UIImage? {
+//        return filtered(with: BBMetalGammaFilter(gamma: gamma))
+//    }
+//    
+//    public func bb_levelsFiltered(withMinimum minimum: BBMetalColor = .black,
+//                                  middle: BBMetalColor = .white,
+//                                  maximum: BBMetalColor = .white,
+//                                  minOutput: BBMetalColor = .black,
+//                                  maxOutput: BBMetalColor = .white) -> UIImage? {
+//        
+//        return filtered(with: BBMetalLevelsFilter(minimum: minimum,
+//                                                  middle: middle,
+//                                                  maximum: maximum,
+//                                                  minOutput: minOutput,
+//                                                  maxOutput: maxOutput))
+//    }
+//    
+//    public func bb_colorMatrixFiltered(withColorMatrix colorMatrix: BBMetalMatrix4x4 = .identity, intensity: Float = 1) -> UIImage? {
+//        return filtered(with: BBMetalColorMatrixFilter(colorMatrix: colorMatrix, intensity: intensity))
+//    }
+//    
+//    public func bb_rgbaFiltered(withRed red: Float = 1, green: Float = 1, blue: Float = 1, alpha: Float = 1) -> UIImage? {
+//        return filtered(with: BBMetalRGBAFilter(red: red, green: green, blue: blue, alpha: alpha))
+//    }
+//    
+//    public func bb_hueFiltered(withHue hue: Float = 0) -> UIImage? {
+//        return filtered(with: BBMetalHueFilter(hue: hue))
+//    }
+//    
+//    public func bb_vibranceFiltered(withVibrance vibrance: Float = 0) -> UIImage? {
+//        return filtered(with: BBMetalVibranceFilter(vibrance: vibrance))
+//    }
+//    
+//    public func bb_whiteBalanceFiltered(withTemperature temperature: Float = 5000, tint: Float = 0) -> UIImage? {
+//        return filtered(with: BBMetalWhiteBalanceFilter(temperature: temperature, tint: tint))
+//    }
+//    
+//    public func bb_highlightShadowFiltered(withShadows shadows: Float = 0, highlights: Float = 1) -> UIImage? {
+//        return filtered(with: BBMetalHighlightShadowFilter(shadows: shadows, highlights: highlights))
+//    }
+//    
+//    public func bb_HighlightShadowTintFiltered(withShadowTintColor shadowTintColor: BBMetalColor = .red,
+//                                               shadowTintIntensity: Float = 0,
+//                                               highlightTintColor: BBMetalColor = .blue,
+//                                               highlightTintIntensity: Float = 0) -> UIImage? {
+//        
+//        return filtered(with: BBMetalHighlightShadowTintFilter(shadowTintColor: shadowTintColor,
+//                                                               shadowTintIntensity: shadowTintIntensity,
+//                                                               highlightTintColor: highlightTintColor,
+//                                                               highlightTintIntensity: highlightTintIntensity))
+//    }
     
 //    public func bb_lookupFiltered(withLookupTable lookupTable: MTLTexture, intensity: Float = 1) -> UIImage? {
 //        return filtered(with: BBMetalLookupFilter(lookupTable: lookupTable, intensity: intensity))

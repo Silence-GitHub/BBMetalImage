@@ -199,6 +199,8 @@ class CameraFilterVC: UIViewController {
     }
     
     private func topBlendImage(withAlpha alpha: Float) -> UIImage {
-        return UIImage(named: "multicolour_flowers.jpg")!.bb_rgbaFiltered(alpha: alpha)!
+        let image = UIImage(named: "multicolour_flowers.jpg")!
+        if alpha == 1 { return image }
+        return BBMetalRGBAFilter(alpha: alpha).filteredImage(with: image)!
     }
 }

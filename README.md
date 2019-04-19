@@ -15,12 +15,12 @@ A Swift library for GPU-accelerated image/video processing based on Metal.
 
 ##  How to Use
 
-### Image Extensions
+### Single filter
 
-`UIImage` extensions are the simplest way to get filtered image synchronously.
+Call `filteredImage(with:)` method of a filter is the simplest way to get filtered image synchronously.
 
 ```swift
-let filteredImage = image.bb_contrastFiltered(withContrast: 3)
+let filteredImage = BBMetalContrastFilter(contrast: 3).filteredImage(with: image)
 ```
 
 ### Filter Chain
