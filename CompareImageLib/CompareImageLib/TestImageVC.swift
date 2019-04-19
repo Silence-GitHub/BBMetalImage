@@ -44,17 +44,25 @@ class TestImageVC: UIViewController {
         imageView.image = image
         view.addSubview(imageView)
         
-        let button = UIButton(frame: CGRect(x: 10, y: view.bounds.height - 90, width: view.bounds.width - 20, height: 30))
-        button.backgroundColor = .blue
-        button.setTitle("Add filter", for: .normal)
-        button.setTitle("Remove filer", for: .selected)
-        button.addTarget(self, action: #selector(clickButton(_:)), for: .touchUpInside)
-        view.addSubview(button)
+        let segment = UISegmentedControl(frame: CGRect(x: 10, y: view.bounds.height - 90, width: view.bounds.width - 20, height: 30))
+        let titles: [String] = ["Origin", "Filter", "Filters"]
+        for i in 0..<titles.count {
+            segment.insertSegment(withTitle: titles[i], at: i, animated: false)
+        }
+        segment.selectedSegmentIndex = 0
+        segment.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
+        view.addSubview(segment)
     }
     
-    @objc private func clickButton(_ button: UIButton) {
-        button.isSelected = !button.isSelected
-        imageView.image = button.isSelected ? filteredImage : image
+    @objc private func segmentChanged(_ segment: UISegmentedControl) {
+        switch segment.selectedSegmentIndex {
+        case 0:
+            imageView.image = image
+        case 1:
+            imageView.image = filteredImage
+        default:
+            imageView.image = multifilteredImage
+        }
     }
     
     private var filteredImage: UIImage? {
@@ -66,11 +74,43 @@ class TestImageVC: UIViewController {
             let lookupFilter = GPUImageLookupFilter()
             lookupImageSource.addTarget(lookupFilter, atTextureLocation: 1)
             lookupImageSource.processImage()
+            return lookupFilter.image(byFilteringImage: image)
+        }
+    }
+    
+    private var multifilteredImage: UIImage? {
+        switch type {
+        case .BBMetalImage:
+            let imageSource = BBMetalStaticImageSource(image: image)
+            let contrastFilter = BBMetalContrastFilter(contrast: 3)
+            let lookupFilter = BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
+            let sharpenFilter = BBMetalSharpenFilter(sharpeness: 1)
+            imageSource.add(consumer: contrastFilter)
+                .add(consumer: lookupFilter)
+                .add(consumer: sharpenFilter)
+                .runSynchronously = true
+            imageSource.transmitTexture()
+            return sharpenFilter.outputTexture?.bb_image
+        case .GPUImage:
             let imageSource = GPUImagePicture(image: image)!
-            imageSource.addTarget(lookupFilter)
-            lookupFilter.useNextFrameForImageCapture()
+            
+            let contrastFilter = GPUImageContrastFilter()
+            contrastFilter.contrast = 3
+            
+            let lookupImageSource = GPUImagePicture(image: UIImage(named: "test_lookup")!)!
+            let lookupFilter = GPUImageLookupFilter()
+            lookupImageSource.addTarget(lookupFilter, atTextureLocation: 1)
+            lookupImageSource.processImage()
+            
+            let sharpenFilter = GPUImageSharpenFilter()
+            sharpenFilter.sharpness = 1
+            
+            imageSource.addTarget(contrastFilter)
+            contrastFilter.addTarget(lookupFilter)
+            lookupFilter.addTarget(sharpenFilter)
+            sharpenFilter.useNextFrameForImageCapture()
             imageSource.processImage()
-            return lookupFilter.imageFromCurrentFramebuffer()
+            return sharpenFilter.imageFromCurrentFramebuffer()
         }
     }
 }
