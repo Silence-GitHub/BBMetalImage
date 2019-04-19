@@ -2,6 +2,8 @@
 
 A Swift library for GPU-accelerated image/video processing based on Metal.
 
+This library is highly inspired by GPUImage.
+
 ## Features
 
 - [x] More than 60 built-in filters
@@ -119,3 +121,79 @@ func process() {
 }
 ```
 
+## Built-in Filters
+
+- Brightness
+- Exposure
+- Contrast
+- Saturation
+- Gamma
+- Levels
+- Color Matrix
+- RGBA
+- Hue
+- Vibrance
+- White Balance
+- Highlight Shadow
+
+- Highlight Shadow Tint
+- Lookup
+- Color Inversion
+- Monochrome
+- False Color
+- Haze
+- Luminance
+- Luminance Threshold
+- Chroma Key
+- Crop
+- Resize
+- Rotate
+- Flip
+- Sharpen
+- Unsharp Mask
+- Gaussian Blur
+- Box Blur
+- Zoom Blur
+- Motion Blur
+- Tilt Shift
+- Blend Modes
+  - Normal
+  - Chroma Key
+  - Dissolve
+  - Add
+  - Subtract
+  - Multiply
+  - Divide
+  - Overlay
+  - Darken
+  - Lighten
+  - Color
+  - Color Burn
+  - Color Dodge
+  - Screen
+  - Exclusion
+  - Difference
+  - Hard Light
+  - Soft Light
+  - Alpha
+  - Source Over
+  - Hue
+  - Saturation
+  - Luminosity
+  - Linear Burn
+  - Mask
+
+- Pixellate
+- Polar Pixellate
+- Polka Dot
+- Halftone
+- Crosshatch
+- Sketch
+- Threshold Sketch
+- Toon
+- Posterize
+- Swirl
+
+## License
+
+BBMetalImage is released under the MIT license. See [LICENSE](https://github.com/Silence-GitHub/BBWebImage/blob/master/LICENSE) for details.
