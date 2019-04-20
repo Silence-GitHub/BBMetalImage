@@ -38,7 +38,9 @@ public class BBMetalCamera: NSObject {
     private var camera: AVCaptureDevice!
     private var videoOutputQueue: DispatchQueue!
     
+    #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache!
+    #endif
     
     public init?(sessionPreset: AVCaptureSession.Preset = .high) {
         _consumers = []
@@ -80,10 +82,12 @@ public class BBMetalCamera: NSObject {
         
         session.commitConfiguration()
         
+        #if !targetEnvironment(simulator)
         if CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, BBMetalDevice.sharedDevice, nil, &textureCache) != kCVReturnSuccess ||
             textureCache == nil {
             return nil
         }
+        #endif
     }
     
     public func start() { session.startRunning() }
@@ -153,6 +157,7 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
         let width = CVPixelBufferGetWidth(imageBuffer)
         let height = CVPixelBufferGetHeight(imageBuffer)
         
+        #if !targetEnvironment(simulator)
         var cvMetalTextureOut: CVMetalTexture?
         let result = CVMetalTextureCacheCreateTextureFromImage(kCFAllocatorDefault,
                                                                textureCache,
@@ -169,6 +174,7 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
             return texture
         }
         CVMetalTextureCacheFlush(textureCache, 0)
+        #endif
         return nil
     }
 }
