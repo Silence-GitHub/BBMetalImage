@@ -15,6 +15,14 @@ This library is highly inspired by GPUImage.
 - iOS 10.0+
 - Swift 4.2
 
+## Installation
+
+Install with CocoaPods:
+
+1. Add `pod 'BBMetalImage'` to your Podfile.
+2. Run `pod install` or `pod update`.
+3. Add `import BBMetalImage` to the Swift source file.
+
 ##  How to Use
 
 ### Single filter
