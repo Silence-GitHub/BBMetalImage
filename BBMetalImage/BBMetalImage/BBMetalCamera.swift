@@ -32,6 +32,25 @@ public class BBMetalCamera: NSObject {
     }
     private var _willTransmitTexture: ((MTLTexture) -> Void)?
     
+    public var benchmark: Bool {
+        get {
+            lock.wait()
+            let b = _benchmark
+            lock.signal()
+            return b
+        }
+        set {
+            lock.wait()
+            _benchmark = newValue
+            lock.signal()
+        }
+    }
+    private var _benchmark: Bool
+    
+    private var capturedFrameCount: Int
+    private var totalCaptureFrameTime: Double
+    private let ignoreInitialFrameCount: Int
+    
     private let lock: DispatchSemaphore
     
     private var session: AVCaptureSession!
@@ -44,6 +63,10 @@ public class BBMetalCamera: NSObject {
     
     public init?(sessionPreset: AVCaptureSession.Preset = .high) {
         _consumers = []
+        _benchmark = false
+        capturedFrameCount = 0
+        totalCaptureFrameTime = 0
+        ignoreInitialFrameCount = 5
         lock = DispatchSemaphore(value: 1)
         
         super.init()
@@ -93,6 +116,20 @@ public class BBMetalCamera: NSObject {
     public func start() { session.startRunning() }
     
     public func stop() { session.stopRunning() }
+    
+    public var averageFrameDuration: Double {
+        lock.wait()
+        let d = capturedFrameCount > ignoreInitialFrameCount ? totalCaptureFrameTime / Double(capturedFrameCount - ignoreInitialFrameCount) : 0
+        lock.signal()
+        return d
+    }
+    
+    public func resetBenchmark() {
+        lock.wait()
+        capturedFrameCount = 0
+        totalCaptureFrameTime = 0
+        lock.signal()
+    }
 }
 
 extension BBMetalCamera: BBMetalImageSource {
@@ -139,6 +176,8 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
         lock.wait()
         let consumers = _consumers
         let willTransmit = _willTransmitTexture
+        let runBenchmark = _benchmark
+        let startTime = runBenchmark ? CACurrentMediaTime() : 0
         lock.signal()
         
         guard !consumers.isEmpty,
@@ -146,6 +185,15 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
         
         willTransmit?(texture)
         for consumer in consumers { consumer.newTextureAvailable(texture, from: self) }
+        
+        if runBenchmark {
+            lock.wait()
+            capturedFrameCount += 1
+            if capturedFrameCount > ignoreInitialFrameCount {
+                totalCaptureFrameTime += CACurrentMediaTime() - startTime
+            }
+            lock.signal()
+        }
     }
     
     public func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
