@@ -221,7 +221,6 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
             let texture = CVMetalTextureGetTexture(cvMetalTexture) {
             return texture
         }
-        CVMetalTextureCacheFlush(textureCache, 0)
         #endif
         return nil
     }

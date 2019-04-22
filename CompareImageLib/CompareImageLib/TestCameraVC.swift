@@ -41,6 +41,7 @@ class TestCameraVC: UIViewController {
         switch type {
         case .BBMetalImage:
             bbCamera = BBMetalCamera(sessionPreset: .high)
+            bbCamera.benchmark = true
             bbLookupFilter = BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
             bbImageView = BBMetalView(frame: CGRect(x: 10, y: 100, width: view.bounds.width - 20, height: view.bounds.height - 200))
             view.addSubview(bbImageView)
@@ -50,6 +51,7 @@ class TestCameraVC: UIViewController {
         case .GPUImage:
             gpuCamera = GPUImageVideoCamera(sessionPreset: AVCaptureSession.Preset.high.rawValue, cameraPosition: .back)
             gpuCamera.outputImageOrientation = .portrait
+            gpuCamera.runBenchmark = true
             
             gpuLookupFilter = GPUImageLookupFilter()
             gpuLookupImageSource = GPUImagePicture(image: UIImage(named: "test_lookup")!)
@@ -69,6 +71,12 @@ class TestCameraVC: UIViewController {
         button.setTitle("Remove filer", for: .selected)
         button.addTarget(self, action: #selector(clickButton(_:)), for: .touchUpInside)
         view.addSubview(button)
+        
+        let benchmarkButton = UIButton(frame: CGRect(x: 10, y: view.bounds.height - 60, width: view.bounds.width - 20, height: 30))
+        benchmarkButton.backgroundColor = .green
+        benchmarkButton.setTitle("Benchmark", for: .normal)
+        benchmarkButton.addTarget(self, action: #selector(clickBenchmarkButton(_:)), for: .touchUpInside)
+        view.addSubview(benchmarkButton)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -100,10 +108,12 @@ class TestCameraVC: UIViewController {
             case .BBMetalImage:
                 bbCamera.removeAllConsumers()
                 bbCamera.add(consumer: bbLookupFilter).add(consumer: bbImageView)
+                bbCamera.resetBenchmark()
             case .GPUImage:
                 gpuCamera.removeAllTargets()
                 gpuCamera.addTarget(gpuLookupFilter)
                 gpuLookupFilter.addTarget(gpuImageView)
+                gpuCamera.resetBenchmarkAverage()
             }
         } else {
             switch type {
@@ -111,11 +121,22 @@ class TestCameraVC: UIViewController {
                 bbCamera.removeAllConsumers()
                 bbLookupFilter.removeAllConsumers()
                 bbCamera.add(consumer: bbImageView)
+                bbCamera.resetBenchmark()
             case .GPUImage:
                 gpuCamera.removeAllTargets()
                 gpuLookupFilter.removeAllTargets()
                 gpuCamera.addTarget(gpuImageView)
+                gpuCamera.resetBenchmarkAverage()
             }
+        }
+    }
+    
+    @objc private func clickBenchmarkButton(_ button: UIButton) {
+        switch type {
+        case .BBMetalImage:
+            print("BBMetalImage average frame duration \(bbCamera.averageFrameDuration)")
+        default:
+            print("GPUImage average frame duration \(gpuCamera.averageFrameDurationDuringCapture())")
         }
     }
 }
