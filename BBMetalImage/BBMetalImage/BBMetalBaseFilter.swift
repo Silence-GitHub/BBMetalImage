@@ -48,7 +48,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     private let threadgroupSize: MTLSize
     private var threadgroupCount: MTLSize?
     
-    /// Whether to synchronously wait for the execution of the Metal command buffer to complete
+    /// Whether to synchronously wait for the execution of the Metal command buffer to complete. False by default.
     public var runSynchronously: Bool {
         get {
             lock.wait()

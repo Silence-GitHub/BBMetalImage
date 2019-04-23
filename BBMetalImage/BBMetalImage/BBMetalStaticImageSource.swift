@@ -8,7 +8,9 @@
 
 import MetalKit
 
+/// An image source providing static image texture
 public class BBMetalStaticImageSource {
+    /// Image consumers
     public var consumers: [BBMetalImageConsumer] {
         lock.wait()
         let c = _consumers
@@ -17,6 +19,7 @@ public class BBMetalStaticImageSource {
     }
     private var _consumers: [BBMetalImageConsumer]
     
+    /// Texture from static image
     public var texture: MTLTexture? {
         lock.wait()
         let t = _texture
@@ -34,6 +37,7 @@ public class BBMetalStaticImageSource {
         lock = DispatchSemaphore(value: 1)
     }
     
+    /// Transmit texture to image consumers
     public func transmitTexture() {
         lock.wait()
         if _texture == nil { _texture = image.bb_metalTexture }

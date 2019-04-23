@@ -8,7 +8,9 @@
 
 import AVFoundation
 
+/// Camera capturing image and providing Metal texture
 public class BBMetalCamera: NSObject {
+    /// Image consumers
     public var consumers: [BBMetalImageConsumer] {
         lock.wait()
         let c = _consumers
@@ -17,6 +19,7 @@ public class BBMetalCamera: NSObject {
     }
     private var _consumers: [BBMetalImageConsumer]
     
+    /// A block to call before transmiting texture to image consumers
     public var willTransmitTexture: ((MTLTexture) -> Void)? {
         get {
             lock.wait()
@@ -32,6 +35,9 @@ public class BBMetalCamera: NSObject {
     }
     private var _willTransmitTexture: ((MTLTexture) -> Void)?
     
+    /// Whether to run benchmark or not.
+    /// Running benchmark records frame duration.
+    /// False by default.
     public var benchmark: Bool {
         get {
             lock.wait()
@@ -113,10 +119,14 @@ public class BBMetalCamera: NSObject {
         #endif
     }
     
+    /// Starts capturing
     public func start() { session.startRunning() }
     
+    /// Stops capturing
     public func stop() { session.stopRunning() }
     
+    /// Average frame duration, or 0 if not valid value.
+    /// To get valid value, set `benchmark` to true.
     public var averageFrameDuration: Double {
         lock.wait()
         let d = capturedFrameCount > ignoreInitialFrameCount ? totalCaptureFrameTime / Double(capturedFrameCount - ignoreInitialFrameCount) : 0
@@ -124,6 +134,7 @@ public class BBMetalCamera: NSObject {
         return d
     }
     
+    /// Resets benchmark record data
     public func resetBenchmark() {
         lock.wait()
         capturedFrameCount = 0

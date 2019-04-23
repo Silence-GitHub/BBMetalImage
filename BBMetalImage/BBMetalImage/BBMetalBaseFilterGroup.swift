@@ -8,6 +8,7 @@
 
 import UIKit
 
+/// A base filter group containing filters. Subclass this class. Do not create an instance using the class directly.
 open class BBMetalBaseFilterGroup: BBMetalBaseFilter {
     public var initialFilters: [BBMetalBaseFilter]!
     public var terminalFilter: BBMetalBaseFilter!
