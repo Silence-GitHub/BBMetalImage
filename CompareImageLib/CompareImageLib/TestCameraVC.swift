@@ -16,11 +16,14 @@ class TestCameraVC: UIViewController {
     
     private var bbCamera: BBMetalCamera!
     private var bbLookupFilter: BBMetalLookupFilter!
+    private var bbFilters: [BBMetalBaseFilter]!
     private var bbImageView: BBMetalView!
     
     private var gpuCamera: GPUImageVideoCamera!
     private var gpuLookupFilter: GPUImageLookupFilter!
     private var gpuLookupImageSource: GPUImagePicture!
+    private var gpuFilters: [GPUImageFilter]!
+    private var gpuLookupImageSources: [GPUImagePicture]!
     private var gpuImageView: GPUImageView!
     
     init(type: TestLib) {
@@ -42,7 +45,16 @@ class TestCameraVC: UIViewController {
         case .BBMetalImage:
             bbCamera = BBMetalCamera(sessionPreset: .high)
             bbCamera.benchmark = true
+            
             bbLookupFilter = BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
+            
+            let contrastFilter = BBMetalContrastFilter(contrast: 3)
+            let lookupFilter = BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
+            let sharpenFilter = BBMetalSharpenFilter(sharpeness: 1)
+            contrastFilter.add(consumer: lookupFilter)
+                .add(consumer: sharpenFilter)
+            bbFilters = [contrastFilter, lookupFilter, sharpenFilter]
+            
             bbImageView = BBMetalView(frame: CGRect(x: 10, y: 100, width: view.bounds.width - 20, height: view.bounds.height - 200))
             view.addSubview(bbImageView)
             
@@ -58,6 +70,23 @@ class TestCameraVC: UIViewController {
             gpuLookupImageSource.addTarget(gpuLookupFilter, atTextureLocation: 1)
             gpuLookupImageSource.processImage()
             
+            let contrastFilter = GPUImageContrastFilter()
+            contrastFilter.contrast = 3
+            
+            let lookupImageSource = GPUImagePicture(image: UIImage(named: "test_lookup")!)!
+            let lookupFilter = GPUImageLookupFilter()
+            lookupImageSource.addTarget(lookupFilter, atTextureLocation: 1)
+            lookupImageSource.processImage()
+            
+            let sharpenFilter = GPUImageSharpenFilter()
+            sharpenFilter.sharpness = 1
+            
+            contrastFilter.addTarget(lookupFilter)
+            lookupFilter.addTarget(sharpenFilter)
+            
+            gpuFilters = [contrastFilter, lookupFilter, sharpenFilter]
+            gpuLookupImageSources = [lookupImageSource]
+            
             gpuImageView = GPUImageView(frame: CGRect(x: 10, y: 100, width: view.bounds.width - 20, height: view.bounds.height - 200))
             gpuImageView.fillMode = kGPUImageFillModePreserveAspectRatioAndFill
             view.addSubview(gpuImageView)
@@ -65,12 +94,14 @@ class TestCameraVC: UIViewController {
             gpuCamera.addTarget(gpuImageView)
         }
         
-        let button = UIButton(frame: CGRect(x: 10, y: view.bounds.height - 90, width: view.bounds.width - 20, height: 30))
-        button.backgroundColor = .blue
-        button.setTitle("Add filter", for: .normal)
-        button.setTitle("Remove filer", for: .selected)
-        button.addTarget(self, action: #selector(clickButton(_:)), for: .touchUpInside)
-        view.addSubview(button)
+        let segment = UISegmentedControl(frame: CGRect(x: 10, y: view.bounds.height - 90, width: view.bounds.width - 20, height: 30))
+        let titles: [String] = ["Origin", "Filter", "Filters"]
+        for i in 0..<titles.count {
+            segment.insertSegment(withTitle: titles[i], at: i, animated: false)
+        }
+        segment.selectedSegmentIndex = 0
+        segment.addTarget(self, action: #selector(segmentChanged(_:)), for: .valueChanged)
+        view.addSubview(segment)
         
         let benchmarkButton = UIButton(frame: CGRect(x: 10, y: view.bounds.height - 60, width: view.bounds.width - 20, height: 30))
         benchmarkButton.backgroundColor = .green
@@ -101,33 +132,51 @@ class TestCameraVC: UIViewController {
         }
     }
     
-    @objc private func clickButton(_ button: UIButton) {
-        button.isSelected = !button.isSelected
-        if button.isSelected {
+    @objc private func segmentChanged(_ segment: UISegmentedControl) {
+        switch type {
+        case .BBMetalImage:
+            bbCamera.removeAllConsumers()
+            bbLookupFilter.removeAllConsumers()
+            bbFilters.last?.removeAllConsumers()
+        default:
+            gpuCamera.removeAllTargets()
+            gpuLookupFilter.removeAllTargets()
+            gpuFilters.last?.removeAllTargets()
+        }
+        
+        switch segment.selectedSegmentIndex {
+        case 0:
             switch type {
             case .BBMetalImage:
-                bbCamera.removeAllConsumers()
-                bbCamera.add(consumer: bbLookupFilter).add(consumer: bbImageView)
-                bbCamera.resetBenchmark()
+                bbCamera.add(consumer: bbImageView)
             case .GPUImage:
-                gpuCamera.removeAllTargets()
+                gpuCamera.addTarget(gpuImageView)
+            }
+        case 1:
+            switch type {
+            case .BBMetalImage:
+                bbCamera.add(consumer: bbLookupFilter)
+                    .add(consumer: bbImageView)
+            case .GPUImage:
                 gpuCamera.addTarget(gpuLookupFilter)
                 gpuLookupFilter.addTarget(gpuImageView)
-                gpuCamera.resetBenchmarkAverage()
             }
-        } else {
+        default:
             switch type {
             case .BBMetalImage:
-                bbCamera.removeAllConsumers()
-                bbLookupFilter.removeAllConsumers()
-                bbCamera.add(consumer: bbImageView)
-                bbCamera.resetBenchmark()
+                bbCamera.add(consumer: bbFilters.first!)
+                bbFilters.last?.add(consumer: bbImageView)
             case .GPUImage:
-                gpuCamera.removeAllTargets()
-                gpuLookupFilter.removeAllTargets()
-                gpuCamera.addTarget(gpuImageView)
-                gpuCamera.resetBenchmarkAverage()
+                gpuCamera.addTarget(gpuFilters.first)
+                gpuFilters.last?.addTarget(gpuImageView)
             }
+        }
+        
+        switch type {
+        case .BBMetalImage:
+            bbCamera.resetBenchmark()
+        case .GPUImage:
+            gpuCamera.resetBenchmarkAverage()
         }
     }
     
