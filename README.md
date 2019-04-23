@@ -1,6 +1,6 @@
 # BBMetalImage
 
-A Swift library for GPU-accelerated image/video processing based on Metal.
+A high performance Swift library for GPU-accelerated image/video processing based on Metal.
 
 This library is highly inspired by GPUImage.
 
