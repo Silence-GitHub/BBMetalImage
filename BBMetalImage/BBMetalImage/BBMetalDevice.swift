@@ -6,6 +6,7 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+/// A singleton class containing shared resources
 public class BBMetalDevice {
     public static let shared: BBMetalDevice = BBMetalDevice()
     public static var sharedDevice: MTLDevice { return shared.device }

@@ -6,8 +6,22 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+/// Defines image consumer behaviors
 public protocol BBMetalImageConsumer: AnyObject {
+    /// Adds an image source to provide the input texture
+    ///
+    /// - Parameter source: image source object to add
     func add(source: BBMetalImageSource)
+    
+    /// Removes the image source
+    ///
+    /// - Parameter source: image source object to remove
     func remove(source: BBMetalImageSource)
+    
+    /// Receives a new texture from an image source
+    ///
+    /// - Parameters:
+    ///   - texture: new texture received
+    ///   - source: image source object providing the new texture
     func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource)
 }
