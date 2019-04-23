@@ -13,7 +13,9 @@ public struct BBMetalWeakImageSource {
     public init(source: BBMetalImageSource) { self.source = source }
 }
 
+/// A base filter processing texture. Subclass this class. Do not create an instance using the class directly.
 open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
+    /// Image consumers
     public var consumers: [BBMetalImageConsumer] {
         lock.wait()
         let c = _consumers
@@ -22,6 +24,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     }
     private var _consumers: [BBMetalImageConsumer]
     
+    /// Image sources
     public var sources: [BBMetalWeakImageSource] {
         lock.wait()
         let s = _sources
@@ -30,8 +33,10 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     }
     public private(set) var _sources: [BBMetalWeakImageSource]
     
+    /// Filter name
     public let name: String
     
+    /// Output texture containing last processing result
     public var outputTexture: MTLTexture? {
         lock.wait()
         let o = _outputTexture
@@ -43,6 +48,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     private let threadgroupSize: MTLSize
     private var threadgroupCount: MTLSize?
     
+    /// Whether to synchronously wait for the execution of the Metal command buffer to complete
     public var runSynchronously: Bool {
         get {
             lock.wait()
@@ -58,6 +64,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     }
     private var _runSynchronously: Bool
     
+    /// Whether to use `MPSKernel` or not
     public let useMPSKernel: Bool
     
     private var computePipeline: MTLComputePipelineState!
@@ -81,12 +88,19 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         lock = DispatchSemaphore(value: 1)
     }
     
+    /// Registers a block of code that is called immediately after the device has completed the execution of the Metal command buffer
+    ///
+    /// - Parameter handler: block to register
     public func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer) -> Void) {
         lock.wait()
         completions.append(handler)
         lock.signal()
     }
     
+    /// Gets a processed image synchronously
+    ///
+    /// - Parameter images: image to process
+    /// - Returns: a processed image, or nil if fail processing
     public func filteredImage(with images: UIImage...) -> UIImage? {
         let sources = images.map { (image) -> BBMetalStaticImageSource in
             let imageSource = BBMetalStaticImageSource(image: image)
@@ -236,14 +250,28 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         for consumer in consumers { consumer.newTextureAvailable(_outputTexture!, from: self) }
     }
     
+    /// Calcutes the ouput texture size.
+    /// Returns the input texture size by default.
+    /// Override the method if needed.
+    ///
+    /// - Parameter inputSize: input texture size
+    /// - Returns: output texture size
     open func outputTextureSize(withInputTextureSize inputSize: BBMetalIntSize) -> BBMetalIntSize {
         return inputSize
     }
     
+    /// Encodes a kernel into a command buffer.
+    /// Override the method if using MPSKernel.
+    ///
+    /// - Parameter commandBuffer: command buffer to use
     open func encodeMPSKernel(into commandBuffer: MTLCommandBuffer) {
         fatalError("\(#function) must be overridden by subclass")
     }
     
+    /// Updates parameters for the compute command encoder.
+    /// Override the method to set bytes or other paramters for the compute command encoder.
+    ///
+    /// - Parameter encoder: compute command encoder to use
     open func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         fatalError("\(#function) must be overridden by subclass")
     }
