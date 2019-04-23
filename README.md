@@ -4,6 +4,18 @@ A high performance Swift library for GPU-accelerated image/video processing base
 
 This library is highly inspired by GPUImage.
 
+## Performance
+
+Test libraries are BBMetalImage (0.1.1) and GPUImage (0.1.7). Test device is iPhone 7 with iOS 12.1. The code can be found in [CompareImageLib](CompareImageLib) project.
+
+- BBMetalImage has low memory usage for processing image.
+
+![](README_resources/compare_image.png)
+
+- BBMetalImage has low CPU usage and high speed for camera capturing, processing and rendering. 
+
+![](README_resources/compare_camera.png)
+
 ## Features
 
 - [x] More than 60 built-in filters
