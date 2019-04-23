@@ -183,9 +183,9 @@ class TestCameraVC: UIViewController {
     @objc private func clickBenchmarkButton(_ button: UIButton) {
         switch type {
         case .BBMetalImage:
-            print("BBMetalImage average frame duration \(bbCamera.averageFrameDuration)")
+            print("BBMetalImage average frame duration \(bbCamera.averageFrameDuration * 1000) ms")
         default:
-            print("GPUImage average frame duration \(gpuCamera.averageFrameDurationDuringCapture())")
+            print("GPUImage average frame duration \(gpuCamera.averageFrameDurationDuringCapture()) ms")
         }
     }
 }

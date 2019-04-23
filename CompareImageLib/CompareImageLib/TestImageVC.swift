@@ -55,6 +55,7 @@ class TestImageVC: UIViewController {
     }
     
     @objc private func segmentChanged(_ segment: UISegmentedControl) {
+        let start = CACurrentMediaTime()
         switch segment.selectedSegmentIndex {
         case 0:
             imageView.image = image
@@ -63,6 +64,7 @@ class TestImageVC: UIViewController {
         default:
             imageView.image = multifilteredImage
         }
+        print("Total time \((CACurrentMediaTime() - start) * 1000) ms")
     }
     
     private var filteredImage: UIImage? {
