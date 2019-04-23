@@ -5,10 +5,10 @@ Pod::Spec.new do |s|
   s.summary      = "A Swift library for GPU-accelerated image/video processing based on Metal."
 
   s.description  = <<-DESC
-                   A Swift library for GPU-accelerated image/video processing based on Metal.
                    More than 60 built-in filters.
                    Filter chain supported.
                    Customized filter.
+                   High performance.
                    DESC
 
   s.homepage     = "https://github.com/Silence-GitHub/BBMetalImage"

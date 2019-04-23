@@ -9,6 +9,7 @@ This library is highly inspired by GPUImage.
 - [x] More than 60 built-in filters
 - [x] Filter chain supported
 - [x] Customized filter
+- [x] High performance
 
 ## Requirements
 
