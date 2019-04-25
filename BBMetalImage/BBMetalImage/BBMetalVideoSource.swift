@@ -25,6 +25,10 @@ public class BBMetalVideoSource {
     private var assetReader: AVAssetReader!
     private var videoOutput: AVAssetReaderTrackOutput!
     
+    private var playWithVideoRate: Bool = true
+    private var lastSampleFrameTime: CMTime!
+    private var lastActualPlayTime: Double!
+    
     #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache!
     #endif
@@ -117,6 +121,20 @@ public class BBMetalVideoSource {
             reader.status == .reading,
             let sampleBuffer = videoOutput.copyNextSampleBuffer(),
             let texture = texture(with: sampleBuffer) {
+                if playWithVideoRate {
+                    let sampleFrameTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+                    if let lastFrameTime = lastSampleFrameTime,
+                        let lastPlayTime = lastActualPlayTime {
+                        let detalFrameTime = CMTimeGetSeconds(CMTimeSubtract(sampleFrameTime, lastFrameTime))
+                        let actualPlayTime = CACurrentMediaTime()
+                        let detalPlayTime = actualPlayTime - lastPlayTime
+                        if detalFrameTime > detalPlayTime {
+                            usleep(UInt32(1000000 * (detalFrameTime - detalPlayTime)))
+                        }
+                    }
+                    lastSampleFrameTime = sampleFrameTime
+                    lastActualPlayTime = CACurrentMediaTime()
+                }
                 let consumers = _consumers
                 lock.signal()
                 for consumer in consumers { consumer.newTextureAvailable(texture, from: self) }
@@ -139,7 +157,7 @@ public class BBMetalVideoSource {
                                                                textureCache,
                                                                imageBuffer,
                                                                nil,
-                                                               .bgra8Unorm, // camera ouput BGRA
+                                                               .bgra8Unorm, // video ouput BGRA
             width,
             height,
             0,
