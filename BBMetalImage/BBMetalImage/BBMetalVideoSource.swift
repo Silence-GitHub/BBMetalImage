@@ -105,7 +105,7 @@ public class BBMetalVideoSource {
         lock.wait()
         guard let reader = assetReader,
             reader.status == .unknown,
-            !reader.startReading() else {
+            reader.startReading() else {
             reset()
             lock.signal()
             return
@@ -121,6 +121,9 @@ public class BBMetalVideoSource {
                 lock.signal()
                 for consumer in consumers { consumer.newTextureAvailable(texture, from: self) }
                 lock.wait()
+        }
+        if assetReader != nil {
+            reset()
         }
         lock.signal()
     }

@@ -16,6 +16,8 @@
 		4A4CADCC225317C30058BEB6 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A4CADCA225317C30058BEB6 /* LaunchScreen.storyboard */; };
 		4A4CADD4225318D20058BEB6 /* BBMetalImage.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4CADD3225318D20058BEB6 /* BBMetalImage.framework */; };
 		4A4CADD5225318D20058BEB6 /* BBMetalImage.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 4A4CADD3225318D20058BEB6 /* BBMetalImage.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		4A665CFD22721CAA00DFDF4C /* VideoFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A665CFC22721CAA00DFDF4C /* VideoFilterVC.swift */; };
+		4A665CFF2272201300DFDF4C /* test_video.MOV in Resources */ = {isa = PBXBuildFile; fileRef = 4A665CFE2272201300DFDF4C /* test_video.MOV */; };
 		4AC5794D225529B900F7BCAC /* sunflower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4AC5794B225529B900F7BCAC /* sunflower.jpg */; };
 		4AC5794E225529B900F7BCAC /* test_lookup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AC5794C225529B900F7BCAC /* test_lookup.png */; };
 		4AFC464D2253CA08009D37A1 /* StaticImageFilterMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC464C2253CA08009D37A1 /* StaticImageFilterMenuVC.swift */; };
@@ -49,6 +51,8 @@
 		4A4CADCB225317C30058BEB6 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4A4CADCD225317C30058BEB6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4A4CADD3225318D20058BEB6 /* BBMetalImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = BBMetalImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		4A665CFC22721CAA00DFDF4C /* VideoFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoFilterVC.swift; sourceTree = "<group>"; };
+		4A665CFE2272201300DFDF4C /* test_video.MOV */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = test_video.MOV; sourceTree = "<group>"; };
 		4AC5794B225529B900F7BCAC /* sunflower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sunflower.jpg; sourceTree = "<group>"; };
 		4AC5794C225529B900F7BCAC /* test_lookup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_lookup.png; sourceTree = "<group>"; };
 		4AFC464C2253CA08009D37A1 /* StaticImageFilterMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticImageFilterMenuVC.swift; sourceTree = "<group>"; };
@@ -96,9 +100,11 @@
 				4AFC464E2253CDDC009D37A1 /* StaticImageFilterVC.swift */,
 				4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */,
 				4A00949E225C53C50089941C /* CameraFilterVC.swift */,
+				4A665CFC22721CAA00DFDF4C /* VideoFilterVC.swift */,
 				4AC5794B225529B900F7BCAC /* sunflower.jpg */,
 				4AC5794C225529B900F7BCAC /* test_lookup.png */,
 				4AFC46502253D1A6009D37A1 /* multicolour_flowers.jpg */,
+				4A665CFE2272201300DFDF4C /* test_video.MOV */,
 				4A4CADC5225317C20058BEB6 /* Main.storyboard */,
 				4A4CADC8225317C30058BEB6 /* Assets.xcassets */,
 				4A4CADCA225317C30058BEB6 /* LaunchScreen.storyboard */,
@@ -169,6 +175,7 @@
 				4AC5794D225529B900F7BCAC /* sunflower.jpg in Resources */,
 				4A4CADCC225317C30058BEB6 /* LaunchScreen.storyboard in Resources */,
 				4A4CADC9225317C30058BEB6 /* Assets.xcassets in Resources */,
+				4A665CFF2272201300DFDF4C /* test_video.MOV in Resources */,
 				4AFC46512253D1A6009D37A1 /* multicolour_flowers.jpg in Resources */,
 				4AC5794E225529B900F7BCAC /* test_lookup.png in Resources */,
 				4A4CADC7225317C20058BEB6 /* Main.storyboard in Resources */,
@@ -186,6 +193,7 @@
 				4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */,
 				4AFC464D2253CA08009D37A1 /* StaticImageFilterMenuVC.swift in Sources */,
 				4A4CADC4225317C20058BEB6 /* MainMenuVC.swift in Sources */,
+				4A665CFD22721CAA00DFDF4C /* VideoFilterVC.swift in Sources */,
 				4AFC464F2253CDDC009D37A1 /* StaticImageFilterVC.swift in Sources */,
 				4A4CADC2225317C20058BEB6 /* AppDelegate.swift in Sources */,
 				4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */,
@@ -334,6 +342,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9LJHCTN42A;
 				INFOPLIST_FILE = BBMetalImageDemo/Info.plist;
@@ -343,6 +352,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Kaibo.BBMetalImageDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -352,6 +362,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 9LJHCTN42A;
 				INFOPLIST_FILE = BBMetalImageDemo/Info.plist;
@@ -361,6 +372,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = Kaibo.BBMetalImageDemo;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
