@@ -126,8 +126,7 @@ public class BBMetalVideoSource {
                     if let lastFrameTime = lastSampleFrameTime,
                         let lastPlayTime = lastActualPlayTime {
                         let detalFrameTime = CMTimeGetSeconds(CMTimeSubtract(sampleFrameTime, lastFrameTime))
-                        let actualPlayTime = CACurrentMediaTime()
-                        let detalPlayTime = actualPlayTime - lastPlayTime
+                        let detalPlayTime = CACurrentMediaTime() - lastPlayTime
                         if detalFrameTime > detalPlayTime {
                             usleep(UInt32(1000000 * (detalFrameTime - detalPlayTime)))
                         }
@@ -157,11 +156,11 @@ public class BBMetalVideoSource {
                                                                textureCache,
                                                                imageBuffer,
                                                                nil,
-                                                               .bgra8Unorm, // video ouput BGRA
-            width,
-            height,
-            0,
-            &cvMetalTextureOut)
+                                                               .bgra8Unorm,
+                                                               width,
+                                                               height,
+                                                               0,
+                                                               &cvMetalTextureOut)
         if result == kCVReturnSuccess,
             let cvMetalTexture = cvMetalTextureOut,
             let texture = CVMetalTextureGetTexture(cvMetalTexture) {

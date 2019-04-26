@@ -8,6 +8,38 @@
 
 import MetalKit
 
+fileprivate class BBMetalTextureNode {
+    fileprivate var next: BBMetalTextureNode?
+    fileprivate let value: MTLTexture
+    
+    fileprivate init(value: MTLTexture) { self.value = value }
+}
+
+fileprivate class BBMetalTextureQueue {
+    fileprivate var head: BBMetalTextureNode?
+    fileprivate var tail: BBMetalTextureNode?
+    
+    fileprivate func enqueue(_ value: MTLTexture) {
+        let node = BBMetalTextureNode(value: value)
+        if head == nil {
+            head = node
+            tail = node
+        } else {
+            tail?.next = node
+            tail = node
+        }
+    }
+    
+    fileprivate func dequeue() -> MTLTexture? {
+        if let value = head?.value {
+            head = head?.next
+            if head == nil { tail = nil }
+            return value
+        }
+        return nil
+    }
+}
+
 public class BBMetalView: MTKView {
     public enum TextureRotation {
         case rotate0Degrees
@@ -78,8 +110,8 @@ public class BBMetalView: MTKView {
     private var textureContentMode: TextureContentMode = .aspectRatioFill // for internal drawing
     private var tempTextureContentMode: TextureContentMode = .aspectRatioFill // for external setter
     
-    private var texture: MTLTexture?
-    private let lock: DispatchSemaphore = DispatchSemaphore(value: 1)
+    private let textureQueue: BBMetalTextureQueue
+    private let lock: DispatchSemaphore
     
     private lazy var renderPipeline: MTLRenderPipelineState = {
         let library = try! device!.makeDefaultLibrary(bundle: Bundle(for: BBMetalView.self))
@@ -96,6 +128,8 @@ public class BBMetalView: MTKView {
     
     public override init(frame frameRect: CGRect, device: MTLDevice?) {
         _bounds = CGRect(origin: .zero, size: frameRect.size)
+        textureQueue = BBMetalTextureQueue()
+        lock = DispatchSemaphore(value: 1)
         super.init(frame: frameRect, device: device ?? BBMetalDevice.sharedDevice)
     }
     
@@ -107,7 +141,7 @@ public class BBMetalView: MTKView {
         lock.wait()
         defer { lock.signal() }
         
-        guard let texture = self.texture,
+        guard let texture = self.textureQueue.dequeue(),
             let drawable = currentDrawable,
             let renderPassDescriptor = currentRenderPassDescriptor,
             let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
@@ -156,7 +190,7 @@ extension BBMetalView: BBMetalImageConsumer {
     
     public func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource) {
         lock.wait()
-        self.texture = texture
+        self.textureQueue.enqueue(texture)
         lock.signal()
     }
     

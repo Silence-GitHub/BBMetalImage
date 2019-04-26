@@ -11,6 +11,7 @@ import BBMetalImage
 
 class VideoFilterVC: UIViewController {
     private var videoSource: BBMetalVideoSource!
+    private var filter: BBMetalBaseFilter!
     private var metalView: BBMetalView!
     
     override func viewDidLoad() {
@@ -18,9 +19,16 @@ class VideoFilterVC: UIViewController {
 
         view.backgroundColor = .gray
         
+        let url = Bundle.main.url(forResource: "test_video", withExtension: "MOV")!
+        videoSource = BBMetalVideoSource(url: url)
+        
+        filter = BBMetalColorInversionFilter()
+        
         metalView = BBMetalView(frame: CGRect(x: 10, y: 100, width: view.bounds.width - 20, height: view.bounds.height - 200),
                                 device: BBMetalDevice.sharedDevice)
         view.addSubview(metalView)
+        
+        videoSource.add(consumer: metalView)
         
         let button = UIButton(frame: CGRect(x: 10, y: view.bounds.height - 90, width: view.bounds.width - 20, height: 30))
         button.backgroundColor = .blue
@@ -28,10 +36,6 @@ class VideoFilterVC: UIViewController {
         button.setTitle("Remove filer", for: .selected)
         button.addTarget(self, action: #selector(clickButton(_:)), for: .touchUpInside)
         view.addSubview(button)
-        
-        let url = Bundle.main.url(forResource: "test_video", withExtension: "MOV")!
-        videoSource = BBMetalVideoSource(url: url)
-        videoSource.add(consumer: metalView)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -47,8 +51,8 @@ class VideoFilterVC: UIViewController {
     @objc private func clickButton(_ button: UIButton) {
         button.isSelected = !button.isSelected
         videoSource.removeAllConsumers()
+        filter.removeAllConsumers()
         if button.isSelected {
-            let filter = BBMetalColorInversionFilter()
             videoSource.add(consumer: filter).add(consumer: metalView)
         } else {
             videoSource.add(consumer: metalView)
