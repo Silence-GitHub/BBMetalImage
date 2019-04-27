@@ -11,8 +11,8 @@ using namespace metal;
 
 kernel void hazeKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                        texture2d<half, access::read> inputTexture [[texture(1)]],
-                       device float *hazeDistance [[buffer(0)]],
-                       device float *slope [[buffer(1)]],
+                       constant float *hazeDistance [[buffer(0)]],
+                       constant float *slope [[buffer(1)]],
                        uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

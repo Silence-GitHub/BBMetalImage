@@ -12,9 +12,9 @@ using namespace metal;
 kernel void chromaKeyBlendKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                                  texture2d<half, access::read> inputTexture [[texture(1)]],
                                  texture2d<half, access::sample> inputTexture2 [[texture(2)]],
-                                 device float *thresholdSensitivity [[buffer(0)]],
-                                 device float *smoothing [[buffer(1)]],
-                                 device float3 *colorToReplace [[buffer(2)]],
+                                 constant float *thresholdSensitivity [[buffer(0)]],
+                                 constant float *smoothing [[buffer(1)]],
+                                 constant float3 *colorToReplace [[buffer(2)]],
                                  uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

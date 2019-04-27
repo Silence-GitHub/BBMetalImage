@@ -12,7 +12,7 @@ using namespace metal;
 
 kernel void saturationKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                              texture2d<half, access::read> inputTexture [[texture(1)]],
-                             device float *saturation [[buffer(0)]],
+                             constant float *saturation [[buffer(0)]],
                              uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

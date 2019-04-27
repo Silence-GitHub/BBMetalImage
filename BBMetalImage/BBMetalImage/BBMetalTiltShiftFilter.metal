@@ -12,9 +12,9 @@ using namespace metal;
 kernel void tiltShiftKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                             texture2d<half, access::read> blurTexture [[texture(1)]],
                             texture2d<half, access::read> inputTexture [[texture(2)]],
-                            device float *topFocusLevelPointer [[buffer(0)]],
-                            device float *bottomFocusLevelPointer [[buffer(1)]],
-                            device float *focusFallOffRatePointer [[buffer(2)]],
+                            constant float *topFocusLevelPointer [[buffer(0)]],
+                            constant float *bottomFocusLevelPointer [[buffer(1)]],
+                            constant float *focusFallOffRatePointer [[buffer(2)]],
                             uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

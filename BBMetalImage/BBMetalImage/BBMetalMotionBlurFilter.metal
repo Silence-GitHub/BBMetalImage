@@ -12,8 +12,8 @@ using namespace metal;
 
 kernel void motionBlurKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                              texture2d<half, access::sample> inputTexture [[texture(1)]],
-                             device float *blurSize [[buffer(0)]],
-                             device float *blurAngle [[buffer(1)]],
+                             constant float *blurSize [[buffer(0)]],
+                             constant float *blurAngle [[buffer(1)]],
                              uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

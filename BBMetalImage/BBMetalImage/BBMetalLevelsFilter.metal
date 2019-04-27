@@ -17,11 +17,11 @@ using namespace metal;
 
 kernel void  levelsKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                           texture2d<half, access::read> inputTexture [[texture(1)]],
-                          device float3 *minimum [[buffer(0)]],
-                          device float3 *middle [[buffer(1)]],
-                          device float3 *maximum [[buffer(2)]],
-                          device float3 *minOutput [[buffer(3)]],
-                          device float3 *maxOutput [[buffer(4)]],
+                          constant float3 *minimum [[buffer(0)]],
+                          constant float3 *middle [[buffer(1)]],
+                          constant float3 *maximum [[buffer(2)]],
+                          constant float3 *minOutput [[buffer(3)]],
+                          constant float3 *maxOutput [[buffer(4)]],
                           uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

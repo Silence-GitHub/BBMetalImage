@@ -20,7 +20,7 @@ constant half4 kYIQToB = half4(1.0, -1.1070, 1.7046, 0.0);
 
 kernel void hueKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                       texture2d<half, access::read> inputTexture [[texture(1)]],
-                      device float *hueInput [[buffer(0)]],
+                      constant float *hueInput [[buffer(0)]],
                       uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

@@ -12,10 +12,10 @@ using namespace metal;
 
 kernel void highlightShadowTintKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                                       texture2d<half, access::read> inputTexture [[texture(1)]],
-                                      device float3 *shadowTintColor [[buffer(0)]],
-                                      device float *shadowTintIntensity [[buffer(1)]],
-                                      device float3 *highlightTintColor [[buffer(2)]],
-                                      device float *highlightTintIntensity [[buffer(3)]],
+                                      constant float3 *shadowTintColor [[buffer(0)]],
+                                      constant float *shadowTintIntensity [[buffer(1)]],
+                                      constant float3 *highlightTintColor [[buffer(2)]],
+                                      constant float *highlightTintIntensity [[buffer(3)]],
                                       uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

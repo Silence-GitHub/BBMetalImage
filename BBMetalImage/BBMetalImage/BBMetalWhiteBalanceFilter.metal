@@ -13,8 +13,8 @@ constant half3 warmFilter = half3(0.93, 0.54, 0.0);
 
 kernel void whiteBalanceKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                                texture2d<half, access::read> inputTexture [[texture(1)]],
-                               device float *temperature [[buffer(0)]],
-                               device float *tint [[buffer(1)]],
+                               constant float *temperature [[buffer(0)]],
+                               constant float *tint [[buffer(1)]],
                                uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

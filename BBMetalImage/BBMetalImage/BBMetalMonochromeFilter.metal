@@ -12,8 +12,8 @@ using namespace metal;
 
 kernel void monochromeKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                              texture2d<half, access::read> inputTexture [[texture(1)]],
-                             device float3 *filterColorInput [[buffer(0)]],
-                             device float *intensity [[buffer(1)]],
+                             constant float3 *filterColorInput [[buffer(0)]],
+                             constant float *intensity [[buffer(1)]],
                              uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

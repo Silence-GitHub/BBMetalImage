@@ -12,7 +12,7 @@ using namespace metal;
 kernel void dissolveBlendKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                                 texture2d<half, access::read> inputTexture [[texture(1)]],
                                 texture2d<half, access::sample> inputTexture2 [[texture(2)]],
-                                device float *mixturePercent [[buffer(0)]],
+                                constant float *mixturePercent [[buffer(0)]],
                                 uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

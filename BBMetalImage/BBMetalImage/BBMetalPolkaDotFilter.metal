@@ -12,8 +12,8 @@ using namespace metal;
 
 kernel void polkaDotKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                            texture2d<half, access::sample> inputTexture [[texture(1)]],
-                           device float *fractionalWidth [[buffer(0)]],
-                           device float *dotScaling [[buffer(1)]],
+                           constant float *fractionalWidth [[buffer(0)]],
+                           constant float *dotScaling [[buffer(1)]],
                            uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

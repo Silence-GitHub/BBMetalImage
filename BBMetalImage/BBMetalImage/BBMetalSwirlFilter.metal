@@ -11,9 +11,9 @@ using namespace metal;
 
 kernel void swirlKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                         texture2d<half, access::sample> inputTexture [[texture(1)]],
-                        device float2 *centerPointer [[buffer(0)]],
-                        device float *radiusPointer [[buffer(1)]],
-                        device float *anglePointer [[buffer(2)]],
+                        constant float2 *centerPointer [[buffer(0)]],
+                        constant float *radiusPointer [[buffer(1)]],
+                        constant float *anglePointer [[buffer(2)]],
                         uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }

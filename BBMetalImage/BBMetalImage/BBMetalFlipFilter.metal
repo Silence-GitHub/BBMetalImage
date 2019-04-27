@@ -11,8 +11,8 @@ using namespace metal;
 
 kernel void flipKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                        texture2d<half, access::read> inputTexture [[texture(1)]],
-                       device bool *horizontal [[buffer(0)]],
-                       device bool *vertical [[buffer(1)]],
+                       constant bool *horizontal [[buffer(0)]],
+                       constant bool *vertical [[buffer(1)]],
                        uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
