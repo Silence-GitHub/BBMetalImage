@@ -8,38 +8,6 @@
 
 import MetalKit
 
-fileprivate class BBMetalTextureNode {
-    fileprivate var next: BBMetalTextureNode?
-    fileprivate let value: MTLTexture
-    
-    fileprivate init(value: MTLTexture) { self.value = value }
-}
-
-fileprivate class BBMetalTextureQueue {
-    fileprivate var head: BBMetalTextureNode?
-    fileprivate var tail: BBMetalTextureNode?
-    
-    fileprivate func enqueue(_ value: MTLTexture) {
-        let node = BBMetalTextureNode(value: value)
-        if head == nil {
-            head = node
-            tail = node
-        } else {
-            tail?.next = node
-            tail = node
-        }
-    }
-    
-    fileprivate func dequeue() -> MTLTexture? {
-        if let value = head?.value {
-            head = head?.next
-            if head == nil { tail = nil }
-            return value
-        }
-        return nil
-    }
-}
-
 public class BBMetalView: MTKView {
     public enum TextureRotation {
         case rotate0Degrees
@@ -96,7 +64,24 @@ public class BBMetalView: MTKView {
         }
     }
     
-    private var _bounds: CGRect
+    /// This value is always true
+    public override var isPaused: Bool {
+        get { return true }
+        set {}
+    }
+    
+    public override var frame: CGRect {
+        get { return super.frame }
+        set {
+            super.frame = newValue
+            lock.wait()
+            frameSize = newValue.size
+            lock.signal()
+        }
+    }
+    
+    private var frameSize: CGSize
+    private var lastFrameSize: CGSize
     
     private var textureWidth: Int = 0
     private var textureHeight: Int = 0
@@ -110,7 +95,7 @@ public class BBMetalView: MTKView {
     private var textureContentMode: TextureContentMode = .aspectRatioFill // for internal drawing
     private var tempTextureContentMode: TextureContentMode = .aspectRatioFill // for external setter
     
-    private let textureQueue: BBMetalTextureQueue
+    private var texture: MTLTexture?
     private let lock: DispatchSemaphore
     
     private lazy var renderPipeline: MTLRenderPipelineState = {
@@ -127,26 +112,24 @@ public class BBMetalView: MTKView {
     private var textureCoordinateBuffer: MTLBuffer?
     
     public override init(frame frameRect: CGRect, device: MTLDevice?) {
-        _bounds = CGRect(origin: .zero, size: frameRect.size)
-        textureQueue = BBMetalTextureQueue()
+        frameSize = frameRect.size
+        lastFrameSize = frameSize
         lock = DispatchSemaphore(value: 1)
         super.init(frame: frameRect, device: device ?? BBMetalDevice.sharedDevice)
+        super.isPaused = true
     }
     
     required init(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func draw(_ rect: CGRect) {
-        lock.wait()
-        defer { lock.signal() }
-        
-        guard let texture = self.textureQueue.dequeue(),
+    public override func draw(_ rect:CGRect) {
+        guard let texture = self.texture,
             let drawable = currentDrawable,
             let renderPassDescriptor = currentRenderPassDescriptor,
             let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
         
-        if bounds != _bounds ||
+        if frameSize != lastFrameSize ||
             texture.width != textureWidth ||
             texture.height != textureHeight ||
             tempTextureMirroring != textureMirroring ||
@@ -190,12 +173,13 @@ extension BBMetalView: BBMetalImageConsumer {
     
     public func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource) {
         lock.wait()
-        self.textureQueue.enqueue(texture)
+        self.texture = texture
+        draw()
         lock.signal()
     }
     
     private func setupTransform(withWidth width: Int, height: Int) {
-        _bounds = bounds
+        lastFrameSize = frameSize
         textureWidth = width
         textureHeight = height
         textureMirroring = tempTextureMirroring
@@ -209,12 +193,12 @@ extension BBMetalView: BBMetalImageConsumer {
             if textureWidth > 0 && textureHeight > 0 {
                 switch textureRotation {
                 case .rotate0Degrees, .rotate180Degrees:
-                    scaleX = Float(_bounds.width / CGFloat(textureWidth))
-                    scaleY = Float(_bounds.height / CGFloat(textureHeight))
+                    scaleX = Float(lastFrameSize.width / CGFloat(textureWidth))
+                    scaleY = Float(lastFrameSize.height / CGFloat(textureHeight))
                     
                 case .rotate90Degrees, .rotate270Degrees:
-                    scaleX = Float(_bounds.width / CGFloat(textureHeight))
-                    scaleY = Float(_bounds.height / CGFloat(textureWidth))
+                    scaleX = Float(lastFrameSize.width / CGFloat(textureHeight))
+                    scaleY = Float(lastFrameSize.height / CGFloat(textureWidth))
                 }
             }
             
