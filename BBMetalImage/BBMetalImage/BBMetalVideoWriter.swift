@@ -80,9 +80,16 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
     public func add(source: BBMetalImageSource) {}
     public func remove(source: BBMetalImageSource) {}
     
-    public func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource) {
+    public func newTextureAvailable(_ texture: BBMetalTexture, from source: BBMetalImageSource) {
         lock.wait()
         defer { lock.signal() }
+        
+        guard let sampleTime = texture.sampleTime else { return }
+        
+        // The property `pixelBufferPool` is NULL before the first call to startSessionAtTime: on the associated AVAssetWriter object
+        if videoPixelBufferInput.pixelBufferPool == nil {
+            writer.startSession(atSourceTime: sampleTime)
+        }
         
         guard let pool = videoPixelBufferInput.pixelBufferPool,
             CVPixelBufferPoolCreatePixelBuffer(nil, pool, &videoPixelBuffer) == kCVReturnSuccess,
@@ -91,11 +98,10 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
             let baseAddress = CVPixelBufferGetBaseAddress(videoPixelBuffer) else { return }
         
         let bytesPerRow = CVPixelBufferGetBytesPerRow(videoPixelBuffer)
-        let region = MTLRegionMake2D(0, 0, texture.width, texture.height)
-        texture.getBytes(baseAddress, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
+        let region = MTLRegionMake2D(0, 0, texture.metalTexture.width, texture.metalTexture.height)
+        texture.metalTexture.getBytes(baseAddress, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
 
-        // TODO: Get presentation time
-//        videoPixelBufferInput.append(videoPixelBuffer, withPresentationTime: <#T##CMTime#>)
+        videoPixelBufferInput.append(videoPixelBuffer, withPresentationTime: sampleTime)
         
         CVPixelBufferUnlockBaseAddress(videoPixelBuffer, [])
     }

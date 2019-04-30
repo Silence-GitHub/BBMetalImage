@@ -167,7 +167,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         lock.signal()
     }
     
-    public func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource) {
+    public func newTextureAvailable(_ texture: BBMetalTexture, from source: BBMetalImageSource) {
         lock.wait()
         
         // Check whether all input textures are ready
@@ -175,7 +175,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         var empty = false
         for i in 0..<_sources.count {
             if _sources[i].source === source {
-                _sources[i].texture = texture
+                _sources[i].texture = texture.metalTexture
                 foundSource = true
             } else if _sources[i].texture == nil {
                 if foundSource {
@@ -247,7 +247,8 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         lock.signal()
         
         // Transmit output texture to image consumers
-        for consumer in consumers { consumer.newTextureAvailable(_outputTexture!, from: self) }
+        let output = BBMetalDefaultTexture(metalTexture: _outputTexture!)
+        for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
     }
     
     /// Calcutes the ouput texture size.

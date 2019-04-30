@@ -47,7 +47,8 @@ public class BBMetalStaticImageSource {
         }
         let consumers = _consumers
         lock.signal()
-        for consumer in consumers { consumer.newTextureAvailable(texture, from: self) }
+        let output = BBMetalDefaultTexture(metalTexture: texture)
+        for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
     }
 }
 

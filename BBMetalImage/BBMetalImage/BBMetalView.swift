@@ -171,9 +171,9 @@ extension BBMetalView: BBMetalImageConsumer {
     public func add(source: BBMetalImageSource) {}
     public func remove(source: BBMetalImageSource) {}
     
-    public func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource) {
+    public func newTextureAvailable(_ texture: BBMetalTexture, from source: BBMetalImageSource) {
         lock.wait()
-        self.texture = texture
+        self.texture = texture.metalTexture
         draw()
         lock.signal()
     }

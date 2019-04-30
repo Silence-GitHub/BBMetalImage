@@ -54,7 +54,7 @@ open class BBMetalBaseFilterGroup: BBMetalBaseFilter {
         }
     }
     
-    public override func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource) {
+    public override func newTextureAvailable(_ texture: BBMetalTexture, from source: BBMetalImageSource) {
         for filter in initialFilters {
             filter.newTextureAvailable(texture, from: source)
         }

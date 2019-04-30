@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import CoreMedia
+
 /// Defines image consumer behaviors
 public protocol BBMetalImageConsumer: AnyObject {
     /// Adds an image source to provide the input texture
@@ -23,5 +25,20 @@ public protocol BBMetalImageConsumer: AnyObject {
     /// - Parameters:
     ///   - texture: new texture received
     ///   - source: image source object providing the new texture
-    func newTextureAvailable(_ texture: MTLTexture, from source: BBMetalImageSource)
+    func newTextureAvailable(_ texture: BBMetalTexture, from source: BBMetalImageSource)
+}
+
+public protocol BBMetalTexture {
+    var metalTexture: MTLTexture { get }
+    var sampleTime: CMTime? { get }
+}
+
+struct BBMetalDefaultTexture: BBMetalTexture {
+    let metalTexture: MTLTexture
+    let sampleTime: CMTime?
+    
+    init(metalTexture: MTLTexture, sampleTime: CMTime? = nil) {
+        self.metalTexture = metalTexture
+        self.sampleTime = sampleTime
+    }
 }

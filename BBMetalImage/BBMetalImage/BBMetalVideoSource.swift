@@ -121,8 +121,8 @@ public class BBMetalVideoSource {
             reader.status == .reading,
             let sampleBuffer = videoOutput.copyNextSampleBuffer(),
             let texture = texture(with: sampleBuffer) {
+                let sampleFrameTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
                 if playWithVideoRate {
-                    let sampleFrameTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
                     if let lastFrameTime = lastSampleFrameTime,
                         let lastPlayTime = lastActualPlayTime {
                         let detalFrameTime = CMTimeGetSeconds(CMTimeSubtract(sampleFrameTime, lastFrameTime))
@@ -136,7 +136,8 @@ public class BBMetalVideoSource {
                 }
                 let consumers = _consumers
                 lock.signal()
-                for consumer in consumers { consumer.newTextureAvailable(texture, from: self) }
+                let output = BBMetalDefaultTexture(metalTexture: texture, sampleTime: sampleFrameTime)
+                for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
                 lock.wait()
         }
         if assetReader != nil {
