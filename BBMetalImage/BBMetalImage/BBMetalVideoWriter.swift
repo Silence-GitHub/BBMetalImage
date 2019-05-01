@@ -45,7 +45,10 @@ public class BBMetalVideoWriter {
             print("Should not call \(#function) before last writing operation is finished")
             return
         }
-        writer.startWriting()
+        if !writer.startWriting() {
+            reset()
+            print("Asset writer can not start writing")
+        }
     }
     
     public func finish(completion: (() -> Void)?) {
@@ -127,21 +130,34 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
             let videoInput = self.videoInput,
             let videoPixelBufferInput = self.videoPixelBufferInput else { return }
         
-        // The property `pixelBufferPool` is NULL before the first call to startSessionAtTime: on the associated AVAssetWriter object
-        if videoPixelBufferInput.pixelBufferPool == nil {
+        if videoPixelBuffer == nil {
+            // First frame
             writer.startSession(atSourceTime: sampleTime)
+            guard let pool = videoPixelBufferInput.pixelBufferPool,
+                CVPixelBufferPoolCreatePixelBuffer(nil, pool, &videoPixelBuffer) == kCVReturnSuccess else {
+                    print("Can not create pixel buffer")
+                    return
+            }
         }
         
         // Check status
         guard videoInput.isReadyForMoreMediaData,
-            writer.status == .writing else { return }
+            writer.status == .writing else {
+                print("Asset writer or video input is not ready for writing this frame")
+                return
+        }
         
         // Copy data from metal texture to pixel buffer
-        guard let pool = videoPixelBufferInput.pixelBufferPool,
-            CVPixelBufferPoolCreatePixelBuffer(nil, pool, &videoPixelBuffer) == kCVReturnSuccess,
-            videoPixelBuffer != nil,
-            CVPixelBufferLockBaseAddress(videoPixelBuffer, []) == kCVReturnSuccess,
-            let baseAddress = CVPixelBufferGetBaseAddress(videoPixelBuffer) else { return }
+        guard videoPixelBuffer != nil,
+            CVPixelBufferLockBaseAddress(videoPixelBuffer, []) == kCVReturnSuccess else {
+                print("Pixel buffer can not lock base address")
+                return
+        }
+        guard let baseAddress = CVPixelBufferGetBaseAddress(videoPixelBuffer) else {
+            CVPixelBufferUnlockBaseAddress(videoPixelBuffer, [])
+            print("Can not get pixel buffer base address")
+            return
+        }
         
         let bytesPerRow = CVPixelBufferGetBytesPerRow(videoPixelBuffer)
         let region = MTLRegionMake2D(0, 0, texture.metalTexture.width, texture.metalTexture.height)
