@@ -9,10 +9,10 @@
 import AVFoundation
 
 public class BBMetalVideoWriter {
-    private let url: URL
-    private let frameSize: BBMetalIntSize
-    private let fileType: AVFileType
-    private let outputSettings: [String : Any]
+    public let url: URL
+    public let frameSize: BBMetalIntSize
+    public let fileType: AVFileType
+    public let outputSettings: [String : Any]
     
     private var writer: AVAssetWriter!
     private var videoInput: AVAssetWriterInput!
