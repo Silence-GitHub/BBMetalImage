@@ -14,6 +14,11 @@ public class BBMetalVideoWriter {
     public let fileType: AVFileType
     public let outputSettings: [String : Any]
     
+    private var computePipeline: MTLComputePipelineState!
+    private var outputTexture: MTLTexture!
+    private let threadgroupSize: MTLSize
+    private var threadgroupCount: MTLSize
+    
     private var writer: AVAssetWriter!
     private var videoInput: AVAssetWriterInput!
     private var videoPixelBufferInput: AVAssetWriterInputPixelBufferAdaptor!
@@ -30,6 +35,23 @@ public class BBMetalVideoWriter {
         self.frameSize = frameSize
         self.fileType = fileType
         self.outputSettings = outputSettings
+        
+        let library = try! BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: Bundle(for: BBMetalVideoWriter.self))
+        let kernelFunction = library.makeFunction(name: "passThroughKernel")!
+        computePipeline = try! BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
+        
+        let descriptor = MTLTextureDescriptor()
+        descriptor.pixelFormat = .bgra8Unorm
+        descriptor.width = frameSize.width
+        descriptor.height = frameSize.height
+        descriptor.usage = [.shaderRead, .shaderWrite]
+        outputTexture = BBMetalDevice.sharedDevice.makeTexture(descriptor: descriptor)
+        
+        threadgroupSize = MTLSize(width: 16, height: 16, depth: 1)
+        threadgroupCount = MTLSize(width: (frameSize.width + threadgroupSize.width - 1) / threadgroupSize.width,
+                                   height: (frameSize.height + threadgroupSize.height - 1) / threadgroupSize.height,
+                                   depth: 1)
+        
         lock = DispatchSemaphore(value: 1)
     }
     
@@ -140,6 +162,23 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
             }
         }
         
+        // Render to output texture
+        guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer(),
+            let encoder = commandBuffer.makeComputeCommandEncoder() else {
+                CVPixelBufferUnlockBaseAddress(videoPixelBuffer, [])
+                print("Can not create compute command buffer or encoder")
+                return
+        }
+        
+        encoder.setComputePipelineState(computePipeline)
+        encoder.setTexture(outputTexture, index: 0)
+        encoder.setTexture(texture.metalTexture, index: 1)
+        encoder.dispatchThreadgroups(threadgroupCount, threadsPerThreadgroup: threadgroupSize)
+        encoder.endEncoding()
+        
+        commandBuffer.commit()
+        commandBuffer.waitUntilCompleted() // Wait to make sure that output texture contains new data
+        
         // Check status
         guard videoInput.isReadyForMoreMediaData,
             writer.status == .writing else {
@@ -160,8 +199,8 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
         }
         
         let bytesPerRow = CVPixelBufferGetBytesPerRow(videoPixelBuffer)
-        let region = MTLRegionMake2D(0, 0, texture.metalTexture.width, texture.metalTexture.height)
-        texture.metalTexture.getBytes(baseAddress, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
+        let region = MTLRegionMake2D(0, 0, outputTexture.width, outputTexture.height)
+        outputTexture.getBytes(baseAddress, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
 
         videoPixelBufferInput.append(videoPixelBuffer, withPresentationTime: sampleTime)
         
