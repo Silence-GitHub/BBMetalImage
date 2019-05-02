@@ -63,6 +63,25 @@ public class BBMetalCamera: NSObject {
     private var camera: AVCaptureDevice!
     private var videoOutputQueue: DispatchQueue!
     
+    private var audioInput: AVCaptureDeviceInput!
+    private var audioOutput: AVCaptureAudioDataOutput!
+    private var audioOutputQueue: DispatchQueue!
+    
+    public var audioConsumer: BBMetalAudioConsumer? {
+        get {
+            lock.wait()
+            let a = _audioConsumer
+            lock.signal()
+            return a
+        }
+        set {
+            lock.wait()
+            _audioConsumer = newValue
+            lock.signal()
+        }
+    }
+    private var _audioConsumer: BBMetalAudioConsumer?
+    
     #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache!
     #endif
@@ -117,6 +136,65 @@ public class BBMetalCamera: NSObject {
             return nil
         }
         #endif
+    }
+    
+    /// Adds audio input and ouput to capture session
+    ///
+    /// - Returns: true if succeed or the capture session already had audio input and output; otherwise false
+    @discardableResult
+    public func addAudioInputAndOutput() -> Bool {
+        lock.wait()
+        session.beginConfiguration()
+        defer {
+            session.commitConfiguration()
+            lock.signal()
+        }
+        
+        guard let audioDevice = AVCaptureDevice.default(.builtInMicrophone, for: .audio, position: .unspecified),
+            let input = try? AVCaptureDeviceInput(device: audioDevice),
+            session.canAddInput(input) else {
+                print("Can not add audio input")
+                return false
+        }
+        session.addInput(input)
+        audioInput = input
+        
+        let output = AVCaptureAudioDataOutput()
+        let outputQueue = DispatchQueue(label: "com.Kaibo.BBMetalImage.Camera.audioOutput")
+        output.setSampleBufferDelegate(self, queue: outputQueue)
+        guard session.canAddOutput(output) else {
+            _removeAudioInputAndOutput()
+            print("Can not add audio output")
+            return false
+        }
+        session.addOutput(output)
+        audioOutput = output
+        audioOutputQueue = outputQueue
+        
+        return true
+    }
+    
+    /// Removes audio input and output from capture session
+    public func removeAudioInputAndOutput() {
+        lock.wait()
+        session.beginConfiguration()
+        _removeAudioInputAndOutput()
+        session.commitConfiguration()
+        lock.signal()
+    }
+    
+    private func _removeAudioInputAndOutput() {
+        if let input = audioInput {
+            session.removeInput(input)
+            audioInput = nil
+        }
+        if let output = audioOutput {
+            session.removeOutput(output)
+            audioOutput = nil
+        }
+        if audioOutputQueue != nil {
+            audioOutputQueue = nil
+        }
     }
     
     /// Starts capturing
@@ -182,8 +260,14 @@ extension BBMetalCamera: BBMetalImageSource {
     }
 }
 
-extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate {
+extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        if output is AVCaptureAudioDataOutput,
+            let consumer = audioConsumer {
+            consumer.newAudioSampleBufferAvailable(sampleBuffer)
+            return
+        }
+        
         lock.wait()
         let consumers = _consumers
         let willTransmit = _willTransmitTexture

@@ -33,6 +33,10 @@ public protocol BBMetalTexture {
     var sampleTime: CMTime? { get }
 }
 
+public protocol BBMetalAudioConsumer: AnyObject {
+    func newAudioSampleBufferAvailable(_ sampleBuffer: CMSampleBuffer)
+}
+
 struct BBMetalDefaultTexture: BBMetalTexture {
     let metalTexture: MTLTexture
     let sampleTime: CMTime?
