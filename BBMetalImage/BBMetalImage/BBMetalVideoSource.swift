@@ -62,6 +62,13 @@ public class BBMetalVideoSource {
     }
     
     public func start() {
+        lock.wait()
+        let isReading = (assetReader != nil)
+        lock.signal()
+        if isReading {
+            print("Should not call \(#function) while asset reader is reading")
+            return
+        }
         let asset = AVAsset(url: url)
         asset.loadValuesAsynchronously(forKeys: ["tracks"]) { [weak self] in
             guard let self = self else { return }

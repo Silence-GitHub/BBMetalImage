@@ -70,7 +70,16 @@ class CameraFilterVC: UIViewController {
         camera = BBMetalCamera(sessionPreset: .hd1920x1080)
         camera.add(consumer: metalView)
         camera.add(consumer: videoWriter)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         camera.start()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        camera.stop()
     }
     
     @objc private func clickFilterButton(_ button: UIButton) {
