@@ -26,6 +26,7 @@ public class BBMetalVideoSource {
     private var videoOutput: AVAssetReaderTrackOutput!
     
     private var audioOutput: AVAssetReaderTrackOutput!
+    private var lastAudioBuffer: CMSampleBuffer?
     
     public var audioConsumer: BBMetalAudioConsumer? {
         get {
@@ -130,6 +131,7 @@ public class BBMetalVideoSource {
         assetReader = nil
         videoOutput = nil
         audioOutput = nil
+        lastAudioBuffer = nil
     }
     
     private func prepareAssetReader() -> Bool {
@@ -162,6 +164,7 @@ public class BBMetalVideoSource {
         }
         lock.signal()
         
+        // Read and process video buffer
         lock.wait()
         while let reader = assetReader,
             reader.status == .reading,
@@ -182,18 +185,55 @@ public class BBMetalVideoSource {
                 }
                 let consumers = _consumers
                 
-                let currentAudioConsumer = _audioConsumer
+                // Read and process audio buffer
+                // Let video buffer go faster than audio buffer
+                // Make sure audio and video buffer have similar output presentation timestamp
                 var currentAudioBuffer: CMSampleBuffer?
-                if currentAudioConsumer != nil,
-                    audioOutput != nil  {
-                    currentAudioBuffer = audioOutput.copyNextSampleBuffer()
+                let currentAudioConsumer = _audioConsumer
+                if currentAudioConsumer != nil {
+                    if let last = lastAudioBuffer,
+                        CMTimeCompare(CMSampleBufferGetOutputPresentationTimeStamp(last), sampleFrameTime) <= 0 {
+                        // Process audio buffer
+                        currentAudioBuffer = last
+                        lastAudioBuffer = nil
+                        
+                    } else if lastAudioBuffer == nil,
+                        audioOutput != nil,
+                        let audioBuffer = audioOutput.copyNextSampleBuffer() {
+                        if CMTimeCompare(CMSampleBufferGetOutputPresentationTimeStamp(audioBuffer), sampleFrameTime) <= 0 {
+                            // Process audio buffer
+                            currentAudioBuffer = audioBuffer
+                        } else {
+                            // Audio buffer goes faster than video
+                            // Process audio buffer later
+                            lastAudioBuffer = audioBuffer
+                        }
+                    }
                 }
                 lock.signal()
                 
+                // Transmit video texture
                 let output = BBMetalDefaultTexture(metalTexture: texture, sampleTime: sampleFrameTime)
                 for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
                 
+                // Transmit audio buffer
                 if let audioBuffer = currentAudioBuffer { currentAudioConsumer?.newAudioSampleBufferAvailable(audioBuffer) }
+                lock.wait()
+        }
+        // Read and process the rest audio buffers
+        if let consumer = _audioConsumer,
+            let audioBuffer = lastAudioBuffer {
+            lock.signal()
+            consumer.newAudioSampleBufferAvailable(audioBuffer)
+            lock.wait()
+        }
+        while let consumer = _audioConsumer,
+            let reader = assetReader,
+            reader.status == .reading,
+            audioOutput != nil,
+            let audioBuffer = audioOutput.copyNextSampleBuffer() {
+                lock.signal()
+                consumer.newAudioSampleBufferAvailable(audioBuffer)
                 lock.wait()
         }
         if assetReader != nil {
