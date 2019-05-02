@@ -24,6 +24,38 @@ public class BBMetalVideoWriter {
     private var videoPixelBufferInput: AVAssetWriterInputPixelBufferAdaptor!
     private var videoPixelBuffer: CVPixelBuffer!
     
+    public var hasAudioTrack: Bool {
+        get {
+            lock.wait()
+            let h = _hasAudioTrack
+            lock.signal()
+            return h
+        }
+        set {
+            lock.wait()
+            _hasAudioTrack = newValue
+            lock.signal()
+        }
+    }
+    private var _hasAudioTrack: Bool
+    
+    public var expectsMediaDataInRealTime: Bool {
+        get {
+            lock.wait()
+            let e = _expectsMediaDataInRealTime
+            lock.signal()
+            return e
+        }
+        set {
+            lock.wait()
+            _expectsMediaDataInRealTime = newValue
+            lock.signal()
+        }
+    }
+    private var _expectsMediaDataInRealTime: Bool
+    
+    private var audioInput: AVAssetWriterInput!
+    
     private let lock: DispatchSemaphore
     
     public init(url: URL,
@@ -52,6 +84,8 @@ public class BBMetalVideoWriter {
                                    height: (frameSize.height + threadgroupSize.height - 1) / threadgroupSize.height,
                                    depth: 1)
         
+        _hasAudioTrack = true
+        _expectsMediaDataInRealTime = true
         lock = DispatchSemaphore(value: 1)
     }
     
@@ -80,6 +114,9 @@ public class BBMetalVideoWriter {
             let writer = self.writer,
             writer.status == .writing {
             videoInput.markAsFinished()
+            if let audioInput = self.audioInput {
+                audioInput.markAsFinished()
+            }
             writer.finishWriting { [weak self] in
                 guard let self = self else { return }
                 self.lock.wait()
@@ -99,6 +136,9 @@ public class BBMetalVideoWriter {
             let writer = self.writer,
             writer.status == .writing {
             videoInput.markAsFinished()
+            if let audioInput = self.audioInput {
+                audioInput.markAsFinished()
+            }
             writer.cancelWriting()
             reset()
         } else {
@@ -117,8 +157,9 @@ public class BBMetalVideoWriter {
         settings[AVVideoWidthKey] = frameSize.width
         settings[AVVideoHeightKey] = frameSize.height
         videoInput = AVAssetWriterInput(mediaType: .video, outputSettings: settings)
+        videoInput.expectsMediaDataInRealTime = _expectsMediaDataInRealTime
         if !writer.canAdd(videoInput) {
-            print("Asset writer can not add input")
+            print("Asset writer can not add video input")
             return false
         }
         writer.add(videoInput)
@@ -127,6 +168,19 @@ public class BBMetalVideoWriter {
                                           kCVPixelBufferWidthKey as String : frameSize.width,
                                           kCVPixelBufferHeightKey as String : frameSize.height]
         videoPixelBufferInput = AVAssetWriterInputPixelBufferAdaptor(assetWriterInput: videoInput, sourcePixelBufferAttributes: attributes)
+        
+        if _hasAudioTrack {
+            let settings: [String : Any] = [AVFormatIDKey : kAudioFormatMPEG4AAC,
+                                            AVNumberOfChannelsKey : 1,
+                                            AVSampleRateKey : AVAudioSession.sharedInstance().sampleRate]
+            audioInput = AVAssetWriterInput(mediaType: .audio, outputSettings: settings)
+            audioInput.expectsMediaDataInRealTime = _expectsMediaDataInRealTime
+            if !writer.canAdd(audioInput) {
+                print("Asset writer can not add audio input")
+                return false
+            }
+            writer.add(audioInput)
+        }
         return true
     }
     
@@ -135,6 +189,7 @@ public class BBMetalVideoWriter {
         videoInput = nil
         videoPixelBufferInput = nil
         videoPixelBuffer = nil
+        audioInput = nil
     }
 }
 
@@ -201,9 +256,32 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
         let bytesPerRow = CVPixelBufferGetBytesPerRow(videoPixelBuffer)
         let region = MTLRegionMake2D(0, 0, outputTexture.width, outputTexture.height)
         outputTexture.getBytes(baseAddress, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
-
+        
         videoPixelBufferInput.append(videoPixelBuffer, withPresentationTime: sampleTime)
         
         CVPixelBufferUnlockBaseAddress(videoPixelBuffer, [])
+    }
+}
+
+extension BBMetalVideoWriter: BBMetalAudioConsumer {
+    public func newAudioSampleBufferAvailable(_ sampleBuffer: CMSampleBuffer) {
+        lock.wait()
+        defer { lock.signal() }
+        
+        // Check nil
+        guard let audioInput = self.audioInput,
+            let writer = self.writer else { return }
+        
+        // Check first frame
+        guard videoPixelBuffer != nil else { return }
+        
+        // Check status
+        guard audioInput.isReadyForMoreMediaData,
+            writer.status == .writing else {
+                print("Asset writer or audio input is not ready for writing this frame")
+                return
+        }
+        
+        audioInput.append(sampleBuffer)
     }
 }

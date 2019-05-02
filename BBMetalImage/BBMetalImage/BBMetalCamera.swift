@@ -77,6 +77,11 @@ public class BBMetalCamera: NSObject {
         set {
             lock.wait()
             _audioConsumer = newValue
+            if newValue != nil {
+                addAudioInputAndOutput()
+            } else {
+                removeAudioInputAndOutput()
+            }
             lock.signal()
         }
     }
@@ -138,17 +143,12 @@ public class BBMetalCamera: NSObject {
         #endif
     }
     
-    /// Adds audio input and ouput to capture session
-    ///
-    /// - Returns: true if succeed or the capture session already had audio input and output; otherwise false
     @discardableResult
-    public func addAudioInputAndOutput() -> Bool {
-        lock.wait()
+    private func addAudioInputAndOutput() -> Bool {
+        if audioOutput != nil { return true }
+        
         session.beginConfiguration()
-        defer {
-            session.commitConfiguration()
-            lock.signal()
-        }
+        defer { session.commitConfiguration() }
         
         guard let audioDevice = AVCaptureDevice.default(.builtInMicrophone, for: .audio, position: .unspecified),
             let input = try? AVCaptureDeviceInput(device: audioDevice),
@@ -174,13 +174,10 @@ public class BBMetalCamera: NSObject {
         return true
     }
     
-    /// Removes audio input and output from capture session
-    public func removeAudioInputAndOutput() {
-        lock.wait()
+    private func removeAudioInputAndOutput() {
         session.beginConfiguration()
         _removeAudioInputAndOutput()
         session.commitConfiguration()
-        lock.signal()
     }
     
     private func _removeAudioInputAndOutput() {
