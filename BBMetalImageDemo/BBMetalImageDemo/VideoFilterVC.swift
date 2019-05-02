@@ -21,6 +21,7 @@ class VideoFilterVC: UIViewController {
         
         let url = Bundle.main.url(forResource: "test_video", withExtension: "MOV")!
         videoSource = BBMetalVideoSource(url: url)
+        videoSource.playWithVideoRate = true
         
         filter = BBMetalColorInversionFilter()
         

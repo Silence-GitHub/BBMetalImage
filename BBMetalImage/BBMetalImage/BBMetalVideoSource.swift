@@ -25,7 +25,21 @@ public class BBMetalVideoSource {
     private var assetReader: AVAssetReader!
     private var videoOutput: AVAssetReaderTrackOutput!
     
-    private var playWithVideoRate: Bool = true
+    public var playWithVideoRate: Bool {
+        get {
+            lock.wait()
+            let p = _playWithVideoRate
+            lock.signal()
+            return p
+        }
+        set {
+            lock.wait()
+            _playWithVideoRate = newValue
+            lock.signal()
+        }
+    }
+    private var _playWithVideoRate: Bool
+    
     private var lastSampleFrameTime: CMTime!
     private var lastActualPlayTime: Double!
     
@@ -37,6 +51,7 @@ public class BBMetalVideoSource {
         _consumers = []
         self.url = url
         lock = DispatchSemaphore(value: 1)
+        _playWithVideoRate = false
         
         #if !targetEnvironment(simulator)
         if CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, BBMetalDevice.sharedDevice, nil, &textureCache) != kCVReturnSuccess ||
@@ -122,7 +137,7 @@ public class BBMetalVideoSource {
             let sampleBuffer = videoOutput.copyNextSampleBuffer(),
             let texture = texture(with: sampleBuffer) {
                 let sampleFrameTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
-                if playWithVideoRate {
+                if _playWithVideoRate {
                     if let lastFrameTime = lastSampleFrameTime,
                         let lastPlayTime = lastActualPlayTime {
                         let detalFrameTime = CMTimeGetSeconds(CMTimeSubtract(sampleFrameTime, lastFrameTime))
