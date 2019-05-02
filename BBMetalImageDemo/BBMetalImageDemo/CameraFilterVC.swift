@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 import BBMetalImage
 
 class CameraFilterVC: UIViewController {
@@ -68,12 +69,16 @@ class CameraFilterVC: UIViewController {
         videoWriter = BBMetalVideoWriter(url: url, frameSize: BBMetalIntSize(width: 1080, height: 1920))
         
         camera = BBMetalCamera(sessionPreset: .hd1920x1080)
+        camera.audioConsumer = videoWriter
         camera.add(consumer: metalView)
         camera.add(consumer: videoWriter)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        try? AVAudioSession.sharedInstance().setCategory(.record, mode: .videoRecording, options: [])
+        try? AVAudioSession.sharedInstance().setActive(true, options: [])
         camera.start()
     }
     
