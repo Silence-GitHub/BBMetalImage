@@ -25,6 +25,23 @@ public class BBMetalVideoSource {
     private var assetReader: AVAssetReader!
     private var videoOutput: AVAssetReaderTrackOutput!
     
+    private var audioOutput: AVAssetReaderTrackOutput!
+    
+    public var audioConsumer: BBMetalAudioConsumer? {
+        get {
+            lock.wait()
+            let a = _audioConsumer
+            lock.signal()
+            return a
+        }
+        set {
+            lock.wait()
+            _audioConsumer = newValue
+            lock.signal()
+        }
+    }
+    private var _audioConsumer: BBMetalAudioConsumer?
+    
     public var playWithVideoRate: Bool {
         get {
             lock.wait()
@@ -112,6 +129,7 @@ public class BBMetalVideoSource {
         asset = nil
         assetReader = nil
         videoOutput = nil
+        audioOutput = nil
     }
     
     private func prepareAssetReader() -> Bool {
@@ -120,11 +138,17 @@ public class BBMetalVideoSource {
         assetReader = reader
         videoOutput = AVAssetReaderTrackOutput(track: videoTrack, outputSettings: [kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA])
         videoOutput.alwaysCopiesSampleData = false
-        if assetReader.canAdd(videoOutput) {
-            assetReader.add(videoOutput)
-            return true
+        if !assetReader.canAdd(videoOutput) { return false }
+        assetReader.add(videoOutput)
+        
+        if _audioConsumer != nil,
+            let audioTrack = asset.tracks(withMediaType: .audio).first {
+            audioOutput = AVAssetReaderTrackOutput(track: audioTrack, outputSettings: [AVFormatIDKey : kAudioFormatLinearPCM])
+            audioOutput.alwaysCopiesSampleData = false
+            if !assetReader.canAdd(audioOutput) { return false }
+            assetReader.add(audioOutput)
         }
-        return false
+        return true
     }
     
     private func processAsset() {
@@ -157,9 +181,19 @@ public class BBMetalVideoSource {
                     lastActualPlayTime = CACurrentMediaTime()
                 }
                 let consumers = _consumers
+                
+                let currentAudioConsumer = _audioConsumer
+                var currentAudioBuffer: CMSampleBuffer?
+                if currentAudioConsumer != nil,
+                    audioOutput != nil  {
+                    currentAudioBuffer = audioOutput.copyNextSampleBuffer()
+                }
                 lock.signal()
+                
                 let output = BBMetalDefaultTexture(metalTexture: texture, sampleTime: sampleFrameTime)
                 for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
+                
+                if let audioBuffer = currentAudioBuffer { currentAudioConsumer?.newAudioSampleBufferAvailable(audioBuffer) }
                 lock.wait()
         }
         if assetReader != nil {

@@ -39,6 +39,7 @@ public class BBMetalVideoWriter {
     }
     private var _hasAudioTrack: Bool
     
+    /// A Boolean value (true by defaut) that indicates whether the input should tailor its processing of media data for real-time sources 
     public var expectsMediaDataInRealTime: Bool {
         get {
             lock.wait()
