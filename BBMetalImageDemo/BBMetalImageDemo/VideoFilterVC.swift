@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 import BBMetalImage
 
 class VideoFilterVC: UIViewController {
@@ -62,7 +63,7 @@ class VideoFilterVC: UIViewController {
         try? FileManager.default.removeItem(at: url)
         videoWriter = BBMetalVideoWriter(url: outputUrl, frameSize: BBMetalIntSize(width: 1080, height: 1920))
         
-        
+        videoSource.audioConsumer = videoWriter
         videoSource.add(consumer: metalView)
         videoSource.add(consumer: videoWriter)
     }
