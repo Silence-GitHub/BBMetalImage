@@ -61,6 +61,36 @@ public class BBMetalVideoSource {
     private var lastSampleFrameTime: CMTime!
     private var lastActualPlayTime: Double!
     
+    /// Whether to run benchmark or not.
+    /// Running benchmark records frame duration.
+    /// False by default.
+    public var benchmark: Bool {
+        get {
+            lock.wait()
+            let b = _benchmark
+            lock.signal()
+            return b
+        }
+        set {
+            lock.wait()
+            _benchmark = newValue
+            lock.signal()
+        }
+    }
+    private var _benchmark: Bool
+    
+    /// Average frame duration, or 0 if not valid value.
+    /// To get valid value, set `benchmark` to true.
+    public var averageFrameDuration: Double {
+        lock.wait()
+        let d = processedFrameCount > 0 ? totalProcessFrameTime / Double(processedFrameCount) : 0
+        lock.signal()
+        return d
+    }
+    
+    private var processedFrameCount: Int
+    private var totalProcessFrameTime: Double
+    
     #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache!
     #endif
@@ -70,6 +100,9 @@ public class BBMetalVideoSource {
         self.url = url
         lock = DispatchSemaphore(value: 1)
         _playWithVideoRate = false
+        _benchmark = false
+        processedFrameCount = 0
+        totalProcessFrameTime = 0
         
         #if !targetEnvironment(simulator)
         if CVMetalTextureCacheCreate(kCFAllocatorDefault, nil, BBMetalDevice.sharedDevice, nil, &textureCache) != kCVReturnSuccess ||
@@ -120,6 +153,14 @@ public class BBMetalVideoSource {
         lock.signal()
     }
     
+    /// Resets benchmark record data
+    public func resetBenchmark() {
+        lock.wait()
+        processedFrameCount = 0
+        totalProcessFrameTime = 0
+        lock.signal()
+    }
+    
     private func safeReset() {
         lock.wait()
         reset()
@@ -166,6 +207,7 @@ public class BBMetalVideoSource {
         
         // Read and process video buffer
         lock.wait()
+        var startTime = _benchmark ? CACurrentMediaTime() : 0
         while let reader = assetReader,
             reader.status == .reading,
             let sampleBuffer = videoOutput.copyNextSampleBuffer(),
@@ -218,6 +260,15 @@ public class BBMetalVideoSource {
                 
                 // Transmit audio buffer
                 if let audioBuffer = currentAudioBuffer { currentAudioConsumer?.newAudioSampleBufferAvailable(audioBuffer) }
+                
+                // Benchmark
+                if startTime != 0 {
+                    let now = CACurrentMediaTime()
+                    processedFrameCount += 1
+                    totalProcessFrameTime += now - startTime
+                    startTime = now
+                }
+
                 lock.wait()
         }
         // Read and process the rest audio buffers

@@ -53,6 +53,15 @@ public class BBMetalCamera: NSObject {
     }
     private var _benchmark: Bool
     
+    /// Average frame duration, or 0 if not valid value.
+    /// To get valid value, set `benchmark` to true.
+    public var averageFrameDuration: Double {
+        lock.wait()
+        let d = capturedFrameCount > ignoreInitialFrameCount ? totalCaptureFrameTime / Double(capturedFrameCount - ignoreInitialFrameCount) : 0
+        lock.signal()
+        return d
+    }
+    
     private var capturedFrameCount: Int
     private var totalCaptureFrameTime: Double
     private let ignoreInitialFrameCount: Int
@@ -200,15 +209,6 @@ public class BBMetalCamera: NSObject {
     /// Stops capturing
     public func stop() { session.stopRunning() }
     
-    /// Average frame duration, or 0 if not valid value.
-    /// To get valid value, set `benchmark` to true.
-    public var averageFrameDuration: Double {
-        lock.wait()
-        let d = capturedFrameCount > ignoreInitialFrameCount ? totalCaptureFrameTime / Double(capturedFrameCount - ignoreInitialFrameCount) : 0
-        lock.signal()
-        return d
-    }
-    
     /// Resets benchmark record data
     public func resetBenchmark() {
         lock.wait()
@@ -259,17 +259,18 @@ extension BBMetalCamera: BBMetalImageSource {
 
 extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        // Audio
         if output is AVCaptureAudioDataOutput,
             let consumer = audioConsumer {
             consumer.newAudioSampleBufferAvailable(sampleBuffer)
             return
         }
         
+        // Video
         lock.wait()
         let consumers = _consumers
         let willTransmit = _willTransmitTexture
-        let runBenchmark = _benchmark
-        let startTime = runBenchmark ? CACurrentMediaTime() : 0
+        let startTime = _benchmark ? CACurrentMediaTime() : 0
         lock.signal()
         
         guard !consumers.isEmpty,
@@ -280,7 +281,8 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         let output = BBMetalDefaultTexture(metalTexture: texture, sampleTime: sampleTime)
         for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
         
-        if runBenchmark {
+        // Benchmark
+        if startTime != 0 {
             lock.wait()
             capturedFrameCount += 1
             if capturedFrameCount > ignoreInitialFrameCount {
