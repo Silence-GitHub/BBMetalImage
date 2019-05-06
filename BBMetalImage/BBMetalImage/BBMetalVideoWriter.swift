@@ -8,10 +8,15 @@
 
 import AVFoundation
 
+/// Video writer writing video file
 public class BBMetalVideoWriter {
+    /// URL of video file
     public let url: URL
+    /// Video frame size
     public let frameSize: BBMetalIntSize
+    /// Video file type
     public let fileType: AVFileType
+    /// Video settings
     public let outputSettings: [String : Any]
     
     private var computePipeline: MTLComputePipelineState!
@@ -24,6 +29,7 @@ public class BBMetalVideoWriter {
     private var videoPixelBufferInput: AVAssetWriterInputPixelBufferAdaptor!
     private var videoPixelBuffer: CVPixelBuffer!
     
+    /// Whether the video contains audio track (true by default)
     public var hasAudioTrack: Bool {
         get {
             lock.wait()
@@ -90,6 +96,7 @@ public class BBMetalVideoWriter {
         lock = DispatchSemaphore(value: 1)
     }
     
+    /// Starts receiving Metal texture and writing video file
     public func start() {
         lock.wait()
         defer { lock.signal() }
@@ -108,6 +115,9 @@ public class BBMetalVideoWriter {
         }
     }
     
+    /// Finishes writing video file
+    ///
+    /// - Parameter completion: a closure to call after writing video file
     public func finish(completion: (() -> Void)?) {
         lock.wait()
         defer { lock.signal() }
@@ -130,6 +140,7 @@ public class BBMetalVideoWriter {
         }
     }
     
+    /// Cancels writing video file
     public func cancel() {
         lock.wait()
         defer { lock.signal() }

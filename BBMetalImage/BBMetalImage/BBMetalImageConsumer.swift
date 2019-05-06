@@ -28,12 +28,22 @@ public protocol BBMetalImageConsumer: AnyObject {
     func newTextureAvailable(_ texture: BBMetalTexture, from source: BBMetalImageSource)
 }
 
+/// Defines texture behaviors
 public protocol BBMetalTexture {
+    /// Metal texture
     var metalTexture: MTLTexture { get }
+    
+    /// Sample time of the metal texture.
+    /// If the metal texture is used as static image, the sample time is nil.
+    /// If the metal texture is used as video frame, the sample time should not be nil.
     var sampleTime: CMTime? { get }
 }
 
+/// Defines audio consumer behaviors
 public protocol BBMetalAudioConsumer: AnyObject {
+    /// Receives a sample buffer
+    ///
+    /// - Parameter sampleBuffer: audio sample buffer to receive
     func newAudioSampleBufferAvailable(_ sampleBuffer: CMSampleBuffer)
 }
 

@@ -76,6 +76,9 @@ public class BBMetalCamera: NSObject {
     private var audioOutput: AVCaptureAudioDataOutput!
     private var audioOutputQueue: DispatchQueue!
     
+    /// Audio consumer processing audio sample buffer.
+    /// Set this property to nil (default value) if not recording audio.
+    /// Set this property to a given audio consumer if recording audio.
     public var audioConsumer: BBMetalAudioConsumer? {
         get {
             lock.wait()

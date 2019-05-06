@@ -8,6 +8,7 @@
 
 import AVFoundation
 
+/// Video source reading video frame and providing Metal texture
 public class BBMetalVideoSource {
     /// Image consumers
     public var consumers: [BBMetalImageConsumer] {
@@ -28,6 +29,9 @@ public class BBMetalVideoSource {
     private var audioOutput: AVAssetReaderTrackOutput!
     private var lastAudioBuffer: CMSampleBuffer?
     
+    /// Audio consumer processing audio sample buffer.
+    /// Set this property to nil (default value) if not processing audio.
+    /// Set this property to a given audio consumer if processing audio.
     public var audioConsumer: BBMetalAudioConsumer? {
         get {
             lock.wait()
@@ -43,6 +47,7 @@ public class BBMetalVideoSource {
     }
     private var _audioConsumer: BBMetalAudioConsumer?
     
+    /// Whether to process video with the actual rate. False by default, meaning the processing speed is faster than the actual video rate.
     public var playWithVideoRate: Bool {
         get {
             lock.wait()
@@ -112,6 +117,7 @@ public class BBMetalVideoSource {
         #endif
     }
     
+    /// Starts reading and processing video frame
     public func start() {
         lock.wait()
         let isReading = (assetReader != nil)
@@ -143,6 +149,7 @@ public class BBMetalVideoSource {
         }
     }
     
+    /// Cancels reading and processing video frame
     public func cancel() {
         lock.wait()
         if let reader = assetReader,
