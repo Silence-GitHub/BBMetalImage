@@ -41,6 +41,9 @@ class CameraFilterVC: UIViewController {
                                 device: BBMetalDevice.sharedDevice)
         view.addSubview(metalView)
         
+        let tapMetalView = UITapGestureRecognizer(target: self, action: #selector(tapMetalView(_:)))
+        metalView.addGestureRecognizer(tapMetalView)
+        
         var y: CGFloat = metalView.frame.maxY + 10
         var i = 0
         func generateButton(title: String, selectedTitle: String? = nil) -> UIButton {
@@ -85,6 +88,10 @@ class CameraFilterVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         camera.stop()
+    }
+    
+    @objc private func tapMetalView(_ tap: UITapGestureRecognizer) {
+        camera.switchCameraPosition()
     }
     
     @objc private func clickFilterButton(_ button: UIButton) {

@@ -74,6 +74,7 @@ public class BBMetalCamera: NSObject {
     private var session: AVCaptureSession!
     private var camera: AVCaptureDevice!
     private var videoInput: AVCaptureDeviceInput!
+    private var videoOutput: AVCaptureVideoDataOutput!
     private var videoOutputQueue: DispatchQueue!
     
     private var audioInput: AVCaptureDeviceInput!
@@ -142,6 +143,7 @@ public class BBMetalCamera: NSObject {
             return nil
         }
         session.addOutput(videoDataOutput)
+        videoOutput = videoDataOutput
         
         guard let connection = videoDataOutput.connections.first,
             connection.isVideoOrientationSupported else {
@@ -238,6 +240,10 @@ public class BBMetalCamera: NSObject {
         session.addInput(videoDeviceInput)
         camera = videoDevice
         videoInput = videoDeviceInput
+        
+        guard let connection = videoOutput.connections.first,
+            connection.isVideoOrientationSupported else { return false }
+        connection.videoOrientation = .portrait
         
         return true
     }
