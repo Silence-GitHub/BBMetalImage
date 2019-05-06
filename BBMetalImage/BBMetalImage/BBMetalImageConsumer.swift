@@ -7,6 +7,7 @@
 //
 
 import CoreMedia
+import AVFoundation
 
 /// Defines image consumer behaviors
 public protocol BBMetalImageConsumer: AnyObject {
@@ -37,6 +38,10 @@ public protocol BBMetalTexture {
     /// If the metal texture is used as static image, the sample time is nil.
     /// If the metal texture is used as video frame, the sample time should not be nil.
     var sampleTime: CMTime? { get }
+    
+    /// Camera position.
+    /// Nil if unknown or image does not come from camera.
+    var cameraPosition: AVCaptureDevice.Position? { get }
 }
 
 /// Defines audio consumer behaviors
@@ -50,9 +55,13 @@ public protocol BBMetalAudioConsumer: AnyObject {
 struct BBMetalDefaultTexture: BBMetalTexture {
     let metalTexture: MTLTexture
     let sampleTime: CMTime?
+    let cameraPosition: AVCaptureDevice.Position?
     
-    init(metalTexture: MTLTexture, sampleTime: CMTime? = nil) {
+    init(metalTexture: MTLTexture,
+         sampleTime: CMTime? = nil,
+         cameraPosition: AVCaptureDevice.Position? = nil) {
         self.metalTexture = metalTexture
         self.sampleTime = sampleTime
+        self.cameraPosition = cameraPosition
     }
 }

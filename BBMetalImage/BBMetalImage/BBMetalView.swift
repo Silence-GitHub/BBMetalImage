@@ -86,8 +86,11 @@ public class BBMetalView: MTKView {
     private var textureWidth: Int = 0
     private var textureHeight: Int = 0
     
-    private var textureMirroring = false // for internal drawing
-    private var tempTextureMirroring = false // for external setter
+    private var frontCamera: Bool = false // for internal drawing
+    private var tempFrontCamera: Bool = false // for external setter
+    
+    private var textureMirroring: Bool = false // for internal drawing
+    private var tempTextureMirroring: Bool = false // for external setter
     
     private var textureRotation: TextureRotation = .rotate0Degrees // for internal drawing
     private var tempTextureRotation: TextureRotation = .rotate0Degrees // for external setter
@@ -132,6 +135,7 @@ public class BBMetalView: MTKView {
         if frameSize != lastFrameSize ||
             texture.width != textureWidth ||
             texture.height != textureHeight ||
+            tempFrontCamera != frontCamera ||
             tempTextureMirroring != textureMirroring ||
             tempTextureRotation != textureRotation ||
             tempTextureContentMode != textureContentMode {
@@ -174,6 +178,7 @@ extension BBMetalView: BBMetalImageConsumer {
     public func newTextureAvailable(_ texture: BBMetalTexture, from source: BBMetalImageSource) {
         lock.wait()
         self.texture = texture.metalTexture
+        tempFrontCamera = (texture.cameraPosition == .front)
         draw()
         lock.signal()
     }
@@ -182,6 +187,7 @@ extension BBMetalView: BBMetalImageConsumer {
         lastFrameSize = frameSize
         textureWidth = width
         textureHeight = height
+        frontCamera = tempFrontCamera
         textureMirroring = tempTextureMirroring
         textureRotation = tempTextureRotation
         textureContentMode = tempTextureContentMode
@@ -221,7 +227,7 @@ extension BBMetalView: BBMetalImageConsumer {
             }
         }
         
-        if textureMirroring { scaleX = -scaleX }
+        if textureMirroring != frontCamera { scaleX = -scaleX }
         
         let vertexData: [Float] = [
             -scaleX, -scaleY,
