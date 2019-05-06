@@ -35,6 +35,9 @@ public class BBMetalCamera: NSObject {
     }
     private var _willTransmitTexture: ((MTLTexture) -> Void)?
     
+    /// Camera position
+    public var position: AVCaptureDevice.Position { return camera.position }
+    
     /// Whether to run benchmark or not.
     /// Running benchmark records frame duration.
     /// False by default.
@@ -70,6 +73,7 @@ public class BBMetalCamera: NSObject {
     
     private var session: AVCaptureSession!
     private var camera: AVCaptureDevice!
+    private var videoInput: AVCaptureDeviceInput!
     private var videoOutputQueue: DispatchQueue!
     
     private var audioInput: AVCaptureDeviceInput!
@@ -103,7 +107,7 @@ public class BBMetalCamera: NSObject {
     private var textureCache: CVMetalTextureCache!
     #endif
     
-    public init?(sessionPreset: AVCaptureSession.Preset = .high) {
+    public init?(sessionPreset: AVCaptureSession.Preset = .high, position: AVCaptureDevice.Position = .back) {
         _consumers = []
         _benchmark = false
         capturedFrameCount = 0
@@ -113,7 +117,7 @@ public class BBMetalCamera: NSObject {
         
         super.init()
         
-        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: .back),
+        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position),
             let videoDeviceInput = try? AVCaptureDeviceInput(device: videoDevice) else { return nil }
         
         session = AVCaptureSession()
@@ -127,6 +131,7 @@ public class BBMetalCamera: NSObject {
         
         session.addInput(videoDeviceInput)
         camera = videoDevice
+        videoInput = videoDeviceInput
         
         let videoDataOutput = AVCaptureVideoDataOutput()
         videoDataOutput.videoSettings = [kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA]
@@ -204,6 +209,37 @@ public class BBMetalCamera: NSObject {
         if audioOutputQueue != nil {
             audioOutputQueue = nil
         }
+    }
+    
+    /// Switches camera position (back to front, or front to back)
+    ///
+    /// - Returns: true if succeed, or false if fail
+    @discardableResult
+    public func switchCameraPosition() -> Bool {
+        lock.wait()
+        session.beginConfiguration()
+        defer {
+            session.commitConfiguration()
+            lock.signal()
+        }
+        
+        var position: AVCaptureDevice.Position = .back
+        if camera.position == .back { position = .front }
+        
+        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position),
+            let videoDeviceInput = try? AVCaptureDeviceInput(device: videoDevice) else { return false }
+        
+        session.removeInput(videoInput)
+        
+        guard session.canAddInput(videoDeviceInput) else {
+            session.addInput(videoInput)
+            return false
+        }
+        session.addInput(videoDeviceInput)
+        camera = videoDevice
+        videoInput = videoDeviceInput
+        
+        return true
     }
     
     /// Starts capturing
