@@ -38,7 +38,7 @@ Install with CocoaPods:
 
 ##  How to Use
 
-### Single filter
+### Single Filter
 
 Call `filteredImage(with:)` method of a filter is the simplest way to get filtered image synchronously.
 
@@ -153,7 +153,7 @@ func setup() {
 }
 ```
 
-#### Process image synchronously
+#### Process Image Synchronously
 
 ```swift
 // Set up image source
@@ -178,7 +178,7 @@ imageSource.transmitTexture()
 let filteredImage = sharpenFilter.outputTexture?.bb_image
 ```
 
-#### Process image asynchronously
+#### Process Image Asynchronously
 
 ```swift
 // Hold image source
