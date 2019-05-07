@@ -214,19 +214,24 @@ public class BBMetalVideoSource {
         
         // Read and process video buffer
         lock.wait()
-        var startTime = _benchmark ? CACurrentMediaTime() : 0
+        let useVideoRate = _playWithVideoRate
+        var startTime: Double = _benchmark ? CACurrentMediaTime() : 0
+        var sleepTime: Double = 0
         while let reader = assetReader,
             reader.status == .reading,
             let sampleBuffer = videoOutput.copyNextSampleBuffer(),
             let texture = texture(with: sampleBuffer) {
                 let sampleFrameTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
-                if _playWithVideoRate {
+                if useVideoRate {
                     if let lastFrameTime = lastSampleFrameTime,
                         let lastPlayTime = lastActualPlayTime {
                         let detalFrameTime = CMTimeGetSeconds(CMTimeSubtract(sampleFrameTime, lastFrameTime))
                         let detalPlayTime = CACurrentMediaTime() - lastPlayTime
                         if detalFrameTime > detalPlayTime {
-                            usleep(UInt32(1000000 * (detalFrameTime - detalPlayTime)))
+                            sleepTime = detalFrameTime - detalPlayTime
+                            usleep(UInt32(1000000 * sleepTime))
+                        } else {
+                            sleepTime = 0
                         }
                     }
                     lastSampleFrameTime = sampleFrameTime
@@ -272,7 +277,7 @@ public class BBMetalVideoSource {
                 if startTime != 0 {
                     let now = CACurrentMediaTime()
                     processedFrameCount += 1
-                    totalProcessFrameTime += now - startTime
+                    totalProcessFrameTime += now - startTime - sleepTime
                     startTime = now
                 }
 
