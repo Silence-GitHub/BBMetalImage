@@ -50,6 +50,12 @@ class VideoFilterVC2: UIViewController {
         player.play()
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        if let source = videoSource { source.cancel() }
+    }
+    
     @objc private func clickFilterButton(_ button: UIButton) {
         player.pause()
         
