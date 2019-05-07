@@ -24,7 +24,7 @@ class VideoFilterVC: UIViewController {
 
         view.backgroundColor = .gray
         
-        let url = Bundle.main.url(forResource: "test_video", withExtension: "MOV")!
+        let url = Bundle.main.url(forResource: "test_video", withExtension: "mov")!
         videoSource = BBMetalVideoSource(url: url)
         videoSource.playWithVideoRate = true
         
@@ -60,7 +60,6 @@ class VideoFilterVC: UIViewController {
         
         filePath = NSTemporaryDirectory() + "test.mp4"
         let outputUrl = URL(fileURLWithPath: filePath)
-        try? FileManager.default.removeItem(at: url)
         videoWriter = BBMetalVideoWriter(url: outputUrl, frameSize: BBMetalIntSize(width: 1080, height: 1920))
         
         videoSource.audioConsumer = videoWriter
