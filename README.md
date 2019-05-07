@@ -59,10 +59,8 @@ The code below:
 5. Do something after writing the video file
 
 ```swift
-// Hold camera
+// Hold camera and video writer
 var camera: BBMetalCamera!
-
-// Hold writer
 var videoWriter: BBMetalVideoWriter!
 
 func setup() {
@@ -79,9 +77,8 @@ func setup() {
     view.addSubview(metalView)
 
     // Set up video writer
-    filePath = NSTemporaryDirectory() + "test.mp4"
+    let filePath = NSTemporaryDirectory() + "test.mp4"
     let url = URL(fileURLWithPath: filePath)
-    try? FileManager.default.removeItem(at: url)
     videoWriter = BBMetalVideoWriter(url: url, frameSize: BBMetalIntSize(width: 1080, height: 1920))
 
     // Set camera audio consumer to record audio
@@ -105,6 +102,53 @@ func setup() {
 func finishRecording() {
     videoWriter.finish {
          // Do something after recording the video file
+    }
+}
+```
+
+#### Process Video File
+
+```swift
+// Hold video source and writer
+var videoSource: BBMetalVideoSource!
+var videoWriter: BBMetalVideoWriter!
+
+func setup() {
+    // Set up video writer
+    let filePath = NSTemporaryDirectory() + "test.mp4"
+    let outputUrl = URL(fileURLWithPath: filePath)
+    videoWriter = BBMetalVideoWriter(url: outputUrl, frameSize: BBMetalIntSize(width: 1080, height: 1920))
+
+    // Set up video source
+    let sourceURL = Bundle.main.url(forResource: "test_video_2", withExtension: "mov")!
+    videoSource = BBMetalVideoSource(url: sourceURL)
+
+    // Set video source audio consumer to write audio data
+    videoSource.audioConsumer = videoWriter
+
+    // Set up 3 filters to process image
+    let contrastFilter = BBMetalContrastFilter(contrast: 3)
+    let lookupFilter = BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
+    let sharpenFilter = BBMetalSharpenFilter(sharpeness: 1)
+
+    // Set up filter chain
+    videoSource.add(consumer: contrastFilter)
+        .add(consumer: lookupFilter)
+        .add(consumer: sharpenFilter)
+        .add(consumer: videoWriter)
+
+    // Start receiving Metal texture and writing video file
+    videoWriter.start()
+
+    // Start reading and processing video frame and auido data
+    videoSource.start { [weak self] (_) in
+        // All video data is processed
+        guard let self = self else { return }
+
+        // Finish writing video file
+        self.videoWriter.finish {
+            // Do something after writing the video file
+        }
     }
 }
 ```
