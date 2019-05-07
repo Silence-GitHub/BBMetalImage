@@ -48,19 +48,26 @@ let filteredImage = BBMetalContrastFilter(contrast: 3).filteredImage(with: image
 
 ### Filter Chain
 
+#### Capture, Preview and Recording
+
 The code below:
 
-1. Captures image with a camera
+1. Captures image and audio with a camera
 2. The image captured by the camera is processed by 3 filters
 3. The processed image is rendered to the metal view
+4. The processed image and audio are written to a video file
+5. Do something after writing the video file
 
 ```swift
 // Hold camera
 var camera: BBMetalCamera!
 
+// Hold writer
+var videoWriter: BBMetalVideoWriter!
+
 func setup() {
-    // Set up Camera to capture image
-    camera = BBMetalCamera(sessionPreset: .high)!
+    // Set up camera to capture image
+    camera = BBMetalCamera(sessionPreset: .hd1920x1080)!
 
     // Set up 3 filters to process image
     let contrastFilter = BBMetalContrastFilter(contrast: 3)
@@ -71,14 +78,34 @@ func setup() {
     let metalView = BBMetalView(frame: frame)
     view.addSubview(metalView)
 
+    // Set up video writer
+    filePath = NSTemporaryDirectory() + "test.mp4"
+    let url = URL(fileURLWithPath: filePath)
+    try? FileManager.default.removeItem(at: url)
+    videoWriter = BBMetalVideoWriter(url: url, frameSize: BBMetalIntSize(width: 1080, height: 1920))
+
+    // Set camera audio consumer to record audio
+    camera.audioConsumer = videoWriter
+
     // Set up filter chain
     camera.add(consumer: contrastFilter)
         .add(consumer: lookupFilter)
         .add(consumer: sharpenFilter)
         .add(consumer: metalView)
 
+    sharpenFilter.add(consumer: videoWriter)
+
     // Start capturing
     camera.start()
+
+    // Start writing video file
+    videoWriter.start()
+}
+
+func finishRecording() {
+    videoWriter.finish {
+         // Do something after recording the video file
+    }
 }
 ```
 
