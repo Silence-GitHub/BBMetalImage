@@ -17,7 +17,7 @@ public class BBMetalStaticImageSource {
         lock.signal()
         return c
     }
-    private var _consumers: [BBMetalImageConsumer]
+    private var _consumers: [BBMetalImageConsumer] = []
     
     /// Texture from static image
     public var texture: MTLTexture? {
@@ -28,19 +28,28 @@ public class BBMetalStaticImageSource {
     }
     private var _texture: MTLTexture?
     
-    private let image: UIImage
-    private let lock: DispatchSemaphore
-    
-    public init(image: UIImage) {
-        _consumers = []
-        self.image = image
-        lock = DispatchSemaphore(value: 1)
+    private var currentTexture: MTLTexture? {
+        if let texture = image?.bb_metalTexture { return texture }
+        if let texture = cgimage?.bb_metalTexture { return texture }
+        if let texture = imageData?.bb_metalTexture { return texture }
+        return nil
     }
+    
+    private var image: UIImage?
+    private var cgimage: CGImage?
+    private var imageData: Data?
+    
+    private let lock = DispatchSemaphore(value: 1)
+    
+    public init(image: UIImage) { self.image = image }
+    public init(cgimage: CGImage) { self.cgimage = cgimage }
+    public init(imageData: Data) { self.imageData = imageData }
+    public init(texture: MTLTexture) { _texture = texture }
     
     /// Transmit texture to image consumers
     public func transmitTexture() {
         lock.wait()
-        if _texture == nil { _texture = image.bb_metalTexture }
+        if _texture == nil { _texture = currentTexture }
         guard let texture = _texture else {
             lock.signal()
             return
