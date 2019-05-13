@@ -95,7 +95,7 @@ public class BBMetalCamera: NSObject {
             lock.wait()
             _audioConsumer = newValue
             if newValue != nil {
-                addAudioInputAndOutput()
+                if !addAudioInputAndOutput() { _audioConsumer = nil }
             } else {
                 removeAudioInputAndOutput()
             }
