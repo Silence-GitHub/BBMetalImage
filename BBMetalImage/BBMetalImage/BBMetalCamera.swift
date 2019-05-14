@@ -14,7 +14,7 @@ public protocol BBMetalCameraPhotoDelegate: AnyObject {
     ///
     /// - Parameters:
     ///   - camera: camera to use
-    ///   - texture: Metal texture of the photo
+    ///   - texture: Metal texture of the original photo which is not filtered
     func camera(_ camera: BBMetalCamera, didOutput texture: MTLTexture)
     
     /// Called when camera fail taking a photo

@@ -8,14 +8,14 @@
 
 /// Rotates an image
 public class BBMetalRotateFilter: BBMetalBaseFilter {
-    /// angle (degree) to rotate
+    /// Angle (degree) to rotate
     public var angle: Float {
         get { return _angle / Float.pi * 180 }
         set { _angle = newValue * Float.pi / 180 }
     }
     private var _angle: Float
     
-    /// true to change image size to fit rotated image, false to keep image size
+    /// True to change image size to fit rotated image, false to keep image size
     public var fitSize: Bool
     
     public init(angle: Float, fitSize: Bool) {

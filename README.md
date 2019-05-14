@@ -106,6 +106,41 @@ func finishRecording() {
 }
 ```
 
+#### Capture Image
+
+```swift
+// Hold camera
+var camera: BBMetalCamera!
+
+func setup() {
+    // Set up camera to capture image
+    // Set `canTakePhoto` to true and set `photoDelegate` to nonnull
+    camera = BBMetalCamera(sessionPreset: .hd1920x1080)!
+    camera.canTakePhoto = true
+    camera.photoDelegate = self
+
+    // Set up metal view to display image
+    let metalView = BBMetalView(frame: frame)
+    view.addSubview(metalView)
+
+    // Set up filter chain
+    camera.add(consumer: metalView)
+
+    // Start capturing
+    camera.start()
+}
+
+func takePhoto() {
+    camera.takePhoto()
+}
+
+// BBMetalCameraPhotoDelegate
+func camera(_ camera: BBMetalCamera, didOutput texture: MTLTexture) {
+    // Do something to the photo texture
+    // Note: the `texture` is the original photo which is not filtered even though there are filters in the filter chain
+}
+```
+
 #### Process Video File
 
 ```swift
