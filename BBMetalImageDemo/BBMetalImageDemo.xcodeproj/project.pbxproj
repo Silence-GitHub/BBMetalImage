@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A00949E225C53C50089941C /* CameraFilterVC.swift */; };
 		4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */; };
+		4A3CAE3F228A060900252B70 /* CameraPhotoFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A3CAE3E228A060900252B70 /* CameraPhotoFilterVC.swift */; };
 		4A4CADC2225317C20058BEB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADC1225317C20058BEB6 /* AppDelegate.swift */; };
 		4A4CADC4225317C20058BEB6 /* MainMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADC3225317C20058BEB6 /* MainMenuVC.swift */; };
 		4A4CADC7225317C20058BEB6 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4A4CADC5225317C20058BEB6 /* Main.storyboard */; };
@@ -46,6 +47,7 @@
 /* Begin PBXFileReference section */
 		4A00949E225C53C50089941C /* CameraFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterVC.swift; sourceTree = "<group>"; };
 		4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterMenuVC.swift; sourceTree = "<group>"; };
+		4A3CAE3E228A060900252B70 /* CameraPhotoFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPhotoFilterVC.swift; sourceTree = "<group>"; };
 		4A4CADBE225317C20058BEB6 /* BBMetalImageDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BBMetalImageDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A4CADC1225317C20058BEB6 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		4A4CADC3225317C20058BEB6 /* MainMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainMenuVC.swift; sourceTree = "<group>"; };
@@ -106,6 +108,7 @@
 				4AFC464E2253CDDC009D37A1 /* StaticImageFilterVC.swift */,
 				4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */,
 				4A00949E225C53C50089941C /* CameraFilterVC.swift */,
+				4A3CAE3E228A060900252B70 /* CameraPhotoFilterVC.swift */,
 				4A665CFC22721CAA00DFDF4C /* VideoFilterVC.swift */,
 				4A633D672281F33C00138B2A /* VideoFilterVC2.swift */,
 				4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */,
@@ -208,6 +211,7 @@
 				4AFC464F2253CDDC009D37A1 /* StaticImageFilterVC.swift in Sources */,
 				4A4CADC2225317C20058BEB6 /* AppDelegate.swift in Sources */,
 				4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */,
+				4A3CAE3F228A060900252B70 /* CameraPhotoFilterVC.swift in Sources */,
 				4A9BCB66227A03E000E02C6F /* VideoPlayerVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

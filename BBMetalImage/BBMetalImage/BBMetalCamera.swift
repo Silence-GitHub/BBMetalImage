@@ -8,6 +8,23 @@
 
 import AVFoundation
 
+/// Camera photo delegate defines handling taking photo result behaviors
+public protocol BBMetalCameraPhotoDelegate: AnyObject {
+    /// Called when camera did take a photo and get Metal texture
+    ///
+    /// - Parameters:
+    ///   - camera: camera to use
+    ///   - texture: Metal texture of the photo
+    func camera(_ camera: BBMetalCamera, didOutput texture: MTLTexture)
+    
+    /// Called when camera fail taking a photo
+    ///
+    /// - Parameters:
+    ///   - camera: camera to use
+    ///   - error: error for taking the photo
+    func camera(_ camera: BBMetalCamera, didFail error: Error)
+}
+
 /// Camera capturing image and providing Metal texture
 public class BBMetalCamera: NSObject {
     /// Image consumers
@@ -104,12 +121,54 @@ public class BBMetalCamera: NSObject {
     }
     private var _audioConsumer: BBMetalAudioConsumer?
     
+    private var photoOutput: AVCapturePhotoOutput!
+    
+    /// Whether can take photo or not.
+    /// Set this property to true before calling `takePhoto(with:)` method.
+    public var canTakePhoto: Bool {
+        get {
+            lock.wait()
+            let c = _canTakePhoto
+            lock.signal()
+            return c
+        }
+        set {
+            lock.wait()
+            _canTakePhoto = newValue
+            if newValue {
+                if !addPhotoOutput() { _canTakePhoto = false }
+            } else {
+                removePhotoOutput()
+            }
+            lock.signal()
+        }
+    }
+    private var _canTakePhoto: Bool
+    
+    /// Camera photo delegate handling taking photo result.
+    /// To take photo, this property should not be nil.
+    public weak var photoDelegate: BBMetalCameraPhotoDelegate? {
+        get {
+            lock.wait()
+            let p = _photoDelegate
+            lock.signal()
+            return p
+        }
+        set {
+            lock.wait()
+            _photoDelegate = newValue
+            lock.signal()
+        }
+    }
+    private weak var _photoDelegate: BBMetalCameraPhotoDelegate?
+    
     #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache!
     #endif
     
     public init?(sessionPreset: AVCaptureSession.Preset = .high, position: AVCaptureDevice.Position = .back) {
         _consumers = []
+        _canTakePhoto = false
         _benchmark = false
         capturedFrameCount = 0
         totalCaptureFrameTime = 0
@@ -211,6 +270,44 @@ public class BBMetalCamera: NSObject {
         if audioOutputQueue != nil {
             audioOutputQueue = nil
         }
+    }
+    
+    @discardableResult
+    private func addPhotoOutput() -> Bool {
+        if photoOutput != nil { return true }
+        
+        session.beginConfiguration()
+        defer { session.commitConfiguration() }
+        
+        let output = AVCapturePhotoOutput()
+        if !session.canAddOutput(output) {
+            print("Can not add photo output")
+            return false
+        }
+        session.addOutput(output)
+        photoOutput = output
+        
+        return true
+    }
+    
+    private func removePhotoOutput() {
+        session.beginConfiguration()
+        if let output = photoOutput { session.removeOutput(output) }
+        session.commitConfiguration()
+    }
+    
+    /// Takes a photo.
+    /// Before calling this method, set `canTakePhoto` property to true and `photoDelegate` property to nonnull.
+    ///
+    /// - Parameter settings: a specification of the features and settings to use for a single photo capture request
+    public func takePhoto(with settings: AVCapturePhotoSettings? = nil) {
+        lock.wait()
+        if let output = photoOutput,
+            _photoDelegate != nil {
+            let currentSettings = settings ?? AVCapturePhotoSettings(format: [kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA])
+            output.capturePhoto(with: currentSettings, delegate: self)
+        }
+        lock.signal()
     }
     
     /// Switches camera position (back to front, or front to back)
@@ -367,5 +464,36 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         }
         #endif
         return nil
+    }
+}
+
+extension BBMetalCamera: AVCapturePhotoCaptureDelegate {    
+    public func photoOutput(_ output: AVCapturePhotoOutput,
+                            didFinishProcessingPhoto photoSampleBuffer: CMSampleBuffer?,
+                            previewPhoto previewPhotoSampleBuffer: CMSampleBuffer?,
+                            resolvedSettings: AVCaptureResolvedPhotoSettings,
+                            bracketSettings: AVCaptureBracketedStillImageSettings?,
+                            error: Error?) {
+        
+        guard let delegate = photoDelegate else { return }
+        
+        if let error = error { delegate.camera(self, didFail: error) }
+        
+        if let sampleBuffer = photoSampleBuffer,
+            let texture = texture(with: sampleBuffer),
+            let rotatedTexture = rotatedTexture(with: texture, angle: 90) {
+            // Setting `videoOrientation` of `AVCaptureConnection` dose not work. So rotate texture here.
+            delegate.camera(self, didOutput: rotatedTexture)
+        } else {
+            delegate.camera(self, didFail: NSError(domain: "BBMetalCamera.Photo", code: 0, userInfo: [NSLocalizedDescriptionKey : "Can not get Metal texture"]))
+        }
+    }
+    
+    private func rotatedTexture(with inTexture: MTLTexture, angle: Float) -> MTLTexture? {
+        let source = BBMetalStaticImageSource(texture: inTexture)
+        let filter = BBMetalRotateFilter(angle: angle, fitSize: true)
+        source.add(consumer: filter).runSynchronously = true
+        source.transmitTexture()
+        return filter.outputTexture
     }
 }
