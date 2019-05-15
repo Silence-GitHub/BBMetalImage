@@ -84,6 +84,8 @@ class VideoFilterVC2: UIViewController {
                         self.player = AVPlayer(url: outputUrl)
                         self.playerLayer.player = self.player
                         self.player.play()
+                        self.videoWriter = nil
+                        self.videoSource = nil
                     }
                 }
             }
