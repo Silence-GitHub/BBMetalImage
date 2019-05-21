@@ -348,6 +348,7 @@ public class BBMetalCamera: NSObject {
     /// Sets camera frame rate
     ///
     /// - Parameter frameRate: camera frame rate
+    /// - Returns: true if succeed, or false if fail
     @discardableResult
     public func setFrameRate(_ frameRate: Float64) -> Bool {
         var success = false
