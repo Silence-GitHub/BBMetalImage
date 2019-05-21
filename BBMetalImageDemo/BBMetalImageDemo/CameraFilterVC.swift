@@ -68,7 +68,6 @@ class CameraFilterVC: UIViewController {
         
         filePath = NSTemporaryDirectory() + "test.mp4"
         let url = URL(fileURLWithPath: filePath)
-        try? FileManager.default.removeItem(at: url)
         videoWriter = BBMetalVideoWriter(url: url, frameSize: BBMetalIntSize(width: 1080, height: 1920))
         
         camera = BBMetalCamera(sessionPreset: .hd1920x1080)

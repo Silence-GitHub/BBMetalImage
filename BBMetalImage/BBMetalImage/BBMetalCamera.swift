@@ -345,6 +345,47 @@ public class BBMetalCamera: NSObject {
         return true
     }
     
+    /// Sets camera frame rate
+    ///
+    /// - Parameter frameRate: camera frame rate
+    @discardableResult
+    public func setFrameRate(_ frameRate: Float64) -> Bool {
+        var success = false
+        lock.wait()
+        do {
+            try camera.lockForConfiguration()
+            var targetFormat: AVCaptureDevice.Format?
+            let dimensions = CMVideoFormatDescriptionGetDimensions(camera.activeFormat.formatDescription)
+            for format in camera.formats {
+                let newDimensions = CMVideoFormatDescriptionGetDimensions(format.formatDescription)
+                if dimensions.width == newDimensions.width,
+                    dimensions.height == newDimensions.height {
+                    for range in format.videoSupportedFrameRateRanges {
+                        if range.maxFrameRate >= frameRate,
+                            range.minFrameRate <= frameRate {
+                            targetFormat = format
+                            break
+                        }
+                    }
+                    if targetFormat != nil { break }
+                }
+            }
+            if let format = targetFormat {
+                camera.activeFormat = format
+                camera.activeVideoMaxFrameDuration = CMTime(value: 1, timescale: CMTimeScale(frameRate))
+                camera.activeVideoMinFrameDuration = CMTime(value: 1, timescale: CMTimeScale(frameRate))
+                success = true
+            } else {
+                print("Can not find valid format for camera frame rate \(frameRate)")
+            }
+            camera.unlockForConfiguration()
+        } catch {
+            print("Error for camera lockForConfiguration: \(error as NSError)")
+        }
+        lock.signal()
+        return success
+    }
+    
     /// Starts capturing
     public func start() { session.startRunning() }
     
