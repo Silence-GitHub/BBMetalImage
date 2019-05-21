@@ -162,6 +162,22 @@ public class BBMetalCamera: NSObject {
     }
     private weak var _photoDelegate: BBMetalCameraPhotoDelegate?
     
+    /// When this property is false, received video/audio sample buffer will not be processed
+    public var isPaused: Bool {
+        get {
+            lock.wait()
+            let p = _isPaused
+            lock.signal()
+            return p
+        }
+        set {
+            lock.wait()
+            _isPaused = newValue
+            lock.signal()
+        }
+    }
+    private var _isPaused: Bool
+    
     #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache!
     #endif
@@ -169,6 +185,7 @@ public class BBMetalCamera: NSObject {
     public init?(sessionPreset: AVCaptureSession.Preset = .high, position: AVCaptureDevice.Position = .back) {
         _consumers = []
         _canTakePhoto = false
+        _isPaused = false
         _benchmark = false
         capturedFrameCount = 0
         totalCaptureFrameTime = 0
@@ -404,10 +421,18 @@ public class BBMetalCamera: NSObject {
     }
     
     /// Starts capturing
-    public func start() { session.startRunning() }
+    public func start() {
+        lock.wait()
+        session.startRunning()
+        lock.signal()
+    }
     
     /// Stops capturing
-    public func stop() { session.stopRunning() }
+    public func stop() {
+        lock.wait()
+        session.stopRunning()
+        lock.signal()
+    }
     
     /// Resets benchmark record data
     public func resetBenchmark() {
@@ -460,21 +485,29 @@ extension BBMetalCamera: BBMetalImageSource {
 extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCaptureAudioDataOutputSampleBufferDelegate {
     public func captureOutput(_ output: AVCaptureOutput, didOutput sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
         // Audio
-        if output is AVCaptureAudioDataOutput,
-            let consumer = audioConsumer {
-            consumer.newAudioSampleBufferAvailable(sampleBuffer)
+        if output is AVCaptureAudioDataOutput {
+            lock.wait()
+            let paused = _isPaused
+            let currentAudioConsumer = _audioConsumer
+            lock.signal()
+            if !paused,
+                let consumer = currentAudioConsumer {
+                consumer.newAudioSampleBufferAvailable(sampleBuffer)
+            }
             return
         }
         
         // Video
         lock.wait()
+        let paused = _isPaused
         let consumers = _consumers
         let willTransmit = _willTransmitTexture
         let cameraPosition = camera.position
         let startTime = _benchmark ? CACurrentMediaTime() : 0
         lock.signal()
         
-        guard !consumers.isEmpty,
+        guard !paused,
+            !consumers.isEmpty,
             let texture = texture(with: sampleBuffer) else { return }
         
         willTransmit?(texture)
