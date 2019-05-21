@@ -65,6 +65,12 @@ public class BBMetalVideoWriter {
     
     private let lock: DispatchSemaphore
     
+    deinit {
+        lock.wait()
+        NotificationCenter.default.removeObserver(self)
+        lock.signal()
+    }
+    
     public init(url: URL,
                 frameSize: BBMetalIntSize,
                 fileType: AVFileType = .mp4,
@@ -128,11 +134,21 @@ public class BBMetalVideoWriter {
             if let audioInput = self.audioInput {
                 audioInput.markAsFinished()
             }
-            writer.finishWriting { [weak self] in
+            let name = "com.Kaibo.BBMetalImage.VideoWriter.Finish"
+            let object = NSObject()
+            NotificationCenter.default.addObserver(self, selector: #selector(safeReset), name: NSNotification.Name(name), object: object)
+            writer.finishWriting {
+                // The comment code below leads to memory leak even using [weak self].
+                // Using [unowned self] solves the memory leak, but not safe.
+                // So use notification here.
+                /*
+                [weak self] in
                 guard let self = self else { return }
                 self.lock.wait()
                 self.reset()
                 self.lock.signal()
+                */
+                NotificationCenter.default.post(name: NSNotification.Name(name), object: object, userInfo: nil)
                 completion?()
             }
         } else {
@@ -202,6 +218,12 @@ public class BBMetalVideoWriter {
         videoPixelBufferInput = nil
         videoPixelBuffer = nil
         audioInput = nil
+    }
+    
+    @objc private func safeReset() {
+        lock.wait()
+        reset()
+        lock.signal()
     }
 }
 
