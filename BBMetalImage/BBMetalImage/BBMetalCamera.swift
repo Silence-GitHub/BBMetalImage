@@ -381,10 +381,26 @@ public class BBMetalCamera: NSObject {
             }
             camera.unlockForConfiguration()
         } catch {
-            print("Error for camera lockForConfiguration: \(error as NSError)")
+            print("Error for camera lockForConfiguration: \(error)")
         }
         lock.signal()
         return success
+    }
+    
+    /// Configures camera.
+    /// Configure camera in the block, without calling `lockForConfiguration` and `unlockForConfiguration` methods.
+    ///
+    /// - Parameter block: closure configuring camera
+    public func configureCamera(_ block: (AVCaptureDevice) -> Void) {
+        lock.wait()
+        do {
+            try camera.lockForConfiguration()
+            block(camera)
+            camera.unlockForConfiguration()
+        } catch {
+            print("Error for camera lockForConfiguration: \(error)")
+        }
+        lock.signal()
     }
     
     /// Starts capturing
