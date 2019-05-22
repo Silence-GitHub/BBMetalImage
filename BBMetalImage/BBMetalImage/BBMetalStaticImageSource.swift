@@ -101,14 +101,14 @@ extension BBMetalStaticImageSource: BBMetalImageSource {
 }
 
 public extension UIImage {
-    public var bb_metalTexture: MTLTexture? {
+    var bb_metalTexture: MTLTexture? {
         if let cgimage = cgImage { return cgimage.bb_metalTexture }
         return nil
     }
 }
 
 public extension CGImage {
-    public var bb_metalTexture: MTLTexture? {
+    var bb_metalTexture: MTLTexture? {
         let loader = MTKTextureLoader(device: BBMetalDevice.sharedDevice)
         return try? loader.newTexture(cgImage: self, options: [MTKTextureLoader.Option.SRGB : false])
         /*
@@ -145,14 +145,14 @@ public extension CGImage {
 }
 
 public extension Data {
-    public var bb_metalTexture: MTLTexture? {
+    var bb_metalTexture: MTLTexture? {
         let loader = MTKTextureLoader(device: BBMetalDevice.sharedDevice)
         return try? loader.newTexture(data: self, options: [MTKTextureLoader.Option.SRGB : false])
     }
 }
 
 public extension MTLTexture {
-    public var bb_cgimage: CGImage? {
+    var bb_cgimage: CGImage? {
         let bytesPerPixel: Int = 4
         let bytesPerRow: Int = width * bytesPerPixel
         var data = [UInt8](repeating: 0, count: Int(width * height * bytesPerPixel))
@@ -170,7 +170,7 @@ public extension MTLTexture {
         return nil
     }
     
-    public var bb_image: UIImage? {
+    var bb_image: UIImage? {
         if let sourceImage = bb_cgimage {
             return UIImage(cgImage: sourceImage)
         }
