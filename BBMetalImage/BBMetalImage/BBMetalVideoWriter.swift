@@ -136,7 +136,7 @@ public class BBMetalVideoWriter {
             }
             let name = "com.Kaibo.BBMetalImage.VideoWriter.Finish"
             let object = NSObject()
-            NotificationCenter.default.addObserver(self, selector: #selector(safeReset), name: NSNotification.Name(name), object: object)
+            NotificationCenter.default.addObserver(self, selector: #selector(finishWritingNotification(_:)), name: NSNotification.Name(name), object: object)
             writer.finishWriting {
                 // The comment code below leads to memory leak even using [weak self].
                 // Using [unowned self] solves the memory leak, but not safe.
@@ -220,9 +220,10 @@ public class BBMetalVideoWriter {
         audioInput = nil
     }
     
-    @objc private func safeReset() {
+    @objc private func finishWritingNotification(_ notification: Notification) {
         lock.wait()
         reset()
+        NotificationCenter.default.removeObserver(self, name: notification.name, object: notification.object)
         lock.signal()
     }
 }
