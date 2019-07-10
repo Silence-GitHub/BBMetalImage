@@ -110,8 +110,11 @@ public extension UIImage {
 public extension CGImage {
     var bb_metalTexture: MTLTexture? {
         let loader = MTKTextureLoader(device: BBMetalDevice.sharedDevice)
-        return try? loader.newTexture(cgImage: self, options: [MTKTextureLoader.Option.SRGB : false])
-        /*
+        if let texture = try? loader.newTexture(cgImage: self, options: [MTKTextureLoader.Option.SRGB : false]) {
+            return texture
+        }
+        // Texture loader can not load image data to create texture
+        // Draw image and create texture
         let descriptor = MTLTextureDescriptor()
         descriptor.pixelFormat = .rgba8Unorm
         descriptor.width = width
@@ -140,7 +143,6 @@ public extension CGImage {
             }
         }
         return nil
-         */
     }
 }
 
