@@ -136,6 +136,7 @@ class StaticImageFilterVC: UIViewController {
         case .toon: return BBMetalToonFilter().filteredImage(with: image)
         case .posterize: return BBMetalPosterizeFilter().filteredImage(with: image)
         case .swirl: return BBMetalSwirlFilter(center: BBMetalPosition(x: 0.35, y: 0.55), radius: 0.25).filteredImage(with: image)
+        case .sobelEdgeDetection: return BBMetalSobelEdgeDetectionFilter().filteredImage(with: image)
         }
     }
     

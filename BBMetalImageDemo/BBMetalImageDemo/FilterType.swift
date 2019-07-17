@@ -74,4 +74,5 @@ enum FilterType {
     case toon
     case posterize
     case swirl
+    case sobelEdgeDetection
 }

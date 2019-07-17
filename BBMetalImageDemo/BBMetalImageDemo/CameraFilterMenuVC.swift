@@ -218,6 +218,9 @@ class CameraFilterMenuVC: UIViewController {
         let swirl = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .swirl), animated: true) }
         }
+        let sobelEdgeDetection = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .sobelEdgeDetection), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -284,7 +287,8 @@ class CameraFilterMenuVC: UIViewController {
                 ("Threshold sketch", thresholdSketch),
                 ("Toon", toon),
                 ("Posterize", posterize),
-                ("Swirl", swirl)]
+                ("Swirl", swirl),
+                ("SobelEdgeDetection", sobelEdgeDetection)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())

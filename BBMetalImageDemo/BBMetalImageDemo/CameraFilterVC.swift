@@ -266,6 +266,7 @@ class CameraFilterVC: UIViewController {
         case .toon: return BBMetalToonFilter(threshold: 0.2, quantizationLevels: 10)
         case .posterize: return BBMetalPosterizeFilter(colorLevels: 10)
         case .swirl: return BBMetalSwirlFilter(center: BBMetalPosition(x: 0.35, y: 0.55), radius: 0.25, angle: 1)
+        case .sobelEdgeDetection: return BBMetalSobelEdgeDetectionFilter()
         }
     }
     
