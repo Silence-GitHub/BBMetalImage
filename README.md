@@ -18,7 +18,7 @@ Test libraries are BBMetalImage (0.1.1) and GPUImage (0.1.7). Test device is iPh
 
 ## Features
 
-- [x] More than 60 built-in filters
+- [x] More than 70 built-in filters
 - [x] Filter chain supported
 - [x] Customized filter
 - [x] High performance
@@ -26,7 +26,7 @@ Test libraries are BBMetalImage (0.1.1) and GPUImage (0.1.7). Test device is iPh
 ## Requirements
 
 - iOS 10.0+
-- Swift 4.2
+- Swift 5
 
 ## Installation
 
@@ -262,7 +262,6 @@ func process() {
 - Vibrance
 - White Balance
 - Highlight Shadow
-
 - Highlight Shadow Tint
 - Lookup
 - Color Inversion
@@ -309,7 +308,6 @@ func process() {
   - Luminosity
   - Linear Burn
   - Mask
-
 - Pixellate
 - Polar Pixellate
 - Polka Dot
@@ -320,6 +318,9 @@ func process() {
 - Toon
 - Posterize
 - Swirl
+- Sobel Edge Detection
+- Bilateral Blur
+- Beauty
 
 ## License
 
