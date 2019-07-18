@@ -12,6 +12,8 @@ using namespace metal;
 kernel void bilateralBlurKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                                 texture2d<half, access::sample> inputTexture [[texture(1)]],
                                 constant float *distanceNormalizationFactorPointer [[buffer(0)]],
+                                constant float *stepOffsetX [[buffer(1)]],
+                                constant float *stepOffsetY [[buffer(2)]],
                                 uint2 gid [[thread_position_in_grid]]) {
     
     const int GAUSSIAN_SAMPLES = 9;
@@ -24,12 +26,11 @@ kernel void bilateralBlurKernel(texture2d<half, access::write> outputTexture [[t
     
     int multiplier = 0;
     float2 blurStep;
-    float2 singleStepOffset(4.0 / width, 0);
+    float2 singleStepOffset(float(*stepOffsetX) / width, float(*stepOffsetY) / height);
     float2 blurCoordinates[GAUSSIAN_SAMPLES];
     
     for (int i = 0; i < GAUSSIAN_SAMPLES; i++) {
         multiplier = (i - ((GAUSSIAN_SAMPLES - 1) / 2));
-        // Blur in x (horizontal)
         blurStep = float(multiplier) * singleStepOffset;
         blurCoordinates[i] = inCoordinate + blurStep;
     }
