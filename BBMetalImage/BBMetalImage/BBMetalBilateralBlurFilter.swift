@@ -8,18 +8,23 @@
 
 import UIKit
 
+/// A bilateral blur, which tries to blur similar color values while preserving sharp edges
 public class BBMetalBilateralBlurFilter: BBMetalBaseFilterGroup {
+    /// A normalization factor for the distance between central color and sample color, with a default of 8.0
     public var distanceNormalizationFactor: Float {
-        didSet {
-            filter.distanceNormalizationFactor = distanceNormalizationFactor
-            filter2.distanceNormalizationFactor = distanceNormalizationFactor
+        get { return filter.distanceNormalizationFactor }
+        set {
+            filter.distanceNormalizationFactor = newValue
+            filter2.distanceNormalizationFactor = newValue
         }
     }
     
+    /// A multiplier for the spacing between texel reads, ranging from 0.0 on up, with a default of 4.0
     public var stepOffset: Float {
-        didSet {
-            filter.stepOffsetX = stepOffset
-            filter2.stepOffsetY = stepOffset
+        get { return filter.stepOffsetX }
+        set {
+            filter.stepOffsetX = newValue
+            filter2.stepOffsetY = newValue
         }
     }
     
@@ -27,9 +32,6 @@ public class BBMetalBilateralBlurFilter: BBMetalBaseFilterGroup {
     private let filter2: _BBMetalBilateralBlurSinglePassFilter
     
     public init(distanceNormalizationFactor: Float = 8, stepOffset: Float = 4) {
-        self.distanceNormalizationFactor = distanceNormalizationFactor
-        self.stepOffset = stepOffset
-        
         filter = _BBMetalBilateralBlurSinglePassFilter(distanceNormalizationFactor: distanceNormalizationFactor, stepOffsetX: stepOffset, stepOffsetY: 0)
         filter2 = _BBMetalBilateralBlurSinglePassFilter(distanceNormalizationFactor: distanceNormalizationFactor, stepOffsetX: 0, stepOffsetY: stepOffset)
         

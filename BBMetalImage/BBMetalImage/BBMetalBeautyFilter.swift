@@ -9,14 +9,34 @@
 import UIKit
 
 public class BBMetalBeautyFilter: BBMetalBaseFilterGroup {
+    public var distanceNormalizationFactor: Float {
+        get { return blurFilter.distanceNormalizationFactor }
+        set { blurFilter.distanceNormalizationFactor = newValue }
+    }
+    
+    public var stepOffset: Float {
+        get { return blurFilter.stepOffset }
+        set { blurFilter.stepOffset = newValue }
+    }
+    
+    public var edgeStrength: Float {
+        get { return edgeDetectionFilter.edgeStrength }
+        set { edgeDetectionFilter.edgeStrength = newValue }
+    }
+    
+    public var smoothDegree: Float {
+        get { return combinationFilter.smoothDegree }
+        set { combinationFilter.smoothDegree = newValue }
+    }
+    
     private let blurFilter: BBMetalBilateralBlurFilter
     private let edgeDetectionFilter: BBMetalSobelEdgeDetectionFilter
     private let combinationFilter: _BBMetalBeautyCombinationFilter
     
-    public init() {
-        blurFilter = BBMetalBilateralBlurFilter(distanceNormalizationFactor: 4)
-        edgeDetectionFilter = BBMetalSobelEdgeDetectionFilter()
-        combinationFilter = _BBMetalBeautyCombinationFilter()
+    public init(distanceNormalizationFactor: Float = 4, stepOffset: Float = 4, edgeStrength: Float = 1, smoothDegree: Float = 0.5) {
+        blurFilter = BBMetalBilateralBlurFilter(distanceNormalizationFactor: distanceNormalizationFactor, stepOffset: stepOffset)
+        edgeDetectionFilter = BBMetalSobelEdgeDetectionFilter(edgeStrength: edgeStrength)
+        combinationFilter = _BBMetalBeautyCombinationFilter(smoothDegree: smoothDegree)
         
         blurFilter.add(consumer: combinationFilter)
         edgeDetectionFilter.add(consumer: combinationFilter)
