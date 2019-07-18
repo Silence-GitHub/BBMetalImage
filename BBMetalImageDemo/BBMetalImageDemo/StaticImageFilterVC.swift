@@ -138,6 +138,7 @@ class StaticImageFilterVC: UIViewController {
         case .swirl: return BBMetalSwirlFilter(center: BBMetalPosition(x: 0.35, y: 0.55), radius: 0.25).filteredImage(with: image)
         case .sobelEdgeDetection: return BBMetalSobelEdgeDetectionFilter().filteredImage(with: image)
         case .bilateralBlur: return BBMetalBilateralBlurFilter().filteredImage(with: image)
+        case .beauty: return BBMetalBeautyFilter().filteredImage(with: image)
         }
     }
     

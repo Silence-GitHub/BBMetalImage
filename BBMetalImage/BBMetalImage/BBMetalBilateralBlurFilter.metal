@@ -16,6 +16,8 @@ kernel void bilateralBlurKernel(texture2d<half, access::write> outputTexture [[t
                                 constant float *stepOffsetY [[buffer(2)]],
                                 uint2 gid [[thread_position_in_grid]]) {
     
+    if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
+    
     const int GAUSSIAN_SAMPLES = 9;
     
     const float x = float(gid.x);

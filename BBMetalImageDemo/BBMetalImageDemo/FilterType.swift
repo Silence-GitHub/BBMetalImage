@@ -76,4 +76,5 @@ enum FilterType {
     case swirl
     case sobelEdgeDetection
     case bilateralBlur
+    case beauty
 }
