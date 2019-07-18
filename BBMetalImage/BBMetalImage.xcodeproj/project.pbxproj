@@ -189,6 +189,10 @@
 		4A68355722571F6E0089872B /* BBMetalGaussianBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A68355522571F6E0089872B /* BBMetalGaussianBlurFilter.swift */; };
 		4A68F3EC227A278C00558212 /* BBMetalVideoWriter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A68F3EB227A278C00558212 /* BBMetalVideoWriter.metal */; };
 		4A68F3ED227A278C00558212 /* BBMetalVideoWriter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A68F3EB227A278C00558212 /* BBMetalVideoWriter.metal */; };
+		4AA3E73C22DFD53B00B26E89 /* BBMetalBilateralBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA3E73B22DFD53B00B26E89 /* BBMetalBilateralBlurFilter.swift */; };
+		4AA3E73D22DFD53B00B26E89 /* BBMetalBilateralBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA3E73B22DFD53B00B26E89 /* BBMetalBilateralBlurFilter.swift */; };
+		4AA3E73F22DFD55200B26E89 /* BBMetalBilateralBlurFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4AA3E73E22DFD55200B26E89 /* BBMetalBilateralBlurFilter.metal */; };
+		4AA3E74022DFD55200B26E89 /* BBMetalBilateralBlurFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4AA3E73E22DFD55200B26E89 /* BBMetalBilateralBlurFilter.metal */; };
 		4AC5795022552E6000F7BCAC /* BBMetalContrastFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4AC5794F22552E6000F7BCAC /* BBMetalContrastFilter.metal */; };
 		4AC5795122552E6000F7BCAC /* BBMetalContrastFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4AC5794F22552E6000F7BCAC /* BBMetalContrastFilter.metal */; };
 		4AC5795322552E7300F7BCAC /* BBMetalContrastFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC5795222552E7300F7BCAC /* BBMetalContrastFilter.swift */; };
@@ -423,6 +427,8 @@
 		4A683552225707510089872B /* BBMetalSharpenFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalSharpenFilter.swift; sourceTree = "<group>"; };
 		4A68355522571F6E0089872B /* BBMetalGaussianBlurFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalGaussianBlurFilter.swift; sourceTree = "<group>"; };
 		4A68F3EB227A278C00558212 /* BBMetalVideoWriter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BBMetalVideoWriter.metal; sourceTree = "<group>"; };
+		4AA3E73B22DFD53B00B26E89 /* BBMetalBilateralBlurFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalBilateralBlurFilter.swift; sourceTree = "<group>"; };
+		4AA3E73E22DFD55200B26E89 /* BBMetalBilateralBlurFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BBMetalBilateralBlurFilter.metal; sourceTree = "<group>"; };
 		4AC5794F22552E6000F7BCAC /* BBMetalContrastFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BBMetalContrastFilter.metal; sourceTree = "<group>"; };
 		4AC5795222552E7300F7BCAC /* BBMetalContrastFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalContrastFilter.swift; sourceTree = "<group>"; };
 		4AC579552255341800F7BCAC /* BBMetalSaturationFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalSaturationFilter.swift; sourceTree = "<group>"; };
@@ -679,6 +685,8 @@
 				4AF665DC225FA8DA0014994E /* BBMetalSwirlFilter.metal */,
 				4AFB017322DFAB5A004278DF /* BBMetalSobelEdgeDetectionFilter.swift */,
 				4AFB017622DFAC54004278DF /* BBMetalSobelEdgeDetectionFilter.metal */,
+				4AA3E73B22DFD53B00B26E89 /* BBMetalBilateralBlurFilter.swift */,
+				4AA3E73E22DFD55200B26E89 /* BBMetalBilateralBlurFilter.metal */,
 				4A4CADB1225310CB0058BEB6 /* BBMetalShaderTypes.h */,
 				4A273119225874B2002F90F4 /* BBMetalShaderTypes.metal */,
 				4A4CAD8B225285E60058BEB6 /* BBMetalImage.h */,
@@ -876,6 +884,7 @@
 				4A2730BD22582853002F90F4 /* BBMetalAddBlendFilter.swift in Sources */,
 				4A273117225872F6002F90F4 /* BBMetalColorBlendFilter.metal in Sources */,
 				4AC5796B22556FD100F7BCAC /* BBMetalHueFilter.swift in Sources */,
+				4AA3E73F22DFD55200B26E89 /* BBMetalBilateralBlurFilter.metal in Sources */,
 				4ADCF37622590DA400B7F506 /* BBMetalLinearBurnBlendFilter.metal in Sources */,
 				4ADCF37922590DB300B7F506 /* BBMetalLinearBurnBlendFilter.swift in Sources */,
 				4A00948A225BCA830089941C /* BBMetalLevelsFilter.swift in Sources */,
@@ -910,6 +919,7 @@
 				4A68F3EC227A278C00558212 /* BBMetalVideoWriter.metal in Sources */,
 				4AFD9C4E225EB5160000C839 /* BBMetalPolkaDotFilter.metal in Sources */,
 				4A27309F2257CD55002F90F4 /* BBMetalMotionBlurFilter.metal in Sources */,
+				4AA3E73C22DFD53B00B26E89 /* BBMetalBilateralBlurFilter.swift in Sources */,
 				4AFC467722542BD2009D37A1 /* BBMetalBrightnessFilter.metal in Sources */,
 				4A683553225707510089872B /* BBMetalSharpenFilter.swift in Sources */,
 				4ADCF37322590BE400B7F506 /* BBMetalLuminosityBlendFilter.metal in Sources */,
@@ -1035,6 +1045,7 @@
 				4A2730F722586197002F90F4 /* BBMetalDifferenceBlendFilter.metal in Sources */,
 				4A273115225872E6002F90F4 /* BBMetalColorBlendFilter.swift in Sources */,
 				4AFC4684225466B4009D37A1 /* BBMetalLookupFilter.metal in Sources */,
+				4AA3E74022DFD55200B26E89 /* BBMetalBilateralBlurFilter.metal in Sources */,
 				4ADCF37722590DA400B7F506 /* BBMetalLinearBurnBlendFilter.metal in Sources */,
 				4ADCF37A22590DB300B7F506 /* BBMetalLinearBurnBlendFilter.swift in Sources */,
 				4A00948B225BCA830089941C /* BBMetalLevelsFilter.swift in Sources */,
@@ -1069,6 +1080,7 @@
 				4A68F3ED227A278C00558212 /* BBMetalVideoWriter.metal in Sources */,
 				4A1B94A82255815B0068675A /* BBMetalWhiteBalanceFilter.metal in Sources */,
 				4A2730DF2258592D002F90F4 /* BBMetalColorBurnBlendFilter.metal in Sources */,
+				4AA3E73D22DFD53B00B26E89 /* BBMetalBilateralBlurFilter.swift in Sources */,
 				4A1B94AE2255ADBC0068675A /* BBMetalHighlightShadowFilter.metal in Sources */,
 				4ADCF37422590BE400B7F506 /* BBMetalLuminosityBlendFilter.metal in Sources */,
 				4A273103225864DF002F90F4 /* BBMetalSoftLightBlendFilter.metal in Sources */,

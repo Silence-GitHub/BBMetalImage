@@ -75,4 +75,5 @@ enum FilterType {
     case posterize
     case swirl
     case sobelEdgeDetection
+    case bilateralBlur
 }

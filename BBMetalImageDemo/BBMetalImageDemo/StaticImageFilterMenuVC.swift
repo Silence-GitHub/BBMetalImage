@@ -221,6 +221,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let sobelEdgeDetection = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .sobelEdgeDetection), animated: true) }
         }
+        let bilateralBlur = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .bilateralBlur), animated: true) }
+        }
         list = [("Brightness", brightness),
                 ("Exposure", exposure),
                 ("Contrast", contrast),
@@ -288,7 +291,8 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Toon", toon),
                 ("Posterize", posterize),
                 ("Swirl", swirl),
-                ("SobelEdgeDetection", sobelEdgeDetection)]
+                ("SobelEdgeDetection", sobelEdgeDetection),
+                ("BilateralBlur", bilateralBlur)]
         
         let tableView = UITableView(frame: view.bounds)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
