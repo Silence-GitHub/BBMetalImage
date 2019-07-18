@@ -6,8 +6,6 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
-
 /// A bilateral blur, which tries to blur similar color values while preserving sharp edges
 public class BBMetalBilateralBlurFilter: BBMetalBaseFilterGroup {
     /// A normalization factor for the distance between central color and sample color, with a default of 8.0
