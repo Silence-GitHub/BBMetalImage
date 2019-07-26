@@ -58,9 +58,7 @@ class MultipleVideoBlendVC: UIViewController {
         videoSource = MultipleVideoSource(urls: [url, url2])
         
         let alphaFilter = BBMetalRGBAFilter(alpha: 0.2)
-        alphaFilter.runSynchronously = true // Make sure correct texture
         let blendFilter = BBMetalSourceOverBlendFilter()
-        blendFilter.runSynchronously = true
         
         let outputUrl = URL(fileURLWithPath: filePath)
         try? FileManager.default.removeItem(at: outputUrl)

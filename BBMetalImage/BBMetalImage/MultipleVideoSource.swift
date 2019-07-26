@@ -41,9 +41,7 @@ public class MultipleVideoSource {
     
     private var textureSize: BBMetalIntSize
     
-    #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache!
-    #endif
     
     public init?(urls: [URL]) {
         if urls.isEmpty { return nil }
@@ -176,14 +174,16 @@ public class MultipleVideoSource {
                     break
                 }
                 if textureSize.width == 0 || textureSize.height == 0 {
-                    textureSize = BBMetalIntSize(width: texture.width, height: texture.height)
-                } else if textureSize.width != texture.width || textureSize.height != texture.height {
+                    textureSize = BBMetalIntSize(width: texture.metalTexture.width, height: texture.metalTexture.height)
+                } else if textureSize.width != texture.metalTexture.width || textureSize.height != texture.metalTexture.height {
                     let filter = videoSources[i].resizeFilter
-                    filter.size = BBMetalSize(width: Float(textureSize.width) / Float(texture.width),
-                                              height: Float(textureSize.height) / Float(texture.height))
+                    filter.size = BBMetalSize(width: Float(textureSize.width) / Float(texture.metalTexture.width),
+                                              height: Float(textureSize.height) / Float(texture.metalTexture.height))
                 }
                 let sampleFrameTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
-                outputs.append(BBMetalDefaultTexture(metalTexture: texture, sampleTime: sampleFrameTime))
+                outputs.append(BBMetalDefaultTexture(metalTexture: texture.metalTexture,
+                                                     sampleTime: sampleFrameTime,
+                                                     cvMetalTexture: texture.cvMetalTexture))
             }
             if stop { break }
             lock.signal()
@@ -205,7 +205,7 @@ public class MultipleVideoSource {
         completion?(finish)
     }
     
-    private func texture(with sampleBuffer: CMSampleBuffer) -> MTLTexture? {
+    private func texture(with sampleBuffer: CMSampleBuffer) -> BBMetalVideoTextureItem? {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
         let width = CVPixelBufferGetWidth(imageBuffer)
         let height = CVPixelBufferGetHeight(imageBuffer)
@@ -224,7 +224,7 @@ public class MultipleVideoSource {
         if result == kCVReturnSuccess,
             let cvMetalTexture = cvMetalTextureOut,
             let texture = CVMetalTextureGetTexture(cvMetalTexture) {
-            return texture
+            return BBMetalVideoTextureItem(metalTexture: texture, cvMetalTexture: cvMetalTexture)
         }
         #endif
         return nil

@@ -98,9 +98,7 @@ public class BBMetalVideoSource {
     private var processedFrameCount: Int
     private var totalProcessFrameTime: Double
     
-    #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache!
-    #endif
     
     public init?(url: URL) {
         _consumers = []
@@ -271,7 +269,9 @@ public class BBMetalVideoSource {
                 lock.signal()
                 
                 // Transmit video texture
-                let output = BBMetalDefaultTexture(metalTexture: texture, sampleTime: sampleFrameTime)
+                let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
+                                                   sampleTime: sampleFrameTime,
+                                                   cvMetalTexture: texture.cvMetalTexture)
                 for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
                 
                 // Transmit audio buffer
@@ -313,7 +313,7 @@ public class BBMetalVideoSource {
         completion?(finish)
     }
     
-    private func texture(with sampleBuffer: CMSampleBuffer) -> MTLTexture? {
+    private func texture(with sampleBuffer: CMSampleBuffer) -> BBMetalVideoTextureItem? {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
         let width = CVPixelBufferGetWidth(imageBuffer)
         let height = CVPixelBufferGetHeight(imageBuffer)
@@ -332,7 +332,7 @@ public class BBMetalVideoSource {
         if result == kCVReturnSuccess,
             let cvMetalTexture = cvMetalTextureOut,
             let texture = CVMetalTextureGetTexture(cvMetalTexture) {
-            return texture
+            return BBMetalVideoTextureItem(metalTexture: texture, cvMetalTexture: cvMetalTexture)
         }
         #endif
         return nil

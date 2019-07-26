@@ -178,9 +178,7 @@ public class BBMetalCamera: NSObject {
     }
     private var _isPaused: Bool
     
-    #if !targetEnvironment(simulator)
     private var textureCache: CVMetalTextureCache!
-    #endif
     
     public init?(sessionPreset: AVCaptureSession.Preset = .high, position: AVCaptureDevice.Position = .back) {
         _consumers = []
@@ -510,11 +508,12 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
             !consumers.isEmpty,
             let texture = texture(with: sampleBuffer) else { return }
         
-        willTransmit?(texture)
+        willTransmit?(texture.metalTexture)
         let sampleTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
-        let output = BBMetalDefaultTexture(metalTexture: texture,
+        let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
                                            sampleTime: sampleTime,
-                                           cameraPosition: cameraPosition)
+                                           cameraPosition: cameraPosition,
+                                           cvMetalTexture: texture.cvMetalTexture)
         for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
         
         // Benchmark
@@ -532,7 +531,7 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         print(#function)
     }
     
-    private func texture(with sampleBuffer: CMSampleBuffer) -> MTLTexture? {
+    private func texture(with sampleBuffer: CMSampleBuffer) -> BBMetalVideoTextureItem? {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
         let width = CVPixelBufferGetWidth(imageBuffer)
         let height = CVPixelBufferGetHeight(imageBuffer)
@@ -551,7 +550,7 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         if result == kCVReturnSuccess,
             let cvMetalTexture = cvMetalTextureOut,
             let texture = CVMetalTextureGetTexture(cvMetalTexture) {
-            return texture
+            return BBMetalVideoTextureItem(metalTexture: texture, cvMetalTexture: cvMetalTexture)
         }
         #endif
         return nil
@@ -572,7 +571,7 @@ extension BBMetalCamera: AVCapturePhotoCaptureDelegate {
         
         if let sampleBuffer = photoSampleBuffer,
             let texture = texture(with: sampleBuffer),
-            let rotatedTexture = rotatedTexture(with: texture, angle: 90) {
+            let rotatedTexture = rotatedTexture(with: texture.metalTexture, angle: 90) {
             // Setting `videoOrientation` of `AVCaptureConnection` dose not work. So rotate texture here.
             delegate.camera(self, didOutput: rotatedTexture)
         } else {

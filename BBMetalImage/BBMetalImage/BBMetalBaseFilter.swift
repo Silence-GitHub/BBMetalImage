@@ -247,9 +247,8 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         lock.signal()
         
         // Transmit output texture to image consumers
-        let output = BBMetalDefaultTexture(metalTexture: _outputTexture!,
-                                           sampleTime: texture.sampleTime,
-                                           cameraPosition: texture.cameraPosition)
+        var output = texture
+        output.metalTexture = _outputTexture!
         for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
     }
     
