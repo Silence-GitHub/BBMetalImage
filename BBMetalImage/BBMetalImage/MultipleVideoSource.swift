@@ -67,6 +67,10 @@ public class MultipleVideoSource {
         #endif
     }
     
+    public func videoSource(at index: Int) -> BBMetalImageSource? {
+        return index < videoSources.count && index >= 0 ? videoSources[index].resizeFilter : nil
+    }
+    
     public func start(progress: (() -> Void)? = nil, completion: BBMetalVideoSourceCompletion? = nil) {
         lock.wait()
         let isReading = assets.firstIndex { $0.assetReader != nil } != nil
@@ -224,33 +228,5 @@ public class MultipleVideoSource {
         }
         #endif
         return nil
-    }
-}
-
-extension MultipleVideoSource: BBMetalImageSource {
-    @discardableResult
-    public func add<T: BBMetalImageConsumer>(consumer: T) -> T {
-        for source in videoSources {
-            source.resizeFilter.add(consumer: consumer)
-        }
-        return consumer
-    }
-    
-    public func add(consumer: BBMetalImageConsumer, at index: Int) {
-        for source in videoSources {
-            source.resizeFilter.add(consumer: consumer, at: index)
-        }
-    }
-    
-    public func remove(consumer: BBMetalImageConsumer) {
-        for source in videoSources {
-            source.resizeFilter.remove(consumer: consumer)
-        }
-    }
-    
-    public func removeAllConsumers() {
-        for source in videoSources {
-            source.resizeFilter.removeAllConsumers()
-        }
     }
 }

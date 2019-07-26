@@ -57,16 +57,23 @@ class MultipleVideoBlendVC: UIViewController {
         let url2 = Bundle.main.url(forResource: "test_video_rotate_right", withExtension: "mov")!
         videoSource = MultipleVideoSource(urls: [url, url2])
         
-        let filter = TwoHalfFilter()
+        let alphaFilter = BBMetalRGBAFilter(alpha: 0.2)
+        alphaFilter.runSynchronously = true // Make sure correct texture
+        let blendFilter = BBMetalSourceOverBlendFilter()
+        blendFilter.runSynchronously = true
         
         let outputUrl = URL(fileURLWithPath: filePath)
         try? FileManager.default.removeItem(at: outputUrl)
         videoWriter = BBMetalVideoWriter(url: outputUrl, frameSize: BBMetalIntSize(width: 1080, height: 1920))
         videoWriter.hasAudioTrack = false
         
-        videoSource.add(consumer: filter)
+        videoSource.videoSource(at: 0)?
+            .add(consumer: blendFilter)
+            .add(consumer: metalView)
+        videoSource.videoSource(at: 1)?
+            .add(consumer: alphaFilter)
+            .add(consumer: blendFilter)
             .add(consumer: videoWriter)
-        filter.add(consumer: metalView)
         
         videoWriter.start()
         videoSource.start(progress: {
