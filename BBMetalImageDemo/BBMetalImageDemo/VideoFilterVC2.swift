@@ -75,7 +75,9 @@ class VideoFilterVC2: UIViewController {
             videoSource.add(consumer: filter).add(consumer: videoWriter)
             
             videoWriter.start()
-            videoSource.start { [weak self] (_) in
+            videoSource.start(progress: { (frameTime) in
+                // print(frameTime)
+            }) { [weak self] (_) in
                 guard let self = self else { return }
                 self.videoWriter.finish {
                     DispatchQueue.main.async { [weak self] in

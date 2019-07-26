@@ -9,9 +9,9 @@
 import AVFoundation
 
 fileprivate struct BBMetalAssetItem {
-    var asset: AVAsset?
-    var assetReader: AVAssetReader?
-    var videoOutput: AVAssetReaderTrackOutput?
+    fileprivate var asset: AVAsset?
+    fileprivate var assetReader: AVAssetReader?
+    fileprivate var videoOutput: AVAssetReaderTrackOutput?
 }
 
 public class MultipleVideoSource {
@@ -69,7 +69,7 @@ public class MultipleVideoSource {
         return index < videoSources.count && index >= 0 ? videoSources[index].resizeFilter : nil
     }
     
-    public func start(progress: (() -> Void)? = nil, completion: BBMetalVideoSourceCompletion? = nil) {
+    public func start(progress: BBMetalVideoSourceProgress? = nil, completion: BBMetalVideoSourceCompletion? = nil) {
         lock.wait()
         let isReading = assets.firstIndex { $0.assetReader != nil } != nil
         lock.signal()
@@ -146,7 +146,7 @@ public class MultipleVideoSource {
         return (reader, videoOutput)
     }
     
-    private func processAsset(progress: (() -> Void)?, completion: BBMetalVideoSourceCompletion?) {
+    private func processAsset(progress: BBMetalVideoSourceProgress?, completion: BBMetalVideoSourceCompletion?) {
         lock.wait()
         for item in assets {
             guard let reader = item.assetReader,
@@ -191,7 +191,7 @@ public class MultipleVideoSource {
             for i in 0..<outputs.count {
                 videoSources[i].resizeFilter.newTextureAvailable(outputs[i], from: videoSources[i])
             }
-            progress?()
+            progress?(outputs.first!.sampleTime!)
             
             lock.wait()
         }

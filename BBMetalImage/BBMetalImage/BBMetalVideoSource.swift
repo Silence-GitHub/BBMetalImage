@@ -8,6 +8,7 @@
 
 import AVFoundation
 
+public typealias BBMetalVideoSourceProgress = (CMTime) -> Void
 public typealias BBMetalVideoSourceCompletion = (Bool) -> Void
 
 /// Video source reading video frame and providing Metal texture
@@ -120,7 +121,7 @@ public class BBMetalVideoSource {
     /// Starts reading and processing video frame
     ///
     /// - Parameter completion: a closure to call after processing; The parameter of closure is true if succeed processing all video frames, or false if fail to processing all the video frames (due to user cancel or error)
-    public func start(completion: BBMetalVideoSourceCompletion? = nil) {
+    public func start(progress: BBMetalVideoSourceProgress? = nil, completion: BBMetalVideoSourceCompletion? = nil) {
         lock.wait()
         let isReading = (assetReader != nil)
         lock.signal()
@@ -139,7 +140,7 @@ public class BBMetalVideoSource {
                     self.asset = asset
                     if self.prepareAssetReader() {
                         self.lock.signal()
-                        self.processAsset(completion: completion)
+                        self.processAsset(progress: progress, completion: completion)
                     } else {
                         self.reset()
                         self.lock.signal()
@@ -203,7 +204,7 @@ public class BBMetalVideoSource {
         return true
     }
     
-    private func processAsset(completion: BBMetalVideoSourceCompletion?) {
+    private func processAsset(progress: BBMetalVideoSourceProgress?, completion: BBMetalVideoSourceCompletion?) {
         lock.wait()
         guard let reader = assetReader,
             reader.status == .unknown,
@@ -273,6 +274,7 @@ public class BBMetalVideoSource {
                                                    sampleTime: sampleFrameTime,
                                                    cvMetalTexture: texture.cvMetalTexture)
                 for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
+                progress?(sampleFrameTime)
                 
                 // Transmit audio buffer
                 if let audioBuffer = currentAudioBuffer { currentAudioConsumer?.newAudioSampleBufferAvailable(audioBuffer) }

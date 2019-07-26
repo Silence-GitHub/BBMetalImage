@@ -74,8 +74,8 @@ class MultipleVideoBlendVC: UIViewController {
             .add(consumer: videoWriter)
         
         videoWriter.start()
-        videoSource.start(progress: {
-//            usleep(1000 * 1)
+        videoSource.start(progress: { (frameTime) in
+            // print(frameTime)
         }) { [weak self] (_) in
             guard let self = self else { return }
             self.videoWriter.finish {
