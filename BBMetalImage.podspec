@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = 'BBMetalImage'
-  s.version      = '1.0.2'
+  s.version      = '1.0.3'
   s.summary      = 'A Swift library for GPU-accelerated image/video processing based on Metal.'
 
   s.description  = <<-DESC
@@ -26,6 +26,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.source_files  = 'BBMetalImage/BBMetalImage/*.{h,swift,metal}'
+  s.exclude_files = 'BBMetalImage/BBMetalImage/MultipleVideoSource.swift'
 
   s.private_header_files = 'BBMetalImage/BBMetalImage/BBMetalShaderTypes.h'
 
