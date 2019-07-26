@@ -34,11 +34,15 @@ class MainMenuVC: UIViewController {
         let videoFilter2 = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(VideoFilterVC2(), animated: true) }
         }
+        let multipleVideoBlend = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(MultipleVideoBlendVC(), animated: true) }
+        }
         list = [("Static image filter", staticImageFilter),
                 ("Camera filter", cameraFilter),
                 ("Camera photo filter", cameraPhotoFilter),
                 ("Video filter", videoFilter),
-                ("Video filter 2", videoFilter2)]
+                ("Video filter 2", videoFilter2),
+                ("Multiple video blend", multipleVideoBlend)]
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: UITableViewCell.description())
         tableView.dataSource = self

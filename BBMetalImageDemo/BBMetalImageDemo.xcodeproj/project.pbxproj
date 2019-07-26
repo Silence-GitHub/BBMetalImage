@@ -24,6 +24,8 @@
 		4A9BCB66227A03E000E02C6F /* VideoPlayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */; };
 		4AC5794D225529B900F7BCAC /* sunflower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4AC5794B225529B900F7BCAC /* sunflower.jpg */; };
 		4AC5794E225529B900F7BCAC /* test_lookup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AC5794C225529B900F7BCAC /* test_lookup.png */; };
+		4AFA1DC222EA7D8600B4CF24 /* test_video_rotate_right.mov in Resources */ = {isa = PBXBuildFile; fileRef = 4AFA1DC122EA7D8600B4CF24 /* test_video_rotate_right.mov */; };
+		4AFA1DC922EA7DBC00B4CF24 /* MultipleVideoBlendVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFA1DC722EA7DBC00B4CF24 /* MultipleVideoBlendVC.swift */; };
 		4AFC464D2253CA08009D37A1 /* StaticImageFilterMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC464C2253CA08009D37A1 /* StaticImageFilterMenuVC.swift */; };
 		4AFC464F2253CDDC009D37A1 /* StaticImageFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFC464E2253CDDC009D37A1 /* StaticImageFilterVC.swift */; };
 		4AFC46512253D1A6009D37A1 /* multicolour_flowers.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4AFC46502253D1A6009D37A1 /* multicolour_flowers.jpg */; };
@@ -63,6 +65,8 @@
 		4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerVC.swift; sourceTree = "<group>"; };
 		4AC5794B225529B900F7BCAC /* sunflower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sunflower.jpg; sourceTree = "<group>"; };
 		4AC5794C225529B900F7BCAC /* test_lookup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_lookup.png; sourceTree = "<group>"; };
+		4AFA1DC122EA7D8600B4CF24 /* test_video_rotate_right.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = test_video_rotate_right.mov; sourceTree = "<group>"; };
+		4AFA1DC722EA7DBC00B4CF24 /* MultipleVideoBlendVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MultipleVideoBlendVC.swift; sourceTree = "<group>"; };
 		4AFC464C2253CA08009D37A1 /* StaticImageFilterMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticImageFilterMenuVC.swift; sourceTree = "<group>"; };
 		4AFC464E2253CDDC009D37A1 /* StaticImageFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StaticImageFilterVC.swift; sourceTree = "<group>"; };
 		4AFC46502253D1A6009D37A1 /* multicolour_flowers.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = multicolour_flowers.jpg; sourceTree = "<group>"; };
@@ -112,11 +116,13 @@
 				4A665CFC22721CAA00DFDF4C /* VideoFilterVC.swift */,
 				4A633D672281F33C00138B2A /* VideoFilterVC2.swift */,
 				4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */,
+				4AFA1DC722EA7DBC00B4CF24 /* MultipleVideoBlendVC.swift */,
 				4AC5794B225529B900F7BCAC /* sunflower.jpg */,
 				4AC5794C225529B900F7BCAC /* test_lookup.png */,
 				4AFC46502253D1A6009D37A1 /* multicolour_flowers.jpg */,
 				4A665CFE2272201300DFDF4C /* test_video.mov */,
 				4A633D692281F43300138B2A /* test_video_2.mov */,
+				4AFA1DC122EA7D8600B4CF24 /* test_video_rotate_right.mov */,
 				4A4CADC5225317C20058BEB6 /* Main.storyboard */,
 				4A4CADC8225317C30058BEB6 /* Assets.xcassets */,
 				4A4CADCA225317C30058BEB6 /* LaunchScreen.storyboard */,
@@ -192,6 +198,7 @@
 				4AC5794E225529B900F7BCAC /* test_lookup.png in Resources */,
 				4A4CADC7225317C20058BEB6 /* Main.storyboard in Resources */,
 				4A633D6A2281F43300138B2A /* test_video_2.mov in Resources */,
+				4AFA1DC222EA7D8600B4CF24 /* test_video_rotate_right.mov in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -212,6 +219,7 @@
 				4A4CADC2225317C20058BEB6 /* AppDelegate.swift in Sources */,
 				4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */,
 				4A3CAE3F228A060900252B70 /* CameraPhotoFilterVC.swift in Sources */,
+				4AFA1DC922EA7DBC00B4CF24 /* MultipleVideoBlendVC.swift in Sources */,
 				4A9BCB66227A03E000E02C6F /* VideoPlayerVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
