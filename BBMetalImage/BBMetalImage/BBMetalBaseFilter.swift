@@ -71,14 +71,14 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     private var completions: [(MTLCommandBuffer) -> Void]
     private let lock: DispatchSemaphore
     
-    public init(kernelFunctionName: String, useMPSKernel: Bool = false) {
+    public init(kernelFunctionName: String, useMPSKernel: Bool = false, useMainBundleKernel: Bool = false) {
         _consumers = []
         _sources = []
         name = kernelFunctionName
         self.useMPSKernel = useMPSKernel
         
         if !useMPSKernel,
-            let library = try? BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: Bundle(for: BBMetalBaseFilter.self)),
+            let library = try? BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: useMainBundleKernel ? .main : Bundle(for: BBMetalBaseFilter.self)),
             let kernelFunction = library.makeFunction(name: kernelFunctionName) {
             computePipeline = try? BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
         }
