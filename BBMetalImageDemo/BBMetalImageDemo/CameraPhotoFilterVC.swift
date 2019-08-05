@@ -13,6 +13,7 @@ import BBMetalImage
 class CameraPhotoFilterVC: UIViewController {
     private var camera: BBMetalCamera!
     private var metalView: BBMetalView!
+    private var faceView: UIView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +26,13 @@ class CameraPhotoFilterVC: UIViewController {
                                 device: BBMetalDevice.sharedDevice)
         view.addSubview(metalView)
         
+        let tapMetalView = UITapGestureRecognizer(target: self, action: #selector(tapMetalView(_:)))
+        metalView.addGestureRecognizer(tapMetalView)
+        
+        faceView = UIView(frame: .zero)
+        faceView.backgroundColor = UIColor.red.withAlphaComponent(0.2)
+        metalView.addSubview(faceView)
+        
         let photoButton = UIButton(frame: CGRect(x: x, y: metalView.frame.maxY + 10, width: width, height: 30))
         photoButton.backgroundColor = .blue
         photoButton.setTitle("Take photo", for: .normal)
@@ -32,6 +40,10 @@ class CameraPhotoFilterVC: UIViewController {
         view.addSubview(photoButton)
         
         camera = BBMetalCamera(sessionPreset: .hd1920x1080)
+        
+        camera.addMetadataOutput(with: [.face])
+        camera.metadataObjectDelegate = self
+        
         camera.canTakePhoto = true
         camera.photoDelegate = self
         camera.add(consumer: BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!))
@@ -46,6 +58,10 @@ class CameraPhotoFilterVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         camera.stop()
+    }
+    
+    @objc private func tapMetalView(_ tap: UITapGestureRecognizer) {
+        camera.switchCameraPosition()
     }
     
     @objc private func clickPhotoButton(_ button: UIButton) {
@@ -71,5 +87,68 @@ extension CameraPhotoFilterVC: BBMetalCameraPhotoDelegate {
     func camera(_ camera: BBMetalCamera, didFail error: Error) {
         // In main thread
         print("Fail taking photo. Error: \(error)")
+    }
+}
+
+extension CameraPhotoFilterVC: BBMetalCameraMetadataObjectDelegate {
+    func camera(_ camera: BBMetalCamera, didOutput metadataObjects: [AVMetadataObject]) {
+        guard let first = metadataObjects.first else { return }
+        print(first.bounds)
+        
+        DispatchQueue.main.async { [weak self] in
+            guard let self = self else { return }
+            self.handleMetadataBounds(first.bounds)
+        }
+    }
+    
+    private func handleMetadataBounds(_ bounds: CGRect) {
+        let imageWidth: CGFloat = 1080
+        let imageHeight: CGFloat = 1920
+        let aa: CGFloat = imageWidth / imageHeight
+        let bb: CGFloat = metalView.bounds.width / metalView.bounds.height
+        
+        // top x, right y
+        let x = camera.position == .front ? bounds.minY : 1 - bounds.maxY
+        let y = bounds.origin.x
+        
+        // x' = sx * x + tx
+        // y' = sy * y + ty
+        var sx: CGFloat = metalView.bounds.width
+        var tx: CGFloat = 0
+        var sy: CGFloat = metalView.bounds.height
+        var ty: CGFloat = 0
+        
+        var displayImageWidth = imageWidth
+        var displayImageHeight = imageHeight
+        
+        if aa > bb {
+            // Mask left and right
+            displayImageWidth = imageHeight * bb
+            let maskImageMarginLeft = abs(imageWidth - displayImageWidth) * 0.5
+            tx = -maskImageMarginLeft / displayImageWidth * metalView.bounds.width
+            sx = (1 + maskImageMarginLeft / displayImageWidth) * metalView.bounds.width - tx
+            
+        } else {
+            // Mask top and bottom
+            displayImageHeight = imageWidth / bb
+            let maskImageMarginTop = abs(imageHeight - displayImageHeight) * 0.5
+            ty = -maskImageMarginTop / displayImageHeight * metalView.bounds.height
+            sy = (1 + maskImageMarginTop / displayImageHeight) * metalView.bounds.height - ty
+        }
+        
+        var frame: CGRect = .zero
+        frame.origin.x = sx * x + tx
+        frame.size.width = bounds.height * imageWidth / displayImageWidth * metalView.bounds.width
+        frame.origin.y = sy * y + ty
+        frame.size.height = bounds.width * imageHeight / displayImageHeight * metalView.bounds.height
+        if frame.minX >= 0,
+            frame.maxX <= metalView.bounds.width,
+            frame.minY >= 0,
+            frame.maxY <= metalView.bounds.height {
+            faceView.frame = frame
+            faceView.isHidden = false
+        } else {
+            faceView.isHidden = true
+        }
     }
 }

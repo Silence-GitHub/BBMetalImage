@@ -25,6 +25,15 @@ public protocol BBMetalCameraPhotoDelegate: AnyObject {
     func camera(_ camera: BBMetalCamera, didFail error: Error)
 }
 
+public protocol BBMetalCameraMetadataObjectDelegate: AnyObject {
+    /// Called when camera did get metadata objects
+    ///
+    /// - Parameters:
+    ///   - camera: camera to use
+    ///   - metadataObjects: metadata objects
+    func camera(_ camera: BBMetalCamera, didOutput metadataObjects: [AVMetadataObject])
+}
+
 /// Camera capturing image and providing Metal texture
 public class BBMetalCamera: NSObject {
     /// Image consumers
@@ -161,6 +170,24 @@ public class BBMetalCamera: NSObject {
         }
     }
     private weak var _photoDelegate: BBMetalCameraPhotoDelegate?
+    
+    private var metadataOutput: AVCaptureMetadataOutput!
+    private var metadataOutputQueue: DispatchQueue!
+    
+    public weak var metadataObjectDelegate: BBMetalCameraMetadataObjectDelegate? {
+        get {
+            lock.wait()
+            let m = _metadataObjectDelegate
+            lock.signal()
+            return m
+        }
+        set {
+            lock.wait()
+            _metadataObjectDelegate = newValue
+            lock.signal()
+        }
+    }
+    private weak var _metadataObjectDelegate: BBMetalCameraMetadataObjectDelegate?
     
     /// When this property is false, received video/audio sample buffer will not be processed
     public var isPaused: Bool {
@@ -309,6 +336,55 @@ public class BBMetalCamera: NSObject {
         session.beginConfiguration()
         if let output = photoOutput { session.removeOutput(output) }
         session.commitConfiguration()
+    }
+    
+    @discardableResult
+    public func addMetadataOutput(with types: [AVMetadataObject.ObjectType]) -> Bool {
+        var result = false
+        
+        lock.wait()
+        
+        if metadataOutput != nil {
+            lock.signal()
+            return result
+        }
+        
+        session.beginConfiguration()
+        
+        let output = AVCaptureMetadataOutput()
+        let outputQueue = DispatchQueue(label: "com.Kaibo.BBMetalImage.Camera.metadataOutput")
+        output.setMetadataObjectsDelegate(self, queue: outputQueue)
+        
+        if session.canAddOutput(output) {
+            session.addOutput(output)
+            let validTypes = types.filter { output.availableMetadataObjectTypes.contains($0) }
+            output.metadataObjectTypes = validTypes
+            metadataOutput = output
+            metadataOutputQueue = outputQueue
+            result = true
+        }
+        
+        session.commitConfiguration()
+        lock.signal()
+        return result
+    }
+    
+    func removeMetadataOutput() {
+        lock.wait()
+        
+        if metadataOutput == nil {
+            lock.signal()
+            return
+        }
+        
+        session.beginConfiguration()
+        
+        session.removeOutput(metadataOutput)
+        metadataOutput = nil
+        metadataOutputQueue = nil
+        
+        session.commitConfiguration()
+        lock.signal()
     }
     
     /// Takes a photo.
@@ -567,13 +643,15 @@ extension BBMetalCamera: AVCapturePhotoCaptureDelegate {
         
         guard let delegate = photoDelegate else { return }
         
-        if let error = error { delegate.camera(self, didFail: error) }
-        
-        if let sampleBuffer = photoSampleBuffer,
+        if let error = error {
+            delegate.camera(self, didFail: error)
+            
+        } else if let sampleBuffer = photoSampleBuffer,
             let texture = texture(with: sampleBuffer),
             let rotatedTexture = rotatedTexture(with: texture.metalTexture, angle: 90) {
             // Setting `videoOrientation` of `AVCaptureConnection` dose not work. So rotate texture here.
             delegate.camera(self, didOutput: rotatedTexture)
+            
         } else {
             delegate.camera(self, didFail: NSError(domain: "BBMetalCamera.Photo", code: 0, userInfo: [NSLocalizedDescriptionKey : "Can not get Metal texture"]))
         }
@@ -585,5 +663,11 @@ extension BBMetalCamera: AVCapturePhotoCaptureDelegate {
         source.add(consumer: filter).runSynchronously = true
         source.transmitTexture()
         return filter.outputTexture
+    }
+}
+
+extension BBMetalCamera: AVCaptureMetadataOutputObjectsDelegate {
+    public func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
+        metadataObjectDelegate?.camera(self, didOutput: metadataObjects)
     }
 }
