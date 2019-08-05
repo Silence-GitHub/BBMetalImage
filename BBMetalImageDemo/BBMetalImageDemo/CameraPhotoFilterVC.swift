@@ -92,8 +92,13 @@ extension CameraPhotoFilterVC: BBMetalCameraPhotoDelegate {
 
 extension CameraPhotoFilterVC: BBMetalCameraMetadataObjectDelegate {
     func camera(_ camera: BBMetalCamera, didOutput metadataObjects: [AVMetadataObject]) {
-        guard let first = metadataObjects.first else { return }
-        print(first.bounds)
+        guard let first = metadataObjects.first else {
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else { return }
+                self.faceView.isHidden = true
+            }
+            return
+        }
         
         DispatchQueue.main.async { [weak self] in
             guard let self = self else { return }
