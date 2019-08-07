@@ -32,8 +32,7 @@ class VideoFilterVC: UIViewController {
         
         let x: CGFloat = 10
         let width: CGFloat = view.bounds.width - 20
-        metalView = BBMetalView(frame: CGRect(x: x, y: 100, width: width, height: view.bounds.height - 230),
-                                device: BBMetalDevice.sharedDevice)
+        metalView = BBMetalView(frame: CGRect(x: x, y: 100, width: width, height: view.bounds.height - 230))
         view.addSubview(metalView)
         
         var y: CGFloat = metalView.frame.maxY + 10

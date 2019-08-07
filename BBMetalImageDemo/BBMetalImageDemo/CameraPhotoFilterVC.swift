@@ -22,8 +22,7 @@ class CameraPhotoFilterVC: UIViewController {
         
         let x: CGFloat = 10
         let width: CGFloat = view.bounds.width - 20
-        metalView = BBMetalView(frame: CGRect(x: x, y: 100, width: width, height: view.bounds.height - 200),
-                                device: BBMetalDevice.sharedDevice)
+        metalView = BBMetalView(frame: CGRect(x: x, y: 100, width: width, height: view.bounds.height - 200))
         view.addSubview(metalView)
         
         let tapMetalView = UITapGestureRecognizer(target: self, action: #selector(tapMetalView(_:)))
