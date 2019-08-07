@@ -126,11 +126,13 @@ public class BBMetalView: MTKView {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func draw(_ rect:CGRect) {
+    public override func draw(_ rect: CGRect) {
         guard let texture = self.texture,
             let drawable = currentDrawable,
             let renderPassDescriptor = currentRenderPassDescriptor,
             let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
+        
+        drawableSize = CGSize(width: texture.width, height: texture.height)
         
         if frameSize != lastFrameSize ||
             texture.width != textureWidth ||
@@ -147,13 +149,6 @@ public class BBMetalView: MTKView {
         commandBuffer.label = "RenderPassThroughCommand"
         
         encoder.label = "RenderPassThroughEncoder"
-        
-        encoder.setViewport(MTLViewport(originX: 0,
-                                        originY: 0,
-                                        width: Double(drawableSize.width),
-                                        height: Double(drawableSize.height),
-                                        znear: -1,
-                                        zfar: 1))
         
         encoder.setRenderPipelineState(renderPipeline)
         
