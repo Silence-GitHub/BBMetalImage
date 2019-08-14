@@ -26,8 +26,6 @@ kernel void rotateKernel(texture2d<half, access::write> outputTexture [[texture(
     const float inX = (cos(inAngle) * d + inputTexture.get_width() / 2.0f) / inputTexture.get_width();
     const float inY = (sin(inAngle) * d + inputTexture.get_height() / 2.0f) / inputTexture.get_height();
     
-    if (inX < 0 || inX >= 1 || inY < 0 || inY >= 1) { return; }
-    
     constexpr sampler quadSampler;
     const half4 color = inputTexture.sample(quadSampler, float2(inX, inY));
     outputTexture.write(color, gid);
