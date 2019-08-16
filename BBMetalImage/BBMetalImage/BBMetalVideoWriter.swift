@@ -8,6 +8,13 @@
 
 import AVFoundation
 
+public typealias BBMetalVideoWriterProgress = (BBMetalVideoWriterProgressType) -> Void
+
+public enum BBMetalVideoWriterProgressType {
+    case video(CMTime, Bool)
+    case audio(CMTime, Bool)
+}
+
 /// Video writer writing video file
 public class BBMetalVideoWriter {
     /// URL of video file
@@ -63,6 +70,8 @@ public class BBMetalVideoWriter {
     
     private var audioInput: AVAssetWriterInput!
     
+    private var progress: BBMetalVideoWriterProgress?
+    
     private let lock: DispatchSemaphore
     
     deinit {
@@ -103,9 +112,12 @@ public class BBMetalVideoWriter {
     }
     
     /// Starts receiving Metal texture and writing video file
-    public func start() {
+    public func start(progress: BBMetalVideoWriterProgress? = nil) {
         lock.wait()
         defer { lock.signal() }
+        
+        self.progress = progress
+        
         if writer == nil {
             if !prepareAssetWriter() {
                 reset()
@@ -218,6 +230,7 @@ public class BBMetalVideoWriter {
         videoPixelBufferInput = nil
         videoPixelBuffer = nil
         audioInput = nil
+        progress = nil
     }
     
     @objc private func finishWritingNotification(_ notification: Notification) {
@@ -234,7 +247,19 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
     
     public func newTextureAvailable(_ texture: BBMetalTexture, from source: BBMetalImageSource) {
         lock.wait()
-        defer { lock.signal() }
+        
+        let progress = self.progress
+        var result: Bool?
+        
+        defer {
+            lock.signal()
+            
+            if let progress = progress,
+                let result = result,
+                let sampleTime = texture.sampleTime {
+                progress(.video(sampleTime, result))
+            }
+        }
         
         // Check nil
         guard let sampleTime = texture.sampleTime,
@@ -292,7 +317,7 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
         let region = MTLRegionMake2D(0, 0, outputTexture.width, outputTexture.height)
         outputTexture.getBytes(baseAddress, bytesPerRow: bytesPerRow, from: region, mipmapLevel: 0)
         
-        videoPixelBufferInput.append(videoPixelBuffer, withPresentationTime: sampleTime)
+        result = videoPixelBufferInput.append(videoPixelBuffer, withPresentationTime: sampleTime)
         
         CVPixelBufferUnlockBaseAddress(videoPixelBuffer, [])
     }
@@ -301,7 +326,18 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
 extension BBMetalVideoWriter: BBMetalAudioConsumer {
     public func newAudioSampleBufferAvailable(_ sampleBuffer: CMSampleBuffer) {
         lock.wait()
-        defer { lock.signal() }
+        
+        let progress = self.progress
+        var result: Bool?
+        
+        defer {
+            lock.signal()
+            
+            if let result = result,
+                let progress = progress {
+                progress(.audio(CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer), result))
+            }
+        }
         
         // Check nil
         guard let audioInput = self.audioInput,
@@ -317,6 +353,6 @@ extension BBMetalVideoWriter: BBMetalAudioConsumer {
                 return
         }
         
-        audioInput.append(sampleBuffer)
+        result = audioInput.append(sampleBuffer)
     }
 }
