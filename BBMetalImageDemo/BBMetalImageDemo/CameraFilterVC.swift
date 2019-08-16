@@ -118,7 +118,12 @@ class CameraFilterVC: UIViewController {
         if button.isSelected {
             playButton.isHidden = true
             try? FileManager.default.removeItem(at: videoWriter.url)
-            videoWriter.start()
+            videoWriter.start { (type) in
+//                switch type {
+//                case let .video(time, success): print("Video time = \(time), success = \(success)")
+//                case let .audio(time, success): print("Audio time = \(time), success = \(success)")
+//                }
+            }
         } else {
             videoWriter.finish { [weak self] in
                 DispatchQueue.main.async {

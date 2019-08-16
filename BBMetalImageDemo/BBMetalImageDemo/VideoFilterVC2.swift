@@ -74,7 +74,12 @@ class VideoFilterVC2: UIViewController {
             let filter = BBMetalColorInversionFilter()
             videoSource.add(consumer: filter).add(consumer: videoWriter)
             
-            videoWriter.start()
+            videoWriter.start { (type) in
+//                switch type {
+//                case let .video(time, success): print("Video time = \(time), success = \(success)")
+//                case let .audio(time, success): print("Audio time = \(time), success = \(success)")
+//                }
+            }
             videoSource.start(progress: { (frameTime) in
                 // print(frameTime)
             }) { [weak self] (_) in
