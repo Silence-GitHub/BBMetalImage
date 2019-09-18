@@ -214,6 +214,8 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
         commandBuffer.label = name + "Command"
         
+        for completion in completions { commandBuffer.addCompletedHandler(completion) }
+        
         if useMPSKernel {
             encodeMPSKernel(into: commandBuffer)
         } else {
@@ -225,8 +227,6 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
             }
             
             guard let encoder = commandBuffer.makeComputeCommandEncoder() else { return }
-            
-            for completion in completions { commandBuffer.addCompletedHandler(completion) }
             
             encoder.label = name + "Encoder"
             encoder.setComputePipelineState(computePipeline)
