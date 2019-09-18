@@ -86,6 +86,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let dilation = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .dilation), animated: true) }
         }
+        let rgbaDilation = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .rgbaDilation), animated: true) }
+        }
         let chromaKey = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .chromaKey), animated: true) }
         }
@@ -259,6 +262,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Erosion", erosion),
                 ("RGBAErosion", rgbaErosion),
                 ("Dilation", dilation),
+                ("RGBADilation", rgbaDilation),
                 ("Chroma key", chromaKey),
                 ("Crop", crop),
                 ("Resize", resize),

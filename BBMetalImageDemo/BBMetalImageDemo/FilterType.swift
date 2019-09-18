@@ -30,6 +30,7 @@ enum FilterType {
     case erosion
     case rgbaErosion
     case dilation
+    case rgbaDilation
     case chromaKey
     case crop
     case resize
