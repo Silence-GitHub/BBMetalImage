@@ -83,6 +83,9 @@ class CameraFilterMenuVC: UIViewController {
         let rgbaErosion = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .rgbaErosion), animated: true) }
         }
+        let dilation = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .dilation), animated: true) }
+        }
         let chromaKey = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .chromaKey), animated: true) }
         }
@@ -255,6 +258,7 @@ class CameraFilterMenuVC: UIViewController {
                 ("Luminance threshold", luminanceThreshold),
                 ("Erosion", erosion),
                 ("RGBAErosion", rgbaErosion),
+                ("Dilation", dilation),
                 ("Chroma key", chromaKey),
                 ("Crop", crop),
                 ("Resize", resize),

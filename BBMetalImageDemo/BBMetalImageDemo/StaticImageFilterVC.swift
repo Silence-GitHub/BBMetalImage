@@ -91,6 +91,7 @@ class StaticImageFilterVC: UIViewController {
         case .luminanceThreshold: return BBMetalLuminanceThresholdFilter(threshold: 0.6).filteredImage(with: image)
         case .erosion: return BBMetalErosionFilter(pixelRadius: 2).filteredImage(with: image)
         case .rgbaErosion: return BBMetalRGBAErosionFilter(pixelRadius: 2).filteredImage(with: image)
+        case .dilation: return BBMetalDilationFilter(pixelRadius: 2).filteredImage(with: image)
         case .chromaKey: return BBMetalChromaKeyFilter(colorToReplace: .blue).filteredImage(with: image)
         case .crop: return BBMetalCropFilter(rect: BBMetalRect(x: 0.25, y: 0.5, width: 0.5, height: 0.5)).filteredImage(with: image)
         case .resize: return BBMetalResizeFilter(size: BBMetalSize(width: 0.5, height: 0.8)).filteredImage(with: image)
