@@ -28,6 +28,7 @@ enum FilterType {
     case luminance
     case luminanceThreshold
     case erosion
+    case rgbaErosion
     case chromaKey
     case crop
     case resize
