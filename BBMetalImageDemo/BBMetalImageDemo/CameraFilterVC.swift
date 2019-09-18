@@ -173,6 +173,7 @@ class CameraFilterVC: UIViewController {
         case .haze: return BBMetalHazeFilter(distance: 0.2, slope: 0)
         case .luminance: return BBMetalLuminanceFilter()
         case .luminanceThreshold: return BBMetalLuminanceThresholdFilter(threshold: 0.6)
+        case .erosion: return BBMetalErosionFilter(pixelRadius: 2)
         case .chromaKey: return BBMetalChromaKeyFilter(thresholdSensitivity: 0.4, smoothing: 0.1, colorToReplace: .blue)
         case .crop: return BBMetalCropFilter(rect: BBMetalRect(x: 0.25, y: 0.5, width: 0.5, height: 0.5))
         case .resize: return BBMetalResizeFilter(size: BBMetalSize(width: 0.5, height: 0.8))

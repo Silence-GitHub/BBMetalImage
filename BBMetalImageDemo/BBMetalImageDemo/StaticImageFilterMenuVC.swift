@@ -77,6 +77,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let luminanceThreshold = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .luminanceThreshold), animated: true) }
         }
+        let erosion = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .erosion), animated: true) }
+        }
         let chromaKey = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .chromaKey), animated: true) }
         }
@@ -247,6 +250,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Haze", haze),
                 ("Luminance", luminance),
                 ("Luminance threshold", luminanceThreshold),
+                ("Erosion", erosion),
                 ("Chroma key", chromaKey),
                 ("Crop", crop),
                 ("Resize", resize),
