@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
 
   s.name         = 'BBMetalImage'
-  s.version      = '1.0.7'
+  s.version      = '1.0.8'
   s.summary      = 'A Swift library for GPU-accelerated image/video processing based on Metal.'
 
   s.description  = <<-DESC
