@@ -11,6 +11,10 @@ open class BBMetalBaseFilterGroup: BBMetalBaseFilter {
     public var initialFilters: [BBMetalBaseFilter]!
     public var terminalFilter: BBMetalBaseFilter!
     
+    public override var consumers: [BBMetalImageConsumer] { return terminalFilter.consumers }
+    
+    public override var sources: [BBMetalWeakImageSource] { return initialFilters.first?.sources ?? [] }
+    
     public override var outputTexture: MTLTexture? {
         return terminalFilter.outputTexture
     }
@@ -38,6 +42,10 @@ open class BBMetalBaseFilterGroup: BBMetalBaseFilter {
     
     public override func remove(consumer: BBMetalImageConsumer) {
         terminalFilter.remove(consumer: consumer)
+    }
+    
+    public override func removeAllConsumers() {
+        terminalFilter.removeAllConsumers()
     }
     
     // MARK: - BBMetalImageConsumer
