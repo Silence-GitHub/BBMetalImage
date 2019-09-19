@@ -12,6 +12,7 @@ using namespace metal;
 kernel void rgbaErosionKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                               texture2d<half, access::sample> inputTexture [[texture(1)]],
                               constant int *pixelRadius [[buffer(0)]],
+                              constant bool *vertical [[buffer(1)]],
                               uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
@@ -20,9 +21,15 @@ kernel void rgbaErosionKernel(texture2d<half, access::write> outputTexture [[tex
     half4 minValue = half4(1);
     
     int radius = abs(*pixelRadius);
-    for (int i = -radius; i <= radius; ++i) {
-        for (int j = -radius; j <= radius; ++j) {
-            const float2 coordinate = float2(float(gid.x + i) / outputTexture.get_width(), float(gid.y + j) / outputTexture.get_height());
+    if (*vertical) {
+        for (int i = -radius; i <= radius; ++i) {
+            const float2 coordinate = float2(float(gid.x) / outputTexture.get_width(), float(gid.y + i) / outputTexture.get_height());
+            const half4 intensity = inputTexture.sample(quadSampler, coordinate);
+            minValue = min(minValue, intensity);
+        }
+    } else {
+        for (int i = -radius; i <= radius; ++i) {
+            const float2 coordinate = float2(float(gid.x + i) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height());
             const half4 intensity = inputTexture.sample(quadSampler, coordinate);
             minValue = min(minValue, intensity);
         }

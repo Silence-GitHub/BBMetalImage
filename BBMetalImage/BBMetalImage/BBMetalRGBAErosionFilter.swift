@@ -7,16 +7,45 @@
 //
 
 /// Find the minimum value of each color channel in the range of radius, and set the minimum value to the current pixel.
-public class BBMetalRGBAErosionFilter: BBMetalBaseFilter {
+public class BBMetalRGBAErosionFilter: BBMetalBaseFilterGroup {
     /// Radius in pixel
-    var pixelRadius: Int
+    public var pixelRadius: Int {
+        get { return filter.pixelRadius }
+        set {
+            filter.pixelRadius = newValue
+            filter2.pixelRadius = newValue
+        }
+    }
+    
+    private let filter: _BBMetalRGBAErosionSinglePassFilter
+    private let filter2: _BBMetalRGBAErosionSinglePassFilter
     
     public init(pixelRadius: Int = 0) {
+        filter = _BBMetalRGBAErosionSinglePassFilter(pixelRadius: pixelRadius, vertical: false)
+        filter2 = _BBMetalRGBAErosionSinglePassFilter(pixelRadius: pixelRadius, vertical: true)
+        
+        filter.add(consumer: filter2)
+        
+        super.init(kernelFunctionName: "")
+        
+        initialFilters = [filter]
+        terminalFilter = filter2
+    }
+}
+
+fileprivate class _BBMetalRGBAErosionSinglePassFilter: BBMetalBaseFilter {
+    /// Radius in pixel
+    fileprivate var pixelRadius: Int
+    fileprivate var vertical: Bool
+    
+    fileprivate init(pixelRadius: Int = 0, vertical: Bool = false) {
         self.pixelRadius = pixelRadius
+        self.vertical = vertical
         super.init(kernelFunctionName: "rgbaErosionKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    fileprivate override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&pixelRadius, length: MemoryLayout<Int>.size, index: 0)
+        encoder.setBytes(&vertical, length: MemoryLayout<Bool>.size, index: 1)
     }
 }
