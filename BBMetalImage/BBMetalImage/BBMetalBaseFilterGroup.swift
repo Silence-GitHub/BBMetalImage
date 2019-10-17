@@ -24,8 +24,13 @@ open class BBMetalBaseFilterGroup: BBMetalBaseFilter {
         set { terminalFilter.runSynchronously = newValue }
     }
     
-    public override func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer) -> Void) {
-        terminalFilter.addCompletedHandler(handler)
+    @discardableResult
+    public override func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer) -> Void) -> String {
+        return terminalFilter.addCompletedHandler(handler)
+    }
+    
+    public override func removeCompletionHandler(for key: String) {
+        terminalFilter.removeCompletionHandler(for: key)
     }
     
     // MARK: - BBMetalImageSource

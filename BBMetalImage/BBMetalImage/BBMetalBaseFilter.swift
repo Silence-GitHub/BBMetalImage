@@ -13,6 +13,11 @@ public struct BBMetalWeakImageSource {
     public init(source: BBMetalImageSource) { self.source = source }
 }
 
+fileprivate struct _BBMetalFilterCompletionItem {
+    fileprivate let key: String
+    fileprivate let completion: (MTLCommandBuffer) -> Void
+}
+
 /// A base filter processing texture. Subclass this class. Do not create an instance using the class directly.
 open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     /// Image consumers
@@ -68,7 +73,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     public let useMPSKernel: Bool
     
     private var computePipeline: MTLComputePipelineState!
-    private var completions: [(MTLCommandBuffer) -> Void]
+    private var completions: [_BBMetalFilterCompletionItem]
     private let lock: DispatchSemaphore
     
     public init(kernelFunctionName: String, useMPSKernel: Bool = false, useMainBundleKernel: Bool = false) {
@@ -91,9 +96,22 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     /// Registers a block of code that is called immediately after the device has completed the execution of the Metal command buffer
     ///
     /// - Parameter handler: block to register
-    public func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer) -> Void) {
+    /// - Returns: a key string can be used to remove the completion callback
+    @discardableResult
+    public func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer) -> Void) -> String {
         lock.wait()
-        completions.append(handler)
+        let key = UUID().uuidString
+        completions.append(_BBMetalFilterCompletionItem(key: key, completion: handler))
+        lock.signal()
+        return key
+    }
+    
+    /// Removes a completion callback with a key
+    ///
+    /// - Parameter key: a key returned by `addCompletedHandler(_:)` method
+    public func removeCompletionHandler(for key: String) {
+        lock.wait()
+        completions = completions.filter { $0.key != key }
         lock.signal()
     }
     
@@ -214,7 +232,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
         commandBuffer.label = name + "Command"
         
-        for completion in completions { commandBuffer.addCompletedHandler(completion) }
+        for completion in completions { commandBuffer.addCompletedHandler(completion.completion) }
         
         if useMPSKernel {
             encodeMPSKernel(into: commandBuffer)
