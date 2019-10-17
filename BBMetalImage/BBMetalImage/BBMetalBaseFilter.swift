@@ -109,9 +109,16 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     /// Removes a completion callback with a key
     ///
     /// - Parameter key: a key returned by `addCompletedHandler(_:)` method
-    public func removeCompletionHandler(for key: String) {
+    public func removeCompletedHandler(for key: String) {
         lock.wait()
         completions = completions.filter { $0.key != key }
+        lock.signal()
+    }
+    
+    /// Removes all completion callbacks
+    public func removeAllCompletedHandlers() {
+        lock.wait()
+        completions.removeAll()
         lock.signal()
     }
     
