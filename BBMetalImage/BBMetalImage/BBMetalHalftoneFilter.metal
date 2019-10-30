@@ -28,10 +28,10 @@ kernel void halftoneKernel(texture2d<half, access::write> outputTexture [[textur
     const float distanceFromSamplePoint = distance(adjustedSamplePos, textureCoordinateToUse);
     
     constexpr sampler quadSampler;
-    const float3 sampledColor = float3(inputTexture.sample(quadSampler, samplePos ).rgb);
-    const float dotScaling = 1.0 - dot(sampledColor, float3(kLuminanceWeighting));
+    const half3 sampledColor = inputTexture.sample(quadSampler, samplePos).rgb;
+    const float dotScaling = 1.0 - dot(float3(sampledColor), float3(kLuminanceWeighting));
     
-    const float checkForPresenceWithinDot = 1.0 - step(distanceFromSamplePoint, (fractionalWidthOfPixel * 0.5) * dotScaling);
+    const half checkForPresenceWithinDot = 1.0 - step(distanceFromSamplePoint, (fractionalWidthOfPixel * 0.5) * dotScaling);
     const half4 outColor(half3(checkForPresenceWithinDot), 1.0h);
     outputTexture.write(outColor, gid);
 }

@@ -20,7 +20,7 @@ kernel void monochromeKernel(texture2d<half, access::write> outputTexture [[text
     
     const half4 inColor = inputTexture.read(gid);
     
-    const float luminance = dot(inColor.rgb, kLuminanceWeighting);
+    const half luminance = dot(inColor.rgb, kLuminanceWeighting);
     const half4 desat = half4(half3(luminance), 1.0);
     
     const half3 filterColor = half3(*filterColorInput);

@@ -7,12 +7,12 @@
 //
 
 public struct BBMetalMatrix4x4 {
-    public var m11:Float, m12:Float, m13:Float, m14:Float
-    public var m21:Float, m22:Float, m23:Float, m24:Float
-    public var m31:Float, m32:Float, m33:Float, m34:Float
-    public var m41:Float, m42:Float, m43:Float, m44:Float
+    public var m11: Float, m12: Float, m13: Float, m14: Float
+    public var m21: Float, m22: Float, m23: Float, m24: Float
+    public var m31: Float, m32: Float, m33: Float, m34: Float
+    public var m41: Float, m42: Float, m43: Float, m44: Float
     
-    public init(rowMajorValues:[Float]) {
+    public init(rowMajorValues: [Float]) {
         guard rowMajorValues.count > 15 else { fatalError("Tried to initialize a 4x4 matrix with fewer than 16 values") }
         
         self.m11 = rowMajorValues[0]
