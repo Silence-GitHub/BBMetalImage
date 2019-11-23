@@ -77,6 +77,7 @@ enum FilterType {
     case thresholdSketch
     case toon
     case posterize
+    case kuwahara
     case swirl
     case sobelEdgeDetection
     case bilateralBlur

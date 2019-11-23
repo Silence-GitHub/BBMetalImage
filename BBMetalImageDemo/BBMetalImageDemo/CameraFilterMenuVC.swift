@@ -227,6 +227,9 @@ class CameraFilterMenuVC: UIViewController {
         let posterize = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .posterize), animated: true) }
         }
+        let kuwahara = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .kuwahara), animated: true) }
+        }
         let swirl = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .swirl), animated: true) }
         }
@@ -309,6 +312,7 @@ class CameraFilterMenuVC: UIViewController {
                 ("Threshold sketch", thresholdSketch),
                 ("Toon", toon),
                 ("Posterize", posterize),
+                ("Kuwahara", kuwahara),
                 ("Swirl", swirl),
                 ("SobelEdgeDetection", sobelEdgeDetection),
                 ("BilateralBlur", bilateralBlur),
