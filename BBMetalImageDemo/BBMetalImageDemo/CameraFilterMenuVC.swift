@@ -233,6 +233,9 @@ class CameraFilterMenuVC: UIViewController {
         let swirl = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .swirl), animated: true) }
         }
+        let convolution3x3 = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .convolution3x3), animated: true) }
+        }
         let sobelEdgeDetection = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .sobelEdgeDetection), animated: true) }
         }
@@ -314,6 +317,7 @@ class CameraFilterMenuVC: UIViewController {
                 ("Posterize", posterize),
                 ("Kuwahara", kuwahara),
                 ("Swirl", swirl),
+                ("Convolution3x3", convolution3x3),
                 ("SobelEdgeDetection", sobelEdgeDetection),
                 ("BilateralBlur", bilateralBlur),
                 ("Beauty", beauty)]
