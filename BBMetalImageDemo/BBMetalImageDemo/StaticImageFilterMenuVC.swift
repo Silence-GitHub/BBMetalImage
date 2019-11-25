@@ -236,6 +236,9 @@ class StaticImageFilterMenuVC: UIViewController {
         let convolution3x3 = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .convolution3x3), animated: true) }
         }
+        let emboss = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .emboss), animated: true) }
+        }
         let sobelEdgeDetection = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(StaticImageFilterVC(type: .sobelEdgeDetection), animated: true) }
         }
@@ -318,6 +321,7 @@ class StaticImageFilterMenuVC: UIViewController {
                 ("Kuwahara", kuwahara),
                 ("Swirl", swirl),
                 ("Convolution3x3", convolution3x3),
+                ("Emboss", emboss),
                 ("SobelEdgeDetection", sobelEdgeDetection),
                 ("BilateralBlur", bilateralBlur),
                 ("Beauty", beauty)]

@@ -144,6 +144,7 @@ class StaticImageFilterVC: UIViewController {
         case .convolution3x3: return BBMetalConvolution3x3Filter(convolution: simd_float3x3(rows: [float3(-1, 0, 1),
                                                                                                    float3(-2, 0, 2),
                                                                                                    float3(-1, 0, 1)])).filteredImage(with: image)
+        case .emboss: return BBMetalEmbossFilter(intensity: 1).filteredImage(with: image)
         case .sobelEdgeDetection: return BBMetalSobelEdgeDetectionFilter().filteredImage(with: image)
         case .bilateralBlur: return BBMetalBilateralBlurFilter().filteredImage(with: image)
         case .beauty: return BBMetalBeautyFilter().filteredImage(with: image)

@@ -278,6 +278,7 @@ class CameraFilterVC: UIViewController {
         case .convolution3x3: return BBMetalConvolution3x3Filter(convolution: simd_float3x3(rows: [float3(-1, 0, 1),
                                                                                                    float3(-2, 0, 2),
                                                                                                    float3(-1, 0, 1)]))
+        case .emboss: return BBMetalEmbossFilter(intensity: 1)
         case .sobelEdgeDetection: return BBMetalSobelEdgeDetectionFilter()
         case .bilateralBlur: return BBMetalBilateralBlurFilter()
         case .beauty: return BBMetalBeautyFilter()
