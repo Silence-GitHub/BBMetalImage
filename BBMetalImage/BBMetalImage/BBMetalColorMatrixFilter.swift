@@ -9,11 +9,11 @@
 /// Transforms the colors of an image by applying a matrix to them
 public class BBMetalColorMatrixFilter: BBMetalBaseFilter {
     /// A 4x4 matrix used to transform each color in an image
-    public var colorMatrix: BBMetalMatrix4x4
+    public var colorMatrix: matrix_float4x4
     /// The degree to which the new transformed color replaces the original color for each pixel
     public var intensity: Float
     
-    public init(colorMatrix: BBMetalMatrix4x4 = .identity, intensity: Float = 1) {
+    public init(colorMatrix: matrix_float4x4 = .identity, intensity: Float = 1) {
         self.intensity = intensity
         self.colorMatrix = colorMatrix
         super.init(kernelFunctionName: "colorMatrixKernel")
@@ -21,6 +21,6 @@ public class BBMetalColorMatrixFilter: BBMetalBaseFilter {
     
     public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&intensity, length: MemoryLayout<Float>.size, index: 0)
-        encoder.setBytes(&colorMatrix, length: MemoryLayout<BBMetalMatrix4x4>.size, index: 1)
+        encoder.setBytes(&colorMatrix, length: MemoryLayout<matrix_float4x4>.size, index: 1)
     }
 }

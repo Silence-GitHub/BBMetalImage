@@ -149,10 +149,10 @@ class CameraFilterVC: UIViewController {
         case .gamma: return BBMetalGammaFilter(gamma: 1.5)
         case .levels: return BBMetalLevelsFilter(minimum: .red)
         case .colorMatrix:
-            var matrix: BBMetalMatrix4x4 = .identity
-            matrix.m12 = 1
-            matrix.m32 = 1
-            matrix.m42 = 1
+            var matrix: matrix_float4x4 = .identity
+            matrix[0][1] = 1
+            matrix[2][1] = 1
+            matrix[3][1] = 1
             return BBMetalColorMatrixFilter(colorMatrix: matrix, intensity: 1)
         case .rgba: return BBMetalRGBAFilter(red: 1.2, green: 1, blue: 1, alpha: 1)
         case .hue: return BBMetalHueFilter(hue: 90)
