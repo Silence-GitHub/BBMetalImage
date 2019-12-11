@@ -9,9 +9,9 @@
 public class BBMetalConvolution3x3Filter: BBMetalBaseFilter {
     public var convolution: matrix_float3x3
     
-    public init(convolution: matrix_float3x3 = matrix_float3x3(rows: [float3(0, 0, 0),
-                                                                      float3(0, 1, 0),
-                                                                      float3(0, 0, 0)])) {
+    public init(convolution: matrix_float3x3 = matrix_float3x3(rows: [SIMD3<Float>(0, 0, 0),
+                                                                      SIMD3<Float>(0, 1, 0),
+                                                                      SIMD3<Float>(0, 0, 0)])) {
         self.convolution = convolution
         super.init(kernelFunctionName: "convolution3x3Kernel")
     }

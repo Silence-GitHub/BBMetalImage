@@ -7,8 +7,8 @@
 //
 
 public extension matrix_float4x4 {
-    static let identity = matrix_float4x4(rows: [float4(1, 0, 0, 0),
-                                                 float4(0, 1, 0, 0),
-                                                 float4(0, 0, 1, 0),
-                                                 float4(0, 0, 0, 1)])
+    static let identity = matrix_float4x4(rows: [SIMD4<Float>(1, 0, 0, 0),
+                                                 SIMD4<Float>(0, 1, 0, 0),
+                                                 SIMD4<Float>(0, 0, 1, 0),
+                                                 SIMD4<Float>(0, 0, 0, 1)])
 }

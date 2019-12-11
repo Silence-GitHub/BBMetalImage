@@ -7,9 +7,9 @@
 //
 
 private func convolutionMatrix(with intensity: Float) -> matrix_float3x3 {
-    return matrix_float3x3(rows: [float3(intensity * -2, -intensity, 0),
-                                  float3(-intensity, 1, intensity),
-                                  float3(0, intensity, intensity * 2)])
+    return matrix_float3x3(rows: [SIMD3<Float>(intensity * -2, -intensity, 0),
+                                  SIMD3<Float>(-intensity, 1, intensity),
+                                  SIMD3<Float>(0, intensity, intensity * 2)])
 }
 
 public class BBMetalEmbossFilter: BBMetalConvolution3x3Filter {
