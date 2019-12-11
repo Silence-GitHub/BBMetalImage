@@ -270,6 +270,10 @@ func process() {
 - Haze
 - Luminance
 - Luminance Threshold
+- Erosion
+- RGBA Erosion
+- Dilation
+- RGBA Dilation
 - Chroma Key
 - Crop
 - Resize
@@ -317,7 +321,10 @@ func process() {
 - Threshold Sketch
 - Toon
 - Posterize
+- Kuwahara
 - Swirl
+- Convolution 3x3
+- Emboss
 - Sobel Edge Detection
 - Bilateral Blur
 - Beauty
