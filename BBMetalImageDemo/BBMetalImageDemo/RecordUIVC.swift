@@ -15,7 +15,8 @@ class RecordUIVC: UIViewController {
     private var icon: UIImageView!
     
     private var displayLink: CADisplayLink!
-    private var step: CGFloat = 1
+    private var stepX: CGFloat = 1
+    private var stepY: CGFloat = 1
     
     private var uiSource: BBMetalUISource!
     
@@ -62,13 +63,17 @@ class RecordUIVC: UIViewController {
     }
     
     @objc private func refreshDisplayLink(_ link: CADisplayLink) {
-        icon.center.x += step
-        if icon.frame.maxX > animationView.bounds.width {
-            icon.frame.origin.x = animationView.bounds.width - icon.frame.width
-            step = -1
-        } else if icon.frame.minX < 0 {
-            icon.frame.origin.x = 0
-            step = 1
+        icon.center.x += stepX
+        icon.center.y += stepY
+        if icon.frame.maxX >= animationView.bounds.width {
+            stepX = -1
+        } else if icon.frame.minX <= 0 {
+            stepX = 1
+        }
+        if icon.frame.maxY >= animationView.bounds.height {
+            stepY = -1
+        } else if icon.frame.minY <= 0 {
+            stepY = 1
         }
         uiSource.transmitTexture(with: .invalid)
     }

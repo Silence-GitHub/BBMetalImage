@@ -9,12 +9,19 @@
 import UIKit
 import CoreMedia
 
+/// UI Source capturing `UIView` snapshot and providing Metal texture
 public class BBMetalUISource {
+    /// The view to capture snapshot
     public let view: UIView
     
+    /// Whether to update texture before transmitting texture.
+    /// If true (default value), capture a view snapshot and update texture.
+    /// If false, if there is old texture, it will be transmitted; If there is no texture, create one, capture a view snapshot and update texture.
+    /// Capturing a view snapshot and updating texture costs time. If the view dose NOT change in a period, set this value to false for performance.
     public var shouldUpdateTexture: Bool = true
     
-    public var textureSize: CGSize
+    /// Texture size in pixel. The default value is zero, and the texture size is the view pixel size (bounds.size * contentScaleFactor).
+    public var textureSize: CGSize = .zero
     
     /// Image consumers
     public var consumers: [BBMetalImageConsumer] {
@@ -25,6 +32,7 @@ public class BBMetalUISource {
     }
     private var _consumers: [BBMetalImageConsumer] = []
     
+    /// Metal texture for the view snapshot
     public var texture: MTLTexture? {
         lock.wait()
         let t = _texture
@@ -42,11 +50,10 @@ public class BBMetalUISource {
         return nil
     }
     
-    public init(view: UIView, textureSize: CGSize = .zero) {
-        self.view = view
-        self.textureSize = textureSize
-    }
+    public init(view: UIView) { self.view = view }
     
+    /// Transmit texture to image consumers
+    /// - Parameter sampleTime: sample time for this video frame
     public func transmitTexture(with sampleTime: CMTime) {
         lock.wait()
         
@@ -99,7 +106,7 @@ public class BBMetalUISource {
             context.translateBy(x: 0, y: renderSize.height)
             context.scaleBy(x: 1, y: -1)
             
-            if !view.drawHierarchy(in: view.bounds, afterScreenUpdates: false) {
+            if !view.drawHierarchy(in: CGRect(origin: .zero, size: renderSize), afterScreenUpdates: false) {
                 context.interpolationQuality = .default
                 view.layer.render(in: context)
             }
