@@ -23,6 +23,14 @@ public class BBMetalUISource {
     /// Texture size in pixel. The default value is zero, and the texture size is the view pixel size (bounds.size * contentScaleFactor).
     public var textureSize: CGSize = .zero
     
+    /// Valid texture size (nil if not valid)
+    public var renderPixelSize: CGSize? {
+        if textureSize.width >= 1 && textureSize.height >= 1 { return textureSize }
+        let size = CGSize(width: view.bounds.width * view.contentScaleFactor, height: view.bounds.height * view.contentScaleFactor)
+        if size.width >= 1 && size.height >= 1 { return size }
+        return nil
+    }
+    
     /// Image consumers
     public var consumers: [BBMetalImageConsumer] {
         lock.wait()
@@ -42,13 +50,6 @@ public class BBMetalUISource {
     private var _texture: MTLTexture?
     
     private let lock = DispatchSemaphore(value: 1)
-    
-    private var renderPixelSize: CGSize? {
-        if textureSize.width >= 1 && textureSize.height >= 1 { return textureSize }
-        let size = CGSize(width: view.bounds.width * view.contentScaleFactor, height: view.bounds.height * view.contentScaleFactor)
-        if size.width >= 1 && size.height >= 1 { return size }
-        return nil
-    }
     
     public init(view: UIView) { self.view = view }
     

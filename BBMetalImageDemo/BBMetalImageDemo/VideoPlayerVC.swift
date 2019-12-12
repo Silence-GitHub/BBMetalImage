@@ -11,11 +11,13 @@ import AVFoundation
 
 class VideoPlayerVC: UIViewController {
     private let url: URL
+    private let videoGravity: AVLayerVideoGravity
     
     private var player: AVPlayer!
     
-    init(url: URL) {
+    init(url: URL, videoGravity: AVLayerVideoGravity = .resizeAspectFill) {
         self.url = url
+        self.videoGravity = videoGravity
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -31,7 +33,7 @@ class VideoPlayerVC: UIViewController {
         player = AVPlayer(url: url)
         let layer = AVPlayerLayer(player: player)
         layer.frame = CGRect(x: 10, y: 100, width: view.bounds.width - 20, height: view.bounds.height - 200)
-        layer.videoGravity = .resizeAspectFill
+        layer.videoGravity = videoGravity
         view.layer.addSublayer(layer)
     }
     
