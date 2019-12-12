@@ -12,7 +12,7 @@ import BBMetalImage
 
 class RecordUIVC: UIViewController {
     private var animationView: UIView!
-    private var icon: UIImageView!
+    private var icon: UILabel!
     
     private var displayLink: CADisplayLink!
     private var stepX: CGFloat = 1
@@ -27,10 +27,14 @@ class RecordUIVC: UIViewController {
         
         animationView = UIView(frame: CGRect(x: 10, y: 100, width: view.bounds.width - 20, height: 100))
         animationView.backgroundColor = .blue
+        animationView.contentScaleFactor = UIScreen.main.scale
         view.addSubview(animationView)
         
-        icon = UIImageView(frame: CGRect(x: 0, y: 25, width: 50, height: 50))
+        icon = UILabel(frame: CGRect(x: 0, y: 25, width: 50, height: 50))
         icon.backgroundColor = .red
+        icon.font = .systemFont(ofSize: 20)
+        icon.textAlignment = .center
+        icon.text = "ABC"
         animationView.addSubview(icon)
         
         displayLink = CADisplayLink(target: self, selector: #selector(refreshDisplayLink(_:)))

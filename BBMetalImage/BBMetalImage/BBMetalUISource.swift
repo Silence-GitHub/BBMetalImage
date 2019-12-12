@@ -108,6 +108,7 @@ public class BBMetalUISource {
             
             if !view.drawHierarchy(in: CGRect(origin: .zero, size: renderSize), afterScreenUpdates: false) {
                 context.interpolationQuality = .default
+                context.scaleBy(x: renderSize.width / view.bounds.width, y: renderSize.height / view.bounds.height)
                 view.layer.render(in: context)
             }
             
