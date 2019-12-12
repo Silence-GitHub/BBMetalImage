@@ -49,22 +49,24 @@ class RecordUIVC: UIViewController {
         view.addSubview(metalView)
         
         uiSource = BBMetalUISource(view: animationView)
-        uiSource.add(consumer: metalView)
+        let filter = BBMetalHueFilter(hue: 45)
+        uiSource.add(consumer: filter)
+            .add(consumer: metalView)
         
         filePath = NSTemporaryDirectory() + "test.mp4"
         let outputUrl = URL(fileURLWithPath: filePath)
         let frameSize = uiSource.renderPixelSize!
         videoWriter = BBMetalVideoWriter(url: outputUrl, frameSize: BBMetalIntSize(width: Int(frameSize.width), height: Int(frameSize.height)))
-        uiSource.add(consumer: videoWriter)
+        filter.add(consumer: videoWriter)
         
         frame.origin.y = frame.maxY + 10
         frame.size.height = 50
-        let button = UIButton(frame: frame)
-        button.backgroundColor = .blue
-        button.setTitle("Start recording", for: .normal)
-        button.setTitle("Finish recording", for: .selected)
-        button.addTarget(self, action: #selector(clickRecordButton(_:)), for: .touchUpInside)
-        view.addSubview(button)
+        let recordButton = UIButton(frame: frame)
+        recordButton.backgroundColor = .blue
+        recordButton.setTitle("Start recording", for: .normal)
+        recordButton.setTitle("Finish recording", for: .selected)
+        recordButton.addTarget(self, action: #selector(clickRecordButton(_:)), for: .touchUpInside)
+        view.addSubview(recordButton)
         
         frame.origin.y = frame.maxY + 10
         playButton = UIButton(frame: frame)
