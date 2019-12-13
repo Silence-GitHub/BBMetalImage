@@ -101,7 +101,7 @@ func setup() {
 
 func finishRecording() {
     videoWriter.finish {
-         // Do something after recording the video file
+        // Do something after recording the video file
     }
 }
 ```
@@ -194,7 +194,7 @@ func setup() {
 // Set up image source
 let imageSource = BBMetalStaticImageSource(image: image)
 
-// Setup 3 filters to process image
+// Set up 3 filters to process image
 let contrastFilter = BBMetalContrastFilter(contrast: 3)
 let lookupFilter = BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
 let sharpenFilter = BBMetalSharpenFilter(sharpeness: 1)
@@ -223,7 +223,7 @@ func process() {
     // Set up image source
     imageSource = BBMetalStaticImageSource(image: image)
     
-    // Setup 3 filters to process image
+    // Set up 3 filters to process image
     let contrastFilter = BBMetalContrastFilter(contrast: 3)
     let lookupFilter = BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
     let sharpenFilter = BBMetalSharpenFilter(sharpeness: 1)
@@ -245,6 +245,53 @@ func process() {
     
     // Start processing
     imageSource.transmitTexture()
+}
+```
+
+#### Record a view animation
+
+Use `BBMetalUISource` to capture `UIView` snapshot and transmit texture.
+
+```swift
+// Hold UI source and video writer
+var uiSource: BBMetalUISource!
+var videoWriter: BBMetalVideoWriter!
+
+func setup() {
+    // Set up UI source with a view
+    uiSource = BBMetalUISource(view: animationView)
+    
+    // Set up filter
+    let filter = BBMetalContrastFilter(contrast: 3)
+    
+    // Set up video writer
+    let filePath = NSTemporaryDirectory() + "test.mp4"
+    let outputUrl = URL(fileURLWithPath: filePath)
+    let frameSize = uiSource.renderPixelSize!
+    videoWriter = BBMetalVideoWriter(url: outputUrl, frameSize: BBMetalIntSize(width: Int(frameSize.width), height: Int(frameSize.height)))
+    
+    // Set up filter chain
+    uiSource.add(consumer: filter)
+        .add(consumer: videoWriter)
+    
+    // Start recording
+    videoWriter.start()
+}
+
+@objc func refreshDisplayLink(_ link: CADisplayLink) {
+    // Update UI
+    // ...
+    
+    // Transmit texture and video frame sample time
+    // Repeat this step for each video frame
+    // If `CADisplayLink` is used for the view animation, repeat this step in the target selector
+    uiSource.transmitTexture(with: sampleTime)
+}
+
+func finishRecording() {
+    videoWriter.finish {
+        // Do something after recording the video file
+    }
 }
 ```
 
