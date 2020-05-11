@@ -6,6 +6,9 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+import simd
+
 /// Transforms the colors of an image by applying a matrix to them
 public class BBMetalColorMatrixFilter: BBMetalBaseFilter {
     /// A 4x4 matrix used to transform each color in an image

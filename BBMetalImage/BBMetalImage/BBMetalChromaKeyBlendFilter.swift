@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Selectively replaces a color in the first image with the second image
 public class BBMetalChromaKeyBlendFilter: BBMetalBaseFilter {
     /// How close a color match needs to exist to the target color to be replaced (default of 0.4)

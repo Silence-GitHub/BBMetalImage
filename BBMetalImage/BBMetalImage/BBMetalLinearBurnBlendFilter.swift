@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Applies a linear burn blend of two images
 public class BBMetalLinearBurnBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "linearBurnBlendKernel") }

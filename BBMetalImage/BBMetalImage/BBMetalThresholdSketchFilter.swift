@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Same as the sketch filter, only the edges are thresholded instead of being grayscale
 public class BBMetalThresholdSketchFilter: BBMetalBaseFilter {
     /// Adjusts the dynamic range of the filter. Higher values lead to stronger edges, but can saturate the intensity colorspace. Default is 1.0

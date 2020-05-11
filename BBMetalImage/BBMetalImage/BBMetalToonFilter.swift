@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// This uses Sobel edge detection to place a black border around objects, and then it quantizes the colors present in the image to give a cartoon-like quality to the image
 public class BBMetalToonFilter: BBMetalBaseFilter {
     /// The sensitivity of the edge detection, with lower values being more sensitive. Ranges from 0.0 to 1.0, with 0.2 as the default

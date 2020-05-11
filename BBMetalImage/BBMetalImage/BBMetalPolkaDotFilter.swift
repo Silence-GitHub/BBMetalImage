@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Breaks an image up into colored dots within a regular grid
 public class BBMetalPolkaDotFilter: BBMetalBaseFilter {
     /// How large the dots are, as a fraction of the width and height of the image (0.0 ~ 1.0, default 0.05)

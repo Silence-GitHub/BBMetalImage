@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Applies a directional motion blur to an image
 public class BBMetalMotionBlurFilter: BBMetalBaseFilter {
     /// A multiplier for the blur size, ranging from 0.0 on up, with a default of 0.0

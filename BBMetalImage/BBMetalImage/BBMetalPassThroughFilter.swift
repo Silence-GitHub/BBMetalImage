@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Pass through filter passes the same texture from image source to image consumer. Use pass through filter to setup the filter chain for custom filter group.
 public class BBMetalPassThroughFilter: BBMetalBaseFilter {
     /// Whether to create a new texture. False by default for performance.

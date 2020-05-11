@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 private func convertTemperature(_ temperature: Float) -> Float {
     return temperature < 5000 ? 0.0004 * (temperature - 5000) : 0.00006 * (temperature - 5000)
 }

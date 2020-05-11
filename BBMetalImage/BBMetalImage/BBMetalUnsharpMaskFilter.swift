@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Applies an unsharp mask
 public class BBMetalUnsharpMaskFilter: BBMetalBaseFilterGroup {
     /// The standard deviation of the underlying gaussian blur filter. The default is 4.0

@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Applies a difference blend of two images
 public class BBMetalDifferenceBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "differenceBlendKernel") }

@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Crops image to the specific rect
 public class BBMetalCropFilter: BBMetalBaseFilter {
     /// A rectangular area to crop out of the image, normalized to coordinates from 0.0 ~ 1.0. The (0.0, 0.0) position is in the upper left of the image

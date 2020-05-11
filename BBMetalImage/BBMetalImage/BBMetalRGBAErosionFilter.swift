@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Find the minimum value of each color channel in the range of radius, and set the minimum value to the current pixel.
 public class BBMetalRGBAErosionFilter: BBMetalBaseFilterGroup {
     /// Radius in pixel

@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Applies a pixellation effect on an image
 public class BBMetalPixellateFilter: BBMetalBaseFilter {
     /// How large the pixels are, as a fraction of the width of the image (0.0 ~ 1.0, default 0.05)

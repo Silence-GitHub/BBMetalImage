@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Blends two images by taking the minimum value of each color component between the images
 public class BBMetalDarkenBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "darkenBlendKernel") }

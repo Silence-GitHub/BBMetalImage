@@ -6,6 +6,9 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+import UIKit
+
 public struct BBMetalWeakImageSource {
     public weak var source: BBMetalImageSource?
     public var texture: MTLTexture?

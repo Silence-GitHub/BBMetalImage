@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 public class BBMetalLookupFilter: BBMetalBaseFilter {
     public var lookupTable: MTLTexture
     public var intensity: Float

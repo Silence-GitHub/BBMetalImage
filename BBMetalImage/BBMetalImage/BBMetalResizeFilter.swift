@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Resizes image to the specific size. The image will be scaled
 public class BBMetalResizeFilter: BBMetalBaseFilter {
     /// Size to resize, normalized to coordinates from 0.0 ~ 1.0

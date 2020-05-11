@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Converts the image to a single-color version, based on the luminance of each pixel
 public class BBMetalMonochromeFilter: BBMetalBaseFilter {
     /// The color to use as the basis for the effect, with red as the default

@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// This reduces the color dynamic range into the number of steps specified, leading to a cartoon-like simple shading of the image
 public class BBMetalPosterizeFilter: BBMetalBaseFilter {
     /// The number of color levels to reduce the image space to. This ranges from 1 to 256, with a default of 10

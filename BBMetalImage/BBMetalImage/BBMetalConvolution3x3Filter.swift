@@ -6,6 +6,9 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+import simd
+
 public class BBMetalConvolution3x3Filter: BBMetalBaseFilter {
     public var convolution: matrix_float3x3
     

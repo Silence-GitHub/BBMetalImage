@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Applies an additive blend of two images
 public class BBMetalAddBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "addBlendKernel") }

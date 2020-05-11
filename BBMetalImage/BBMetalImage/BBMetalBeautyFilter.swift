@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 public class BBMetalBeautyFilter: BBMetalBaseFilterGroup {
     public var distanceNormalizationFactor: Float {
         get { return blurFilter.distanceNormalizationFactor }

@@ -6,6 +6,9 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+import CoreGraphics
+
 /// A singleton class containing shared resources
 public class BBMetalDevice {
     public static let shared: BBMetalDevice = BBMetalDevice()

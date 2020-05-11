@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Adjusts the individual RGBA channels of an image
 public class BBMetalRGBAFilter: BBMetalBaseFilter {
     /// Normalized values by which each color channel is multiplied. The range is from 0.0 up, with 1.0 as the default.

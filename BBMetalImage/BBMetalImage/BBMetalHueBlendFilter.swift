@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Applies a hue blend of two images
 public class BBMetalHueBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "hueBlendKernel") }

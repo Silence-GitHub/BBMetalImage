@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 private func convertHue(_ hue: Float) -> Float {
     return fmodf(hue, 360) * Float.pi / 180
 }

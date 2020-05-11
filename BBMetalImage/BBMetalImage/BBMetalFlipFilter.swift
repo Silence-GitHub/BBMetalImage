@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Flips image horizontally and/or vertically
 public class BBMetalFlipFilter: BBMetalBaseFilter {
     /// Whether to flip horizontally or not

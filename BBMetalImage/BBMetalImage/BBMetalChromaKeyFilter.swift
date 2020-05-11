@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// For a given color in the image, sets the alpha channel to 0
 public class BBMetalChromaKeyFilter: BBMetalBaseFilter {
     /// How close a color match needs to exist to the target color to be replaced (default of 0.4)

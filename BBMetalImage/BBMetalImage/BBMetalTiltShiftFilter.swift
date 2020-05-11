@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// A simulated tilt shift lens effect
 public class BBMetalTiltShiftFilter: BBMetalBaseFilterGroup {
     /// The standard deviation of the underlying gaussian blur filter. The default is 7.0

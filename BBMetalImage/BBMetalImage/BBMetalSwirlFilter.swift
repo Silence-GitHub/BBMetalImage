@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Creates a swirl distortion on the image
 public class BBMetalSwirlFilter: BBMetalBaseFilter {
     /// The center of the image (in normalized coordinates from 0 ~ 1.0) about which to twist, with a default of (0.5, 0.5)

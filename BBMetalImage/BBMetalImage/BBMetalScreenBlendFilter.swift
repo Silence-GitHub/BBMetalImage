@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Applies a screen blend of two images
 public class BBMetalScreenBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "screenBlendKernel") }

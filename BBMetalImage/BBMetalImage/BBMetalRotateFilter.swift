@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Rotates an image
 public class BBMetalRotateFilter: BBMetalBaseFilter {
     /// Angle (degree) to rotate

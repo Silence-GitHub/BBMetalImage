@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Sobel edge detection, with edges highlighted in white
 public class BBMetalSobelEdgeDetectionFilter: BBMetalBaseFilter {
     /// Adjusts the dynamic range of the filter. Higher values lead to stronger edges, but can saturate the intensity colorspace. Default is 1.0

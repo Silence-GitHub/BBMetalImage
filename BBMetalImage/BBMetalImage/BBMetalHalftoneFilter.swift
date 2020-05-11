@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Applies a halftone effect to an image, like news print
 public class BBMetalHalftoneFilter: BBMetalBaseFilter {
     /// How large the halftone dots are, as a fraction of the width of the image (0.0 ~ 1.0, default 0.01)

@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Adjusts the brightness of the image
 public class BBMetalBrightnessFilter: BBMetalBaseFilter {
     /// The adjusted brightness (-1.0 ~ 1.0, with 0.0 as the default)

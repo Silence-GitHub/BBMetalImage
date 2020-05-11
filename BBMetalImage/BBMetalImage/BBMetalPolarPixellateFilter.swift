@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Applies a pixellation effect on an image based on polar coordinates
 public class BBMetalPolarPixellateFilter: BBMetalBaseFilter {
     /// The fractional pixel size, split into width and height components. The default is (0.05, 0.05)

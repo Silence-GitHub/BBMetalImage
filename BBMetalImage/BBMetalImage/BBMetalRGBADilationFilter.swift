@@ -6,6 +6,8 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import Metal
+
 /// Find the maximum value of each color channel in the range of radius, and set the maximum value to the current pixel.
 public class BBMetalRGBADilationFilter: BBMetalBaseFilterGroup {
     /// Radius in pixel
