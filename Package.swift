@@ -13,7 +13,7 @@ let package = Package(
         .target(
             name: "BBMetalImage",
             path: "BBMetalImage/BBMetalImage",
-            exclude: ["BBMetalImage/BBMetalImage/MultipleVideoSource.swift"]
+            exclude: ["MultipleVideoSource.swift"]
         )
     ]
 )
