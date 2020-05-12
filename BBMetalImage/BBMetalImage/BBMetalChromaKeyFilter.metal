@@ -30,6 +30,6 @@ kernel void chromaKeyKernel(texture2d<half, access::write> outputTexture [[textu
     
     const half blendValue = smoothstep(half(*thresholdSensitivity), half(*thresholdSensitivity + *smoothing), distance(half2(Cr, Cb), half2(maskCr, maskCb)));
     
-    const half4 outColor(inColor.rgb, inColor.a * blendValue);
+    const half4 outColor(inColor * blendValue);
     outputTexture.write(outColor, gid);
 }
