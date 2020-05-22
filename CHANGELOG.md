@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.1.1](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.1) - 2020-05-11
+
+### Fix
+
+- Fix chroma key filter shader bug
+
 ## [1.1.0](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.0) - 2019-12-12
 
 ### Add
