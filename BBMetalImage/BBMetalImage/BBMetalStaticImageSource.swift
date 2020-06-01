@@ -155,19 +155,28 @@ public extension Data {
 
 public extension MTLTexture {
     var bb_cgimage: CGImage? {
+        // Data -> CGContext -> CGImage produces empty image on Xcode 11.5 release mode
+        // Create CGImage with another way
+        // Data -> CFData -> CGDataProvider -> CGImage
         let bytesPerPixel: Int = 4
         let bytesPerRow: Int = width * bytesPerPixel
         var data = [UInt8](repeating: 0, count: Int(width * height * bytesPerPixel))
         getBytes(&data, bytesPerRow: bytesPerRow, from: MTLRegionMake2D(0, 0, width, height), mipmapLevel: 0)
         let bitmapInfo: UInt32 = CGImageAlphaInfo.premultipliedLast.rawValue
-        if let context = CGContext(data: &data,
-                                   width: width,
-                                   height: height,
-                                   bitsPerComponent: 8,
-                                   bytesPerRow: bytesPerRow,
-                                   space: BBMetalDevice.sharedColorSpace,
-                                   bitmapInfo: bitmapInfo) {
-            return context.makeImage()
+        if let cfdata = CFDataCreate(kCFAllocatorDefault, &data, bytesPerRow * height),
+            let dataProvider = CGDataProvider(data: cfdata),
+            let cgimage = CGImage(width: width, height: height,
+                                  bitsPerComponent: 8,
+                                  bitsPerPixel: 32,
+                                  bytesPerRow: bytesPerRow,
+                                  space: BBMetalDevice.sharedColorSpace,
+                                  bitmapInfo: CGBitmapInfo(rawValue: bitmapInfo),
+                                  provider: dataProvider,
+                                  decode: nil,
+                                  shouldInterpolate: true,
+                                  intent: .defaultIntent)
+        {
+            return cgimage
         }
         return nil
     }
