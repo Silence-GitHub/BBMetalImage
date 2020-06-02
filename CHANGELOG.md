@@ -1,6 +1,6 @@
 # Change Log
 
-##[1.1.2](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.2) - 2020-06-01
+## [1.1.2](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.2) - 2020-06-01
 
 ### Fix
 
