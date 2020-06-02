@@ -1,5 +1,11 @@
 # Change Log
 
+##[1.1.2](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.2) - 2020-06-01
+
+### Fix
+
+- Fix Xcode 11.5 release mode empty CGImage bug
+
 ## [1.1.1](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.1) - 2020-05-11
 
 ### Fix
