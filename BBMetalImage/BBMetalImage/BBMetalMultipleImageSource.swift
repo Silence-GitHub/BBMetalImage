@@ -24,7 +24,8 @@ public class BBMetalMultipleImageSource {
     private var imageDatas: [Data]?
     private var textures: [MTLTexture]?
     
-    private var sourceCount: Int
+    public let sourceCount: Int
+
     private let hasAllTextures: Bool
     private var textureCache: [Int: MTLTexture] = [:]
     
@@ -69,7 +70,7 @@ public class BBMetalMultipleImageSource {
     }
     
     /// Transmits texture to image consumers
-    public func transmitTexture(at index: Int, sampleTime: CMTime?) {
+    public func transmitTexture(at index: Int, sampleTime: CMTime? = nil) {
         lock.wait()
         guard let texture = texture(at: index) else {
             lock.signal()
