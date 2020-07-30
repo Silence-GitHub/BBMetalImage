@@ -6,12 +6,14 @@
 //  Copyright © 2019 Kaibo Lu. All rights reserved.
 //
 
+import CoreMedia
 import Metal
 import UIKit
 
 public struct BBMetalWeakImageSource {
     public weak var source: BBMetalImageSource?
     public var texture: MTLTexture?
+    public var sampleTime: CMTime?
     
     public init(source: BBMetalImageSource) { self.source = source }
 }
@@ -204,6 +206,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         for i in 0..<_sources.count {
             if _sources[i].source === source {
                 _sources[i].texture = texture.metalTexture
+                _sources[i].sampleTime = texture.sampleTime
                 foundSource = true
             } else if _sources[i].texture == nil {
                 if foundSource {
@@ -268,14 +271,23 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         commandBuffer.commit()
         if _runSynchronously { commandBuffer.waitUntilCompleted() }
         
+        // Find not nil sample time for video frame
         // Clear old input texture
-        for i in 0..<_sources.count { _sources[i].texture = nil }
+        var sampleTime: CMTime?
+        for i in 0..<_sources.count {
+            if sampleTime == nil && _sources[i].sampleTime != nil {
+                sampleTime = _sources[i].sampleTime
+            }
+            _sources[i].texture = nil
+            _sources[i].sampleTime = nil
+        }
         
         let consumers = _consumers
         lock.signal()
         
         // Transmit output texture to image consumers
         var output = texture
+        output.sampleTime = sampleTime
         output.metalTexture = _outputTexture!
         for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
     }

@@ -37,7 +37,7 @@ public protocol BBMetalTexture {
     /// Sample time of the metal texture.
     /// If the metal texture is used as static image, the sample time is nil.
     /// If the metal texture is used as video frame, the sample time should not be nil.
-    var sampleTime: CMTime? { get }
+    var sampleTime: CMTime? { get set }
     
     /// Camera position.
     /// Nil if unknown or image does not come from camera.
@@ -54,7 +54,7 @@ public protocol BBMetalAudioConsumer: AnyObject {
 
 struct BBMetalDefaultTexture: BBMetalTexture {
     var metalTexture: MTLTexture
-    let sampleTime: CMTime?
+    var sampleTime: CMTime?
     let cameraPosition: AVCaptureDevice.Position?
     let cvMetalTexture: CVMetalTexture? // Hold CVMetalTexture to prevent stuttering. https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
     
