@@ -59,6 +59,41 @@ public class BBMetalStaticImageSource {
         let output = BBMetalDefaultTexture(metalTexture: texture)
         for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
     }
+    
+    public func update(_ texture: MTLTexture) {
+        lock.wait()
+        reset()
+        _texture = texture
+        lock.signal()
+    }
+    
+    public func update(_ image: UIImage) {
+        lock.wait()
+        reset()
+        self.image = image
+        lock.signal()
+    }
+    
+    public func update(_ cgimage: CGImage) {
+        lock.wait()
+        reset()
+        self.cgimage = cgimage
+        lock.signal()
+    }
+    
+    public func update(_ imageData: Data) {
+        lock.wait()
+        reset()
+        self.imageData = imageData
+        lock.signal()
+    }
+    
+    private func reset() {
+        _texture = nil
+        image = nil
+        cgimage = nil
+        imageData = nil
+    }
 }
 
 extension BBMetalStaticImageSource: BBMetalImageSource {
