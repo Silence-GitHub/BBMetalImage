@@ -53,7 +53,7 @@ public class BBMetalUISource {
     
     public init(view: UIView) { self.view = view }
     
-    /// Transmit texture to image consumers
+    /// Transmits texture to image consumers
     /// - Parameter sampleTime: sample time for this video frame
     public func transmitTexture(with sampleTime: CMTime) {
         lock.wait()

@@ -9,6 +9,7 @@
 import CoreMedia
 import UIKit
 
+/// An image source providing multiple-image texture
 public class BBMetalMultipleImageSource {
     /// Image consumers
     public var consumers: [BBMetalImageConsumer] {
@@ -70,6 +71,9 @@ public class BBMetalMultipleImageSource {
     }
     
     /// Transmits texture to image consumers
+    /// - Parameters:
+    ///   - index: texture index
+    ///   - sampleTime: frame sample time, nil by default
     public func transmitTexture(at index: Int, sampleTime: CMTime? = nil) {
         lock.wait()
         guard let texture = texture(at: index) else {

@@ -46,7 +46,7 @@ public class BBMetalStaticImageSource {
     public init(imageData: Data) { self.imageData = imageData }
     public init(texture: MTLTexture) { _texture = texture }
     
-    /// Transmit texture to image consumers
+    /// Transmits texture to image consumers
     public func transmitTexture() {
         lock.wait()
         if _texture == nil { _texture = currentTexture }
