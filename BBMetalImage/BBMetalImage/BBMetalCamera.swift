@@ -46,7 +46,7 @@ public class BBMetalCamera: NSObject {
     private var _consumers: [BBMetalImageConsumer]
     
     /// A block to call before transmiting texture to image consumers
-    public var willTransmitTexture: ((MTLTexture) -> Void)? {
+    public var willTransmitTexture: ((MTLTexture, CMTime) -> Void)? {
         get {
             lock.wait()
             let w = _willTransmitTexture
@@ -59,7 +59,7 @@ public class BBMetalCamera: NSObject {
             lock.signal()
         }
     }
-    private var _willTransmitTexture: ((MTLTexture) -> Void)?
+    private var _willTransmitTexture: ((MTLTexture, CMTime) -> Void)?
     
     /// Camera position
     public var position: AVCaptureDevice.Position { return camera.position }
@@ -584,8 +584,8 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
             !consumers.isEmpty,
             let texture = texture(with: sampleBuffer) else { return }
         
-        willTransmit?(texture.metalTexture)
         let sampleTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        willTransmit?(texture.metalTexture, sampleTime)
         let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
                                            sampleTime: sampleTime,
                                            cameraPosition: cameraPosition,
