@@ -1,5 +1,17 @@
 # Change Log
 
+## [1.1.3](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.3) - 2020-08-03
+
+### Add
+
+- BBMetalMultipleImageSource
+- BBMetalStaticImageSource adds update texture functions
+- BBMetalCamera willTransmitTexture adds sample time
+
+### Fix
+
+- Video frame sample time nil bug
+
 ## [1.1.2](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.2) - 2020-06-01
 
 ### Fix
