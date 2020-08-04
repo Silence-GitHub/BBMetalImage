@@ -99,7 +99,7 @@ class MultipleImageBlendVC: UIViewController {
             let filter = BBMetalNormalBlendFilter()
             camera.add(consumer: filter).add(consumer: metalView)
             imageSource.add(consumer: filter).add(consumer: videoWriter)
-            camera.willTransmitTexture = { [weak self] texture in
+            camera.willTransmitTexture = { [weak self] _, _ in
                 guard let self = self else { return }
                 self.frameCount += 1
                 if self.frameCount == 30 {

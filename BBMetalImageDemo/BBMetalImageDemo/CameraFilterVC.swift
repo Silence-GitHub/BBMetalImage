@@ -99,7 +99,7 @@ class CameraFilterVC: UIViewController {
             camera.add(consumer: filter).add(consumer: metalView)
             filter.add(consumer: videoWriter)
             if let source = imageSource {
-                camera.willTransmitTexture = { [weak self] texture in
+                camera.willTransmitTexture = { [weak self] _, _ in
                     guard self != nil else { return }
                     source.transmitTexture()
                 }
