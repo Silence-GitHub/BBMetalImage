@@ -91,6 +91,10 @@ public class BBMetalCamera: NSObject {
         return d
     }
     
+    public var isTorshOn: Bool {
+        camera.torchMode == .on
+    }
+    
     private var capturedFrameCount: Int
     private var totalCaptureFrameTime: Double
     private let ignoreInitialFrameCount: Int
