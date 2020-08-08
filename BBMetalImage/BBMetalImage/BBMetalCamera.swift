@@ -436,6 +436,30 @@ public class BBMetalCamera: NSObject {
         return true
     }
     
+    /// Turn device torsh (on, off, auto)
+    ///
+    /// - Returns: true if succeed, or false if fail
+    @discardableResult
+    public func setCameraTorsh(mode: AVCaptureDevice.TorchMode) -> Bool {
+        guard camera.hasTorch, camera.torchMode != mode else {
+            return false
+        }
+        lock.wait()
+        defer {
+            lock.signal()
+        }
+        do {
+            try camera.lockForConfiguration()
+            defer {
+                camera.unlockForConfiguration()
+            }
+            camera.torchMode = mode
+        } catch {
+            print("Error for camera lockForConfiguration: \(error)")
+        }
+        return true
+    }
+    
     /// Sets camera frame rate
     ///
     /// - Parameter frameRate: camera frame rate
