@@ -369,7 +369,7 @@ public class BBMetalCamera: NSObject {
         return result
     }
     
-    func removeMetadataOutput() {
+    public func removeMetadataOutput() {
         lock.wait()
         
         if metadataOutput == nil {
