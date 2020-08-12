@@ -95,6 +95,10 @@ public class BBMetalCamera: NSObject {
     private var totalCaptureFrameTime: Double
     private let ignoreInitialFrameCount: Int
     
+    private var shouldAdjustSampleTime: Bool
+    private var lastVideoSampleTime: CMTime!
+    private var lastAudioSampleTime: CMTime!
+    
     private let lock: DispatchSemaphore
     
     private var session: AVCaptureSession!
@@ -215,6 +219,7 @@ public class BBMetalCamera: NSObject {
         capturedFrameCount = 0
         totalCaptureFrameTime = 0
         ignoreInitialFrameCount = 5
+        shouldAdjustSampleTime = false
         lock = DispatchSemaphore(value: 1)
         
         super.init()
@@ -505,6 +510,9 @@ public class BBMetalCamera: NSObject {
     public func stop() {
         lock.wait()
         session.stopRunning()
+        shouldAdjustSampleTime = false
+        lastVideoSampleTime = nil
+        lastAudioSampleTime = nil
         lock.signal()
     }
     
@@ -513,6 +521,27 @@ public class BBMetalCamera: NSObject {
         lock.wait()
         capturedFrameCount = 0
         totalCaptureFrameTime = 0
+        lock.signal()
+    }
+    
+    /// Adjusts video and audio sample time.
+    /// Switching camera position while recording leads to the video and audio out of sync.
+    /// Call this function if we allow the user to switch camera position while recording.
+    /// - Parameter from: start writting time of video writer. To get the time, see `start(startHandler:progress:)` function of `BBMetalVideoWriter`
+    public func adjustSampleTime(_ from: CMTime) {
+        lock.wait()
+        shouldAdjustSampleTime = true
+        lastVideoSampleTime = from
+        lastAudioSampleTime = nil // No valid audio sample time
+        lock.signal()
+    }
+    
+    /// Stops adjusting video and audio sample time
+    public func stopAdjustingSampleTime() {
+        lock.wait()
+        shouldAdjustSampleTime = false
+        lastVideoSampleTime = nil
+        lastAudioSampleTime = nil
         lock.signal()
     }
 }
@@ -563,6 +592,17 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
             lock.wait()
             let paused = _isPaused
             let currentAudioConsumer = _audioConsumer
+            
+            if shouldAdjustSampleTime {
+                var sampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
+                let duration = CMSampleBufferGetOutputDuration(sampleBuffer)
+                if lastAudioSampleTime != nil,
+                    CMTimeSubtract(sampleTime, lastAudioSampleTime).seconds > duration.seconds {
+                    sampleTime = CMTimeAdd(lastAudioSampleTime, duration)
+                    CMSampleBufferSetOutputPresentationTimeStamp(sampleBuffer, newValue: sampleTime)
+                }
+                lastAudioSampleTime = sampleTime
+            }
             lock.signal()
             if !paused,
                 let consumer = currentAudioConsumer {
@@ -578,13 +618,21 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         let willTransmit = _willTransmitTexture
         let cameraPosition = camera.position
         let startTime = _benchmark ? CACurrentMediaTime() : 0
+        
+        var sampleTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        if shouldAdjustSampleTime {
+            if lastVideoSampleTime != nil,
+                CMTimeSubtract(sampleTime, lastVideoSampleTime).seconds >= camera.activeVideoMaxFrameDuration.seconds * 2 {
+                sampleTime = CMTimeAdd(lastVideoSampleTime, camera.activeVideoMaxFrameDuration)
+            }
+            lastVideoSampleTime = sampleTime
+        }
         lock.signal()
         
         guard !paused,
             !consumers.isEmpty,
             let texture = texture(with: sampleBuffer) else { return }
         
-        let sampleTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         willTransmit?(texture.metalTexture, sampleTime)
         let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
                                            sampleTime: sampleTime,
