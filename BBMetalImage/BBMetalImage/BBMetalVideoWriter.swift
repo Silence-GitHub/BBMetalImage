@@ -8,6 +8,8 @@
 
 import AVFoundation
 
+public typealias BBMetalVideoWriterStart = (CMTime) -> Void
+
 public typealias BBMetalVideoWriterProgress = (BBMetalVideoWriterProgressType) -> Void
 
 public enum BBMetalVideoWriterProgressType {
@@ -72,6 +74,8 @@ public class BBMetalVideoWriter {
     
     private var progress: BBMetalVideoWriterProgress?
     
+    private var startHandler: BBMetalVideoWriterStart?
+    
     private let lock: DispatchSemaphore
     
     deinit {
@@ -112,10 +116,14 @@ public class BBMetalVideoWriter {
     }
     
     /// Starts receiving Metal texture and writing video file
-    public func start(progress: BBMetalVideoWriterProgress? = nil) {
+    /// - Parameters:
+    ///   - startHandler: a closure to call after starting writting
+    ///   - progress: a closure to call after writting a video frame or an audio buffer
+    public func start(startHandler: BBMetalVideoWriterStart? = nil, progress: BBMetalVideoWriterProgress? = nil) {
         lock.wait()
         defer { lock.signal() }
         
+        self.startHandler = startHandler
         self.progress = progress
         
         if writer == nil {
@@ -230,6 +238,7 @@ public class BBMetalVideoWriter {
         videoPixelBufferInput = nil
         videoPixelBuffer = nil
         audioInput = nil
+        startHandler = nil
         progress = nil
     }
     
@@ -248,11 +257,17 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
     public func newTextureAvailable(_ texture: BBMetalTexture, from source: BBMetalImageSource) {
         lock.wait()
         
+        let startHandler = self.startHandler
         let progress = self.progress
         var result: Bool?
         
         defer {
             lock.signal()
+            
+            if let startHandler = startHandler,
+                let sampleTime = texture.sampleTime {
+                startHandler(sampleTime)
+            }
             
             if let progress = progress,
                 let result = result,
@@ -269,6 +284,7 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
         
         if videoPixelBuffer == nil {
             // First frame
+            self.startHandler = nil // Set start handler to nil to ensure it is called only once
             writer.startSession(atSourceTime: sampleTime)
             guard let pool = videoPixelBufferInput.pixelBufferPool,
                 CVPixelBufferPoolCreatePixelBuffer(nil, pool, &videoPixelBuffer) == kCVReturnSuccess else {
