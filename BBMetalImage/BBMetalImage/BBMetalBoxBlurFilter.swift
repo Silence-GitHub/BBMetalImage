@@ -11,15 +11,18 @@ import MetalPerformanceShaders
 /// A filter that convolves an image with a given kernel of odd width and height
 public class BBMetalBoxBlurFilter: BBMetalBaseFilter {
     /// The width of the kernel. Must be an odd number
-    public let kernelWidth: Int
+    public var kernelWidth: Int { didSet { _kernel = nil } }
     /// The height of the kernel. Must be an odd number
-    public let kernelHeight: Int
+    public var kernelHeight: Int { didSet { _kernel = nil } }
     
-    private lazy var kernel: MPSImageBox = {
+    private var kernel: MPSImageBox {
+        if let k = _kernel { return k }
         let k = MPSImageBox(device: BBMetalDevice.sharedDevice, kernelWidth: kernelWidth, kernelHeight: kernelHeight)
         k.edgeMode = .clamp
+        _kernel = k
         return k
-    }()
+    }
+    private var _kernel: MPSImageBox!
     
     public init(kernelWidth: Int = 1, kernelHeight: Int = 1) {
         self.kernelWidth = kernelWidth
