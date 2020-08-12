@@ -593,6 +593,7 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
             let paused = _isPaused
             let currentAudioConsumer = _audioConsumer
             
+            // Adjust sample time for switching camera position while recording
             if shouldAdjustSampleTime {
                 var sampleTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
                 let duration = CMSampleBufferGetOutputDuration(sampleBuffer)
@@ -619,6 +620,8 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         let cameraPosition = camera.position
         let startTime = _benchmark ? CACurrentMediaTime() : 0
         
+        // Adjust sample time for switching camera position while recording
+        // https://stackoverflow.com/questions/40494841/seamless-audio-recording-while-flipping-camera-using-avcapturesession-avasset/56572852#56572852
         var sampleTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         if shouldAdjustSampleTime {
             if lastVideoSampleTime != nil,
