@@ -90,6 +90,12 @@ class CameraFilterVC: UIViewController {
     
     @objc private func tapMetalView(_ tap: UITapGestureRecognizer) {
         camera.switchCameraPosition()
+        
+        if camera.position == .front {
+            metalView.transform = CGAffineTransform(scaleX: -1, y: 1)
+        } else {
+            metalView.transform = CGAffineTransform(scaleX: 1, y: 1)
+        }
     }
     
     @objc private func clickFilterButton(_ button: UIButton) {
