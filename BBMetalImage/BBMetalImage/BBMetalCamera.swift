@@ -438,6 +438,12 @@ public class BBMetalCamera: NSObject {
             connection.isVideoOrientationSupported else { return false }
         connection.videoOrientation = .portrait
         
+        if position == .front && connection.isVideoMirroringSupported {
+            connection.isVideoMirrored = true
+        } else {
+            connection.isVideoMirrored = false
+        }
+        
         return true
     }
     
