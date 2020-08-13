@@ -1,5 +1,18 @@
 # Change Log
 
+## [1.1.4](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.4) - 2020-08-12
+
+### Add
+
+- BBMetalVideoWriter adds start handler
+- BBMetalCamera adds adjustSampleTime(_:) function
+
+### Change
+
+- BBMetalCamera makes removeMetadataOutput function public
+- BBMetalGaussianBlurFilter can set sigma value
+- BBMetalBoxBlurFilter can set kernel width and height
+
 ## [1.1.3](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.3) - 2020-08-03
 
 ### Add
