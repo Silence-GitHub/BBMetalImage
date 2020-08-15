@@ -209,6 +209,12 @@ public class BBMetalCamera: NSObject {
     
     private var textureCache: CVMetalTextureCache!
     
+    /// Creates a camera
+    /// - Parameters:
+    ///   - sessionPreset: a constant value indicating the quality level or bit rate of the output
+    ///   - position: camera position
+    ///   - multitpleSessions: whether to use independent video session and audio session (false by default). Switching camera position while recording leads to the video and audio out of sync.
+    /// Set true if we allow the user to switch camera position while recording.
     public init?(sessionPreset: AVCaptureSession.Preset = .high, position: AVCaptureDevice.Position = .back, multitpleSessions: Bool = false) {
         _consumers = []
         _canTakePhoto = false
