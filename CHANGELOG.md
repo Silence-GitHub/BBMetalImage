@@ -1,5 +1,12 @@
 # Change Log
 
+## [1.1.5](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.5) - 2020-08-14
+
+### Change
+
+- BBMetalCamera adds mutitpleSessions property, uses indepent audio session, and remo
+ves adjustSampleTime function to fix video and audio out of sync bug if switching camera position while recording
+
 ## [1.1.4](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.4) - 2020-08-12
 
 ### Add
