@@ -34,7 +34,7 @@ kernel void pinchKernel(texture2d<half, access::write> outputTexture [[texture(0
         textureCoordinateToUse = textureCoordinateToUse * percent + center;
     }
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const half4 outColor = inputTexture.sample(quadSampler, textureCoordinateToUse);
     outputTexture.write(outColor, gid);
 }
