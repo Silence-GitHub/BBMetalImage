@@ -80,6 +80,7 @@ enum FilterType {
     case vignette
     case kuwahara
     case swirl
+    case bulge
     case convolution3x3
     case emboss
     case sobelEdgeDetection
