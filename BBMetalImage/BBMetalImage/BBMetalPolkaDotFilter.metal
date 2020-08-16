@@ -18,7 +18,7 @@ kernel void polkaDotKernel(texture2d<half, access::write> outputTexture [[textur
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const float fractionalWidthOfPixel = float(*fractionalWidth);
     const float aspectRatio = float(inputTexture.get_height()) / float(inputTexture.get_width());
     const float2 sampleDivisor = float2(fractionalWidthOfPixel, fractionalWidthOfPixel / aspectRatio);

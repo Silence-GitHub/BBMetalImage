@@ -41,7 +41,7 @@ kernel void lookupKernel(texture2d<half, access::write> outputTexture [[texture(
     texPos2.x = A * quad2.x + B + C * base.r;
     texPos2.y = A * quad2.y + B + C * base.g;
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const half4 newColor1 = lookupTexture.sample(quadSampler, texPos1);
     const half4 newColor2 = lookupTexture.sample(quadSampler, texPos2);
     

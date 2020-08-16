@@ -33,7 +33,7 @@ kernel void motionBlurKernel(texture2d<half, access::write> outputTexture [[text
     const float2 threeStepsForwardTextureCoordinate = textureCoordinate.xy + 3.0 * directionalTexelStep;
     const float2 fourStepsForwardTextureCoordinate = textureCoordinate.xy + 4.0 * directionalTexelStep;
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     half4 color = inputTexture.sample(quadSampler, textureCoordinate) * 0.18;
     
     color += inputTexture.sample(quadSampler, oneStepBackTextureCoordinate) * 0.15;

@@ -31,7 +31,7 @@ kernel void convolution3x3Kernel(texture2d<half, access::write> outputTexture [[
     const float2 bottomLeftCoordinate = float2((x - 1) / width, (y + 1) / height);
     const float2 bottomRightCoordinate = float2((x + 1) / width, (y + 1) / height);
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     
     const half4 centerColor = inputTexture.sample(quadSampler, centerCoordinate);
     

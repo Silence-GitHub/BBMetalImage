@@ -17,7 +17,7 @@ kernel void rgbaDilationKernel(texture2d<half, access::write> outputTexture [[te
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     half4 maxValue = half4(0);
     
     int radius = abs(*pixelRadius);

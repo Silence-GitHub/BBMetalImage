@@ -44,7 +44,7 @@ kernel void bilateralBlurKernel(texture2d<half, access::write> outputTexture [[t
     half distanceFromCentralColor;
     half gaussianWeight;
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const float distanceNormalizationFactor = float(*distanceNormalizationFactorPointer);
     
     centralColor = inputTexture.sample(quadSampler, blurCoordinates[4]);

@@ -31,7 +31,7 @@ kernel void toonKernel(texture2d<half, access::write> outputTexture [[texture(0)
     const float2 bottomLeftCoordinate = float2((x - 1) / width, (y + 1) / height);
     const float2 bottomRightCoordinate = float2((x + 1) / width, (y + 1) / height);
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     
     const half leftIntensity = inputTexture.sample(quadSampler, leftCoordinate).r;
     const half rightIntensity = inputTexture.sample(quadSampler, rightCoordinate).r;

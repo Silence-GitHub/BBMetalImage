@@ -38,7 +38,7 @@ kernel void polarPixellateKernel(texture2d<half, access::write> outputTexture [[
     
     const float2 textureCoordinateToUse = normCoord / 2.0 + 0.5;
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const half4 outColor = inputTexture.sample(quadSampler, textureCoordinateToUse);
     outputTexture.write(outColor, gid);
 }

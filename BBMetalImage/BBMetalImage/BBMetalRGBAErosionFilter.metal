@@ -17,7 +17,7 @@ kernel void rgbaErosionKernel(texture2d<half, access::write> outputTexture [[tex
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     half4 minValue = half4(1);
     
     int radius = abs(*pixelRadius);

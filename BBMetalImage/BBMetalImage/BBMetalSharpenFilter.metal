@@ -28,7 +28,7 @@ kernel void sharpenKernel(texture2d<half, access::write> outputTexture [[texture
     
     const half4 inColor = inputTexture.read(gid);
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const half4 leftColor = inputTexture.sample(quadSampler, leftCoordinate);
     const half4 rightColor = inputTexture.sample(quadSampler, rightCoordinate);
     const half4 topColor = inputTexture.sample(quadSampler, topCoordinate);

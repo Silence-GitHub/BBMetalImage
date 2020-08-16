@@ -30,6 +30,6 @@ vertex RasterizerData vertexPassThrough(uint vertexId [[vertex_id]],
 fragment half4 fragmentPassThrough(RasterizerData in [[stage_in]],
                                    texture2d<half> texture [[texture(0)]]) {
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     return texture.sample(quadSampler, in.textureCoordinate);
 }

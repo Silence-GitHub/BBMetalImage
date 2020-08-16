@@ -16,7 +16,7 @@ kernel void resizeKernel(texture2d<half, access::write> outputTexture [[texture(
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const half4 outColor = inputTexture.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     outputTexture.write(outColor, gid);
 }

@@ -27,7 +27,7 @@ kernel void halftoneKernel(texture2d<half, access::write> outputTexture [[textur
     const float2 adjustedSamplePos = float2(samplePos.x, (samplePos.y * aspectRatio + 0.5 - 0.5 * aspectRatio));
     const float distanceFromSamplePoint = distance(adjustedSamplePos, textureCoordinateToUse);
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const half3 sampledColor = inputTexture.sample(quadSampler, samplePos).rgb;
     const float dotScaling = 1.0 - dot(float3(sampledColor), float3(kLuminanceWeighting));
     

@@ -26,7 +26,7 @@ kernel void kuwaharaKernel(texture2d<half, access::write> outputTexture [[textur
     float3 s0 = float3(0.0); float3 s1 = float3(0.0); float3 s2 = float3(0.0); float3 s3 = float3(0.0);
     float3 c;
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     
     for (j = -radius; j <= 0; ++j)  {
         for (i = -radius; i <= 0; ++i)  {

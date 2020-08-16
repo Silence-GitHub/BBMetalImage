@@ -17,7 +17,7 @@ kernel void darkenBlendKernel(texture2d<half, access::write> outputTexture [[tex
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
     const half4 base = inputTexture.read(gid);
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const half4 overlay = inputTexture2.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     
     const half4 outColor(min(overlay.rgb * base.a, base.rgb * overlay.a) + overlay.rgb * (1.0h - base.a) + base.rgb * (1.0h - overlay.a), 1.0h);

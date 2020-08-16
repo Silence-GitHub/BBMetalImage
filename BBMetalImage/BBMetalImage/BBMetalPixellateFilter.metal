@@ -21,7 +21,7 @@ kernel void pixellateKernel(texture2d<half, access::write> outputTexture [[textu
     const float2 textureCoordinate = float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height());
     const float2 samplePos = textureCoordinate - mod(textureCoordinate, sampleDivisor) + float2(0.5) * sampleDivisor;
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const half4 outColor = inputTexture.sample(quadSampler, samplePos);
     outputTexture.write(outColor, gid);
 }

@@ -17,7 +17,7 @@ kernel void dilationKernel(texture2d<half, access::write> outputTexture [[textur
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     half maxValue = 0;
     
     int radius = abs(*pixelRadius);

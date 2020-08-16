@@ -18,7 +18,7 @@ kernel void normalBlendKernel(texture2d<half, access::write> outputTexture [[tex
     
     const half4 inColor2 = inputTexture.read(gid);
     
-    constexpr sampler quadSampler;
+    constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const half4 inColor = inputTexture2.sample(quadSampler, float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height()));
     
     half4 outColor;
