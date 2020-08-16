@@ -143,6 +143,7 @@ class StaticImageFilterVC: UIViewController {
         case .kuwahara: return BBMetalKuwaharaFilter().filteredImage(with: image)
         case .swirl: return BBMetalSwirlFilter(center: BBMetalPosition(x: 0.35, y: 0.55), radius: 0.25).filteredImage(with: image)
         case .bulge: return BBMetalBulgeFilter(center: BBMetalPosition(x: 0.35, y: 0.55)).filteredImage(with: image)
+        case .pinch: return BBMetalPinchFilter(center: BBMetalPosition(x: 0.35, y: 0.55)).filteredImage(with: image)
         case .convolution3x3: return BBMetalConvolution3x3Filter(convolution: simd_float3x3(rows: [SIMD3<Float>(-1, 0, 1),
                                                                                                    SIMD3<Float>(-2, 0, 2),
                                                                                                    SIMD3<Float>(-1, 0, 1)])).filteredImage(with: image)
