@@ -273,6 +273,7 @@ class CameraFilterVC: UIViewController {
         case .thresholdSketch: return BBMetalThresholdSketchFilter(edgeStrength: 1, threshold: 0.15)
         case .toon: return BBMetalToonFilter(threshold: 0.2, quantizationLevels: 10)
         case .posterize: return BBMetalPosterizeFilter(colorLevels: 10)
+        case .vignette: return BBMetalVignetteFilter()
         case .kuwahara: return BBMetalKuwaharaFilter()
         case .swirl: return BBMetalSwirlFilter(center: BBMetalPosition(x: 0.35, y: 0.55), radius: 0.25, angle: 1)
         case .convolution3x3: return BBMetalConvolution3x3Filter(convolution: simd_float3x3(rows: [SIMD3<Float>(-1, 0, 1),

@@ -139,6 +139,7 @@ class StaticImageFilterVC: UIViewController {
         case .thresholdSketch: return BBMetalThresholdSketchFilter(threshold: 0.15).filteredImage(with: image)
         case .toon: return BBMetalToonFilter().filteredImage(with: image)
         case .posterize: return BBMetalPosterizeFilter().filteredImage(with: image)
+        case .vignette: return BBMetalVignetteFilter().filteredImage(with: image)
         case .kuwahara: return BBMetalKuwaharaFilter().filteredImage(with: image)
         case .swirl: return BBMetalSwirlFilter(center: BBMetalPosition(x: 0.35, y: 0.55), radius: 0.25).filteredImage(with: image)
         case .convolution3x3: return BBMetalConvolution3x3Filter(convolution: simd_float3x3(rows: [SIMD3<Float>(-1, 0, 1),

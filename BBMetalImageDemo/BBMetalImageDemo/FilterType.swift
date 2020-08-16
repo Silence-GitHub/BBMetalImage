@@ -77,6 +77,7 @@ enum FilterType {
     case thresholdSketch
     case toon
     case posterize
+    case vignette
     case kuwahara
     case swirl
     case convolution3x3
