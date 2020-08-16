@@ -1,5 +1,5 @@
 //
-//  BBMetalBulgeFilter.metal
+//  BBMetalPinchFilter.metal
 //  BBMetalImage
 //
 //  Created by Kaibo Lu on 8/16/20.
@@ -9,7 +9,7 @@
 #include <metal_stdlib>
 using namespace metal;
 
-kernel void bulgeKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
+kernel void pinchKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                         texture2d<half, access::sample> inputTexture [[texture(1)]],
                         constant float2 *centerPointer [[buffer(0)]],
                         constant float *radiusPointer [[buffer(1)]],
@@ -24,14 +24,13 @@ kernel void bulgeKernel(texture2d<half, access::write> outputTexture [[texture(0
     const float aspectRatio = float(inputTexture.get_height()) / float(inputTexture.get_width());
     
     const float2 inCoordinateToUse = float2(float(gid.x) / outputTexture.get_width(), float(gid.y) / outputTexture.get_height());
-    float2 textureCoordinateToUse = float2(inCoordinateToUse.x, (inCoordinateToUse.y - center.y) * aspectRatio + center.y);
+    float2 textureCoordinateToUse = float2(inCoordinateToUse.x, inCoordinateToUse.y * aspectRatio + 0.5 - 0.5 * aspectRatio);
     const float dist = distance(center, textureCoordinateToUse);
     textureCoordinateToUse = inCoordinateToUse;
     
     if (dist < radius) {
         textureCoordinateToUse -= center;
-        float percent = 1.0 - (radius - dist) / radius * scale;
-        percent = percent * percent;
+        float percent = 1.0 + (0.5 - dist) / 0.5 * scale;
         textureCoordinateToUse = textureCoordinateToUse * percent + center;
     }
     
