@@ -137,8 +137,19 @@ extension BBMetalStaticImageSource: BBMetalImageSource {
 
 public extension UIImage {
     var bb_metalTexture: MTLTexture? {
-        if let cgimage = cgImage { return cgimage.bb_metalTexture }
+        // To ensure image orientation is correct, redraw image if image orientation is not up
+        // https://stackoverflow.com/questions/42098390/swift-png-image-being-saved-with-incorrect-orientation
+        if let cgimage = bb_flattened?.cgImage { return cgimage.bb_metalTexture }
         return nil
+    }
+    
+    private var bb_flattened: UIImage? {
+        if imageOrientation == .up { return self }
+        UIGraphicsBeginImageContextWithOptions(size, false, scale)
+        draw(in: CGRect(origin: .zero, size: size))
+        let result = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return result
     }
 }
 
@@ -184,7 +195,10 @@ public extension CGImage {
 public extension Data {
     var bb_metalTexture: MTLTexture? {
         let loader = MTKTextureLoader(device: BBMetalDevice.sharedDevice)
-        return try? loader.newTexture(data: self, options: [MTKTextureLoader.Option.SRGB : false])
+        if let texture = try? loader.newTexture(data: self, options: [MTKTextureLoader.Option.SRGB : false]) { return texture }
+        // If image orientation is not up, texture loader may not load texture from image data.
+        // Create a UIImage from image data to get metal texture
+        return UIImage(data: self)?.bb_metalTexture
     }
 }
 
