@@ -1,5 +1,22 @@
 # Change Log
 
+## [1.1.6](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.6) - 2020-08-16
+
+### Add
+
+- BBMetalVignetteFilter
+- BBMetalBulgeFilter
+- BBMetalPinchFilter
+
+### Change
+
+- All texture samplers use linear mag_filer and min_filter to avoid pixelation
+
+### Fix
+
+- UIImage texture incorrect orientation bug
+- Image data no texture bug
+
 ## [1.1.5](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.5) - 2020-08-14
 
 ### Change
