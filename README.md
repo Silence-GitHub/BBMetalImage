@@ -18,9 +18,15 @@ Test libraries are BBMetalImage (0.1.1) and GPUImage (0.1.7). Test device is iPh
 
 ## Features
 
-- [x] More than 70 built-in filters
+- [x] 80 built-in filters
 - [x] Filter chain supported
 - [x] Customized filter
+- [x] Camera capturing video and audio
+- [x] Video source processing video file
+- [x] Image source providing image texture
+- [x] UI source recording view animation
+- [x] Metal view displaying Metal texture
+- [x] Video writer writting video
 - [x] High performance
 
 ## Requirements
@@ -368,8 +374,11 @@ func finishRecording() {
 - Threshold Sketch
 - Toon
 - Posterize
+- Vignette
 - Kuwahara
 - Swirl
+- Bulge
+- Pinch
 - Convolution 3x3
 - Emboss
 - Sobel Edge Detection
