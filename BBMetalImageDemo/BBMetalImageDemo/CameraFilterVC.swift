@@ -20,6 +20,8 @@ class CameraFilterVC: UIViewController {
     
     private var playButton: UIButton!
     
+    private var lastFaceRects = (CGRect(x: 0.25, y: 0.25, width: 0.5, height: 0.5), CGRect(x: 0.25, y: 0.25, width: 0.5, height: 0.5))
+    
     init(type: FilterType) {
         self.type = type
         super.init(nibName: nil, bundle: nil)
@@ -292,5 +294,89 @@ class CameraFilterVC: UIViewController {
         let image = UIImage(named: "multicolour_flowers.jpg")!
         if alpha == 1 { return image }
         return BBMetalRGBAFilter(alpha: alpha).filteredImage(with: image)!
+    }
+
+    func switchFaceDetection(on: Bool) {
+        if on {
+            imageSource = nil
+            camera?.willTransmitTexture = nil
+            camera?.handleFaceDetection = handleFaceDetection
+        } else {
+            camera?.handleFaceDetection = nil
+            removeFilters()
+        }
+    }
+    
+    private func removeFilters() {
+        guard let camera = camera, let metalView = metalView, let videoWriter = videoWriter else { return }
+        
+        camera.removeAllConsumers()
+        
+        camera.add(consumer: metalView)
+        camera.willTransmitTexture = nil
+        imageSource = nil
+        camera.add(consumer: videoWriter)
+    }
+    
+    private func handleFaceDetection(in imageBuffer: CVPixelBuffer) {
+        let faceDetectionRequest = VNDetectFaceLandmarksRequest(completionHandler: { (request: VNRequest, error: Error?) in
+            DispatchQueue.main.async {
+                if let results = request.results as? [VNFaceObservation], results.count > 0 {
+                    print("did detect \(results.count) face(s)")
+                    
+                    self.handleFaceDetectionResults(results)
+                } else {
+                    print("did not detect any face")
+                }
+            }
+        })
+        
+        let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: imageBuffer, orientation: .downMirrored, options: [:])
+        try? imageRequestHandler.perform([faceDetectionRequest])
+    }
+    
+    private func handleFaceDetectionResults(_ observedFacesArray: [VNFaceObservation]) {
+        var faceRect = lastFaceRects.0
+        
+        if observedFacesArray.count > 1 {
+            var faceSizes = [CGFloat]()
+            
+            for face in observedFacesArray {
+                let rect = face.boundingBox
+                var size = rect.width
+                if size < rect.height { size = rect.height }
+                faceSizes.append(size)
+            }
+            
+            if let maxFaceSize = faceSizes.max(), let maxFaceIndex = faceSizes.firstIndex(of: maxFaceSize) {
+                faceRect = observedFacesArray[maxFaceIndex].boundingBox
+            }
+        } else {
+            faceRect = observedFacesArray[0].boundingBox
+        }
+        
+        let finalX      = faceRect.minX/3 + lastFaceRects.0.minX/3 + lastFaceRects.1.minX/3 - 0.025
+        let finalY      = faceRect.minY/3 + lastFaceRects.0.minY/3 + lastFaceRects.1.minY/3 - 0.035
+        let finalWidth  = faceRect.width/3 + lastFaceRects.0.width/3 + lastFaceRects.1.width/3 + 0.05
+        let finalHeight = faceRect.height/3 + lastFaceRects.0.height/3 + lastFaceRects.1.height/3 + 0.05
+        
+        let finalFaceRect = CGRect(x: finalX, y: finalY, width: finalWidth, height: finalHeight)
+        
+        lastFaceRects.1 = lastFaceRects.0
+        lastFaceRects.0 = finalFaceRect
+        
+        let bbMetalRect = BBMetalRect(x: Float(finalFaceRect.minX), y: Float(finalFaceRect.minY), width: Float(finalFaceRect.width), height: Float(finalFaceRect.height))
+        faceTracking(at: bbMetalRect)
+    }
+    
+    func faceTracking(at rect: BBMetalRect) {
+        let filter = BBMetalCropFilter(rect: rect)
+        
+        guard let camera = camera, let metalView = metalView, let videoWriter = videoWriter else { return }
+        
+        camera.removeAllConsumers()
+        
+        camera.add(consumer: filter).add(consumer: metalView)
+        filter.add(consumer: videoWriter)
     }
 }
