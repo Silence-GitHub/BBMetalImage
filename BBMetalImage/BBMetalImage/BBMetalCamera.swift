@@ -45,6 +45,22 @@ public class BBMetalCamera: NSObject {
     }
     private var _consumers: [BBMetalImageConsumer]
     
+    /// A block to call before processing each video sample buffer
+    public var preprocessVideo: ((CMSampleBuffer) -> Void)? {
+        get {
+            lock.wait()
+            let p = _preprocessVideo
+            lock.signal()
+            return p
+        }
+        set {
+            lock.wait()
+            _preprocessVideo = newValue
+            lock.signal()
+        }
+    }
+    private var _preprocessVideo: ((CMSampleBuffer) -> Void)?
+    
     /// A block to call before transmiting texture to image consumers
     public var willTransmitTexture: ((MTLTexture, CMTime) -> Void)? {
         get {
@@ -60,22 +76,6 @@ public class BBMetalCamera: NSObject {
         }
     }
     private var _willTransmitTexture: ((MTLTexture, CMTime) -> Void)?
-    
-    /// Face detection
-    public var handleFaceDetection: ((CVPixelBuffer) -> Void)? {
-        get {
-            lock.wait()
-            let h = _handleFaceDetection
-            lock.signal()
-            return h
-        }
-        set {
-            lock.wait()
-            _handleFaceDetection = newValue
-            lock.signal()
-        }
-    }
-    private var _handleFaceDetection: ((CVPixelBuffer) -> Void)?
     
     /// Camera position
     public var position: AVCaptureDevice.Position { return camera.position }
@@ -277,10 +277,6 @@ public class BBMetalCamera: NSObject {
                 return nil
         }
         connection.videoOrientation = .portrait
-        
-        if connection.isVideoStabilizationSupported {
-            connection.preferredVideoStabilizationMode = .standard
-        }
         
         session.commitConfiguration()
         
@@ -617,19 +613,19 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         let paused = _isPaused
         let consumers = _consumers
         let willTransmit = _willTransmitTexture
-        let handleFace = _handleFaceDetection
+        let preprocessVideo = _preprocessVideo
         let cameraPosition = camera.position
         let startTime = _benchmark ? CACurrentMediaTime() : 0
         lock.signal()
         
-        guard !paused,
-            !consumers.isEmpty,
-            let texture = texture(with: sampleBuffer) else { return }
+        guard !paused, !consumers.isEmpty else { return }
+        
+        preprocessVideo?(sampleBuffer)
+        
+        guard let texture = texture(with: sampleBuffer) else { return }
         
         let sampleTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         willTransmit?(texture.metalTexture, sampleTime)
-        // imageBuffer is also used in texture(with: sampleBuffer) so maybe one could pass the imageBuffer there, too, instead of sampleBuffer
-        if let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) { handleFace?(imageBuffer) }
         let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
                                            sampleTime: sampleTime,
                                            cameraPosition: cameraPosition,
