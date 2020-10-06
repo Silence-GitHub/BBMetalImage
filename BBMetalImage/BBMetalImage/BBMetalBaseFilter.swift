@@ -20,6 +20,15 @@ public struct BBMetalWeakImageSource {
     public init(source: BBMetalImageSource) { self.source = source }
 }
 
+public struct BBMetalFilterCompletionInfo {
+    public let result: Result<MTLTexture, Error>
+    public let sampleTime: CMTime?
+    public let cameraPosition: AVCaptureDevice.Position?
+    public let isCameraPhoto: Bool
+}
+
+public typealias BBMetalFilterCompletion = (BBMetalFilterCompletionInfo) -> Void
+
 fileprivate struct _BBMetalFilterCompletionItem {
     fileprivate let key: String
     fileprivate let completion: (MTLCommandBuffer, Bool) -> Void

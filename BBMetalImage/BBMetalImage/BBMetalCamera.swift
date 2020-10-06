@@ -191,7 +191,7 @@ public class BBMetalCamera: NSObject {
     
     private var _needPhoto: Bool
     
-    private var _capturePhotoCompletion: ((Result<MTLTexture, Error>) -> Void)?
+    private var _capturePhotoCompletion: BBMetalFilterCompletion?
     
     private var metadataOutput: AVCaptureMetadataOutput!
     private var metadataOutputQueue: DispatchQueue!
@@ -432,7 +432,7 @@ public class BBMetalCamera: NSObject {
     /// To get filtered texture, use `addCompletedHandler(_:)` method of `BBMetalBaseFilter`, check whether the filtered texture is camera photo.
     /// This method is much faster than `takePhoto()` method.
     /// - Parameter completion: a closure to call after capturing. If success, get original frame texture. If failure, get error.
-    public func capturePhoto(completion: ((Result<MTLTexture, Error>) -> Void)? = nil) {
+    public func capturePhoto(completion: BBMetalFilterCompletion? = nil) {
         lock.wait()
         _needPhoto = true
         _capturePhotoCompletion = completion
@@ -649,14 +649,25 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         guard let texture = texture(with: sampleBuffer) else {
             if let completion = capturePhotoCompletion {
                 let error = NSError(domain: "BBMetalCameraErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not get Metal texture"])
-                completion(.failure(error))
+                let info = BBMetalFilterCompletionInfo(result: .failure(error),
+                                                       sampleTime: CMSampleBufferGetPresentationTimeStamp(sampleBuffer),
+                                                       cameraPosition: cameraPosition,
+                                                       isCameraPhoto: isCameraPhoto)
+                completion(info)
             }
             return
         }
         
-        capturePhotoCompletion?(.success(texture.metalTexture))
-        
         let sampleTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
+        
+        if let completion = capturePhotoCompletion {
+            let info = BBMetalFilterCompletionInfo(result: .success(texture.metalTexture),
+                                                   sampleTime: sampleTime,
+                                                   cameraPosition: cameraPosition,
+                                                   isCameraPhoto: isCameraPhoto)
+            completion(info)
+        }
+        
         willTransmit?(texture.metalTexture, sampleTime)
         let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
                                            sampleTime: sampleTime,
