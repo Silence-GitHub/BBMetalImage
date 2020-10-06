@@ -15,13 +15,14 @@ public struct BBMetalWeakImageSource {
     public var texture: MTLTexture?
     public var sampleTime: CMTime?
     public var cameraPosition: AVCaptureDevice.Position?
+    public var isCameraPhoto: Bool = false
     
     public init(source: BBMetalImageSource) { self.source = source }
 }
 
 fileprivate struct _BBMetalFilterCompletionItem {
     fileprivate let key: String
-    fileprivate let completion: (MTLCommandBuffer) -> Void
+    fileprivate let completion: (MTLCommandBuffer, Bool) -> Void
 }
 
 /// A base filter processing texture. Subclass this class. Do not create an instance using the class directly.
@@ -104,7 +105,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     /// - Parameter handler: block to register
     /// - Returns: a key string can be used to remove the completion callback
     @discardableResult
-    public func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer) -> Void) -> String {
+    public func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer, Bool) -> Void) -> String {
         lock.wait()
         let key = UUID().uuidString
         completions.append(_BBMetalFilterCompletionItem(key: key, completion: handler))
@@ -209,6 +210,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
                 _sources[i].texture = texture.metalTexture
                 _sources[i].sampleTime = texture.sampleTime
                 _sources[i].cameraPosition = texture.cameraPosition
+                _sources[i].isCameraPhoto = texture.isCameraPhoto
                 foundSource = true
             } else if _sources[i].texture == nil {
                 if foundSource {
@@ -247,7 +249,8 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
         commandBuffer.label = name + "Command"
         
-        for completion in completions { commandBuffer.addCompletedHandler(completion.completion) }
+        let isCameraPhoto = _sources.contains(where: { $0.isCameraPhoto })
+        for completion in completions { commandBuffer.addCompletedHandler { completion.completion($0, isCameraPhoto) } }
         
         if useMPSKernel {
             encodeMPSKernel(into: commandBuffer)
@@ -287,6 +290,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
             _sources[i].texture = nil
             _sources[i].sampleTime = nil
             _sources[i].cameraPosition = nil
+            _sources[i].isCameraPhoto = false
         }
         
         let consumers = _consumers
@@ -296,6 +300,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         var output = texture
         output.sampleTime = sampleTime
         output.cameraPosition = cameraPosition
+        output.isCameraPhoto = isCameraPhoto
         output.metalTexture = _outputTexture!
         for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
     }

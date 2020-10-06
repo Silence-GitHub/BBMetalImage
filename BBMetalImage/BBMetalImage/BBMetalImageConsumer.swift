@@ -42,6 +42,9 @@ public protocol BBMetalTexture {
     /// Camera position.
     /// Nil if unknown or image does not come from camera.
     var cameraPosition: AVCaptureDevice.Position? { get set }
+    
+    /// Whether is a photo taken by calling `takePhoto` function of `BBMetalCamera`
+    var isCameraPhoto: Bool { get set }
 }
 
 /// Defines audio consumer behaviors
@@ -56,15 +59,18 @@ struct BBMetalDefaultTexture: BBMetalTexture {
     var metalTexture: MTLTexture
     var sampleTime: CMTime?
     var cameraPosition: AVCaptureDevice.Position?
+    var isCameraPhoto: Bool
     let cvMetalTexture: CVMetalTexture? // Hold CVMetalTexture to prevent stuttering. https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
     
     init(metalTexture: MTLTexture,
          sampleTime: CMTime? = nil,
          cameraPosition: AVCaptureDevice.Position? = nil,
+         isCameraPhoto: Bool = false,
          cvMetalTexture: CVMetalTexture? = nil) {
         self.metalTexture = metalTexture
         self.sampleTime = sampleTime
         self.cameraPosition = cameraPosition
+        self.isCameraPhoto = isCameraPhoto
         self.cvMetalTexture = cvMetalTexture
     }
 }

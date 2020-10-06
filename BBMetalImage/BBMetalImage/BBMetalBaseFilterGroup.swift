@@ -27,7 +27,7 @@ open class BBMetalBaseFilterGroup: BBMetalBaseFilter {
     }
     
     @discardableResult
-    public override func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer) -> Void) -> String {
+    public override func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer, Bool) -> Void) -> String {
         return terminalFilter.addCompletedHandler(handler)
     }
     

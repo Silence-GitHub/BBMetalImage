@@ -189,6 +189,8 @@ public class BBMetalCamera: NSObject {
     }
     private weak var _photoDelegate: BBMetalCameraPhotoDelegate?
     
+    private var _needPhoto: Bool
+    
     private var metadataOutput: AVCaptureMetadataOutput!
     private var metadataOutputQueue: DispatchQueue!
     
@@ -234,6 +236,7 @@ public class BBMetalCamera: NSObject {
     public init?(sessionPreset: AVCaptureSession.Preset = .high, position: AVCaptureDevice.Position = .back, multitpleSessions: Bool = false) {
         _consumers = []
         _canTakePhoto = false
+        _needPhoto = false
         _isPaused = false
         _benchmark = false
         capturedFrameCount = 0
@@ -428,6 +431,7 @@ public class BBMetalCamera: NSObject {
     /// - Parameter settings: a specification of the features and settings to use for a single photo capture request
     public func takePhoto(with settings: AVCapturePhotoSettings? = nil) {
         lock.wait()
+        _needPhoto = true
         if let output = photoOutput,
             _photoDelegate != nil {
             let currentSettings = settings ?? AVCapturePhotoSettings(format: [kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA])
@@ -615,6 +619,10 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         let willTransmit = _willTransmitTexture
         let preprocessVideo = _preprocessVideo
         let cameraPosition = camera.position
+        
+        let isCameraPhoto = _needPhoto
+        if _needPhoto { _needPhoto = false }
+        
         let startTime = _benchmark ? CACurrentMediaTime() : 0
         lock.signal()
         
@@ -629,6 +637,7 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
                                            sampleTime: sampleTime,
                                            cameraPosition: cameraPosition,
+                                           isCameraPhoto: isCameraPhoto,
                                            cvMetalTexture: texture.cvMetalTexture)
         for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
         
