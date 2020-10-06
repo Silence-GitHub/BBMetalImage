@@ -32,6 +32,22 @@ public class BBMetalVideoSource {
     private var audioOutput: AVAssetReaderTrackOutput!
     private var lastAudioBuffer: CMSampleBuffer?
     
+    /// A block to call before processing each video sample buffer
+    public var preprocessVideo: ((CMSampleBuffer) -> Void)? {
+        get {
+            lock.wait()
+            let p = _preprocessVideo
+            lock.signal()
+            return p
+        }
+        set {
+            lock.wait()
+            _preprocessVideo = newValue
+            lock.signal()
+        }
+    }
+    private var _preprocessVideo: ((CMSampleBuffer) -> Void)?
+    
     /// Audio consumer processing audio sample buffer.
     /// Set this property to nil (default value) if not processing audio.
     /// Set this property to a given audio consumer if processing audio.
@@ -213,17 +229,23 @@ public class BBMetalVideoSource {
             lock.signal()
             return
         }
-        lock.signal()
         
         // Read and process video buffer
-        lock.wait()
         let useVideoRate = _playWithVideoRate
         var startTime: Double = _benchmark ? CACurrentMediaTime() : 0
         var sleepTime: Double = 0
         while let reader = assetReader,
             reader.status == .reading,
-            let sampleBuffer = videoOutput.copyNextSampleBuffer(),
-            let texture = texture(with: sampleBuffer) {
+            let sampleBuffer = videoOutput.copyNextSampleBuffer() {
+                
+                if let preprocessVideo = _preprocessVideo {
+                    lock.signal()
+                    preprocessVideo(sampleBuffer)
+                    lock.wait()
+                }
+                
+                guard let texture = texture(with: sampleBuffer) else { break }
+                
                 let sampleFrameTime = CMSampleBufferGetOutputPresentationTimeStamp(sampleBuffer)
                 if useVideoRate {
                     if let lastFrameTime = lastSampleFrameTime,
