@@ -151,7 +151,7 @@ public class BBMetalCamera: NSObject {
     private var photoOutput: AVCapturePhotoOutput!
     
     /// Whether can take photo or not.
-    /// Set this property to true before calling `takePhoto(with:)` method.
+    /// Set this property to true before calling `takePhoto()` method.
     public var canTakePhoto: Bool {
         get {
             lock.wait()
@@ -190,6 +190,8 @@ public class BBMetalCamera: NSObject {
     private weak var _photoDelegate: BBMetalCameraPhotoDelegate?
     
     private var _needPhoto: Bool
+    
+    private var _capturePhotoCompletion: ((Result<MTLTexture, Error>) -> Void)?
     
     private var metadataOutput: AVCaptureMetadataOutput!
     private var metadataOutputQueue: DispatchQueue!
@@ -425,9 +427,15 @@ public class BBMetalCamera: NSObject {
         lock.signal()
     }
     
-    public func takePhoto() {
+    /// Captures frame texture as a photo.
+    /// Get original frame texture in the completion closure.
+    /// To get filtered texture, use `addCompletedHandler(_:)` method of `BBMetalBaseFilter`, check whether the filtered texture is camera photo.
+    /// This method is much faster than `takePhoto()` method.
+    /// - Parameter completion: a closure to call after capturing. If success, get original frame texture. If failure, get error.
+    public func capturePhoto(completion: ((Result<MTLTexture, Error>) -> Void)? = nil) {
         lock.wait()
         _needPhoto = true
+        _capturePhotoCompletion = completion
         lock.signal()
     }
     
@@ -435,11 +443,11 @@ public class BBMetalCamera: NSObject {
     /// Before calling this method, set `canTakePhoto` property to true and `photoDelegate` property to nonnull.
     ///
     /// - Parameter settings: a specification of the features and settings to use for a single photo capture request
-    public func takePhoto(with settings: AVCapturePhotoSettings?) {
+    public func takePhoto() {
         lock.wait()
         if let output = photoOutput,
             _photoDelegate != nil {
-            let currentSettings = settings ?? AVCapturePhotoSettings(format: [kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA])
+            let currentSettings = AVCapturePhotoSettings(format: [kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA])
             output.capturePhoto(with: currentSettings, delegate: self)
         }
         lock.signal()
@@ -628,6 +636,9 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         let isCameraPhoto = _needPhoto
         if _needPhoto { _needPhoto = false }
         
+        let capturePhotoCompletion = _capturePhotoCompletion
+        if _capturePhotoCompletion != nil { _capturePhotoCompletion = nil }
+        
         let startTime = _benchmark ? CACurrentMediaTime() : 0
         lock.signal()
         
@@ -635,7 +646,15 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         
         preprocessVideo?(sampleBuffer)
         
-        guard let texture = texture(with: sampleBuffer) else { return }
+        guard let texture = texture(with: sampleBuffer) else {
+            if let completion = capturePhotoCompletion {
+                let error = NSError(domain: "BBMetalCameraErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not get Metal texture"])
+                completion(.failure(error))
+            }
+            return
+        }
+        
+        capturePhotoCompletion?(.success(texture.metalTexture))
         
         let sampleTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         willTransmit?(texture.metalTexture, sampleTime)

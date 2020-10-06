@@ -83,7 +83,7 @@ class CameraPhotoFilterVC: UIViewController {
     }
     
     @objc private func clickPhotoButton(_ button: UIButton) {
-        camera.takePhoto()
+        camera.capturePhoto()
     }
 }
 
