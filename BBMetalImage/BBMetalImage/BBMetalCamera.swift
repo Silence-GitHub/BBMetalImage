@@ -425,13 +425,18 @@ public class BBMetalCamera: NSObject {
         lock.signal()
     }
     
+    public func takePhoto() {
+        lock.wait()
+        _needPhoto = true
+        lock.signal()
+    }
+    
     /// Takes a photo.
     /// Before calling this method, set `canTakePhoto` property to true and `photoDelegate` property to nonnull.
     ///
     /// - Parameter settings: a specification of the features and settings to use for a single photo capture request
-    public func takePhoto(with settings: AVCapturePhotoSettings? = nil) {
+    public func takePhoto(with settings: AVCapturePhotoSettings?) {
         lock.wait()
-        _needPhoto = true
         if let output = photoOutput,
             _photoDelegate != nil {
             let currentSettings = settings ?? AVCapturePhotoSettings(format: [kCVPixelBufferPixelFormatTypeKey as String : kCVPixelFormatType_32BGRA])
