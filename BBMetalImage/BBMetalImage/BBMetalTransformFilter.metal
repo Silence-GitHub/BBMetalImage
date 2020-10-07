@@ -49,6 +49,7 @@ kernel void transformKernel(texture2d<half, access::write> outputTexture [[textu
     }
     
     #if defined(__HAVE_BICUBIC_FILTERING__)
+    // If rotation angle is 90 * N degrees (N is integer), use bicubic
     if (isZeroOrOne(a) &&
         isZeroOrOne(b) &&
         isZeroOrOne(c) &&
