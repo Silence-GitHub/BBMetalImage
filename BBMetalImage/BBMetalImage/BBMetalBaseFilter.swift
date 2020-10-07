@@ -31,7 +31,7 @@ public typealias BBMetalFilterCompletion = (BBMetalFilterCompletionInfo) -> Void
 
 fileprivate struct _BBMetalFilterCompletionItem {
     fileprivate let key: String
-    fileprivate let completion: (MTLCommandBuffer, Bool) -> Void
+    fileprivate let completion: BBMetalFilterCompletion
 }
 
 /// A base filter processing texture. Subclass this class. Do not create an instance using the class directly.
@@ -114,7 +114,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     /// - Parameter handler: block to register
     /// - Returns: a key string can be used to remove the completion callback
     @discardableResult
-    public func addCompletedHandler(_ handler: @escaping (MTLCommandBuffer, Bool) -> Void) -> String {
+    public func addCompletedHandler(_ handler: @escaping BBMetalFilterCompletion) -> String {
         lock.wait()
         let key = UUID().uuidString
         completions.append(_BBMetalFilterCompletionItem(key: key, completion: handler))
@@ -258,8 +258,43 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         guard let commandBuffer = BBMetalDevice.sharedCommandQueue.makeCommandBuffer() else { return }
         commandBuffer.label = name + "Command"
         
-        let isCameraPhoto = _sources.contains(where: { $0.isCameraPhoto })
-        for completion in completions { commandBuffer.addCompletedHandler { completion.completion($0, isCameraPhoto) } }
+        // Find not nil sample time for video frame, not nil camera position and true camera photo
+        var sampleTime: CMTime?
+        var cameraPosition: AVCaptureDevice.Position?
+        var isCameraPhoto = false
+        for i in 0..<_sources.count {
+            if sampleTime == nil && _sources[i].sampleTime != nil {
+                sampleTime = _sources[i].sampleTime
+            }
+            if cameraPosition == nil && _sources[i].cameraPosition != nil {
+                cameraPosition = _sources[i].cameraPosition
+            }
+            if !isCameraPhoto && _sources[i].isCameraPhoto {
+                isCameraPhoto = true
+            }
+            if sampleTime != nil && cameraPosition != nil && isCameraPhoto { break }
+        }
+        
+        for completion in completions {
+            commandBuffer.addCompletedHandler { [weak self] buffer in
+                guard let self = self else { return }
+                switch buffer.status {
+                case .completed:
+                    let info = BBMetalFilterCompletionInfo(result: .success(self._outputTexture!),
+                                                           sampleTime: sampleTime,
+                                                           cameraPosition: cameraPosition,
+                                                           isCameraPhoto: isCameraPhoto)
+                    completion.completion(info)
+                default:
+                    let error = buffer.error ?? NSError(domain: "BBMetalBaseFilterErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Metal command buffer unknown error. Status \(buffer.status.rawValue)"])
+                    let info = BBMetalFilterCompletionInfo(result: .failure(error),
+                                                           sampleTime: sampleTime,
+                                                           cameraPosition: cameraPosition,
+                                                           isCameraPhoto: isCameraPhoto)
+                    completion.completion(info)
+                }
+            }
+        }
         
         if useMPSKernel {
             encodeMPSKernel(into: commandBuffer)
@@ -285,17 +320,8 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         commandBuffer.commit()
         if _runSynchronously { commandBuffer.waitUntilCompleted() }
         
-        // Find not nil sample time for video frame, and not nil camera position
         // Clear old input texture
-        var sampleTime: CMTime?
-        var cameraPosition: AVCaptureDevice.Position?
         for i in 0..<_sources.count {
-            if sampleTime == nil && _sources[i].sampleTime != nil {
-                sampleTime = _sources[i].sampleTime
-            }
-            if cameraPosition == nil && _sources[i].cameraPosition != nil {
-                cameraPosition = _sources[i].cameraPosition
-            }
             _sources[i].texture = nil
             _sources[i].sampleTime = nil
             _sources[i].cameraPosition = nil

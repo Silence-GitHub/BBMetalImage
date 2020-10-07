@@ -46,21 +46,25 @@ class CameraPhotoFilterVC: UIViewController {
         
         filter = BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
         
-        filter.addCompletedHandler { [weak self] _, isCameraPhoto in
-            guard isCameraPhoto else { return }
-            
-            DispatchQueue.main.async {
-                guard let self = self else { return }
-                
-                let imageView = UIImageView(frame: self.metalView.frame)
-                imageView.contentMode = .scaleAspectFill
-                imageView.clipsToBounds = true
-                imageView.image = self.filter.outputTexture!.bb_image!
-                self.view.addSubview(imageView)
-                
-                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                    imageView.removeFromSuperview()
+        filter.addCompletedHandler { [weak self] info in
+            guard info.isCameraPhoto else { return }
+            switch info.result {
+            case let .success(texture):
+                let image = texture.bb_image
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    let imageView = UIImageView(frame: self.metalView.frame)
+                    imageView.contentMode = .scaleAspectFill
+                    imageView.clipsToBounds = true
+                    imageView.image = image
+                    self.view.addSubview(imageView)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        imageView.removeFromSuperview()
+                    }
                 }
+            case let .failure(error):
+                print("Error: \(error)")
             }
         }
         
