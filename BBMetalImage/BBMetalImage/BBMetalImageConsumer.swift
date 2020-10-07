@@ -43,7 +43,7 @@ public protocol BBMetalTexture {
     /// Nil if unknown or image does not come from camera.
     var cameraPosition: AVCaptureDevice.Position? { get set }
     
-    /// Whether is a photo taken by calling `takePhoto` function of `BBMetalCamera`
+    /// True if frame texture is captured by `capturePhoto(completion:)` method of `BBMetalCamera`
     var isCameraPhoto: Bool { get set }
 }
 

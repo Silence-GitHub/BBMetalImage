@@ -441,8 +441,8 @@ public class BBMetalCamera: NSObject {
     
     /// Takes a photo.
     /// Before calling this method, set `canTakePhoto` property to true and `photoDelegate` property to nonnull.
-    ///
-    /// - Parameter settings: a specification of the features and settings to use for a single photo capture request
+    /// Get original frame texture in `camera(_:didOutput:)` method of `BBMetalCameraPhotoDelegate`.
+    /// To get filtered texture, use `capturePhoto(completion:)` method, or create new filter to process the original frame texture.
     public func takePhoto() {
         lock.wait()
         if let output = photoOutput,
