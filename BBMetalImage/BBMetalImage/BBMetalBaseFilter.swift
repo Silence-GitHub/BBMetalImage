@@ -20,13 +20,19 @@ public struct BBMetalWeakImageSource {
     public init(source: BBMetalImageSource) { self.source = source }
 }
 
+/// Information about processing frame texture
 public struct BBMetalFilterCompletionInfo {
+    /// Get Metal texture for success or error for failure
     public let result: Result<MTLTexture, Error>
+    /// Frame texture sample time
     public let sampleTime: CMTime?
+    /// Camera position if frame texture comes from camera
     public let cameraPosition: AVCaptureDevice.Position?
+    /// True if frame texture is captured by `capturePhoto(completion:)` method of `BBMetalCamera`
     public let isCameraPhoto: Bool
 }
 
+/// A closure to call after the device has completed the execution of the Metal command buffer
 public typealias BBMetalFilterCompletion = (BBMetalFilterCompletionInfo) -> Void
 
 fileprivate struct _BBMetalFilterCompletionItem {
