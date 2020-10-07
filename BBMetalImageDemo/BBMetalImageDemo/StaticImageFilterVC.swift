@@ -98,6 +98,9 @@ class StaticImageFilterVC: UIViewController {
         case .resize: return BBMetalResizeFilter(size: BBMetalSize(width: 0.5, height: 0.8)).filteredImage(with: image)
         case .rotate: return BBMetalRotateFilter(angle: -120, fitSize: true).filteredImage(with: image)
         case .flip: return BBMetalFlipFilter(horizontal: true, vertical: true).filteredImage(with: image)
+        case .transform:
+            let transform = CGAffineTransform(translationX: 320, y: 0).rotated(by: .pi / 180 * 30)
+            return BBMetalTransformFilter(transform: transform, fitSize: true).filteredImage(with: image)
         case .sharpen: return BBMetalSharpenFilter(sharpeness: 0.5).filteredImage(with: image)
         case .unsharpMask: return BBMetalUnsharpMaskFilter(intensity: 4).filteredImage(with: image)
         case .gaussianBlur: return BBMetalGaussianBlurFilter(sigma: 3).filteredImage(with: image)

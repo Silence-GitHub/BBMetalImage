@@ -104,6 +104,9 @@ class CameraFilterMenuVC: UIViewController {
         let flip = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .flip), animated: true) }
         }
+        let transform = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .transform), animated: true) }
+        }
         let sharpen = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraFilterVC(type: .sharpen), animated: true) }
         }
@@ -286,6 +289,7 @@ class CameraFilterMenuVC: UIViewController {
                 ("Resize", resize),
                 ("Rotate", rotate),
                 ("Flip", flip),
+                ("Transform", transform),
                 ("Sharpen", sharpen),
                 ("Unsharp mask", unsharpMask),
                 ("Gaussian blur", gaussianBlur),
