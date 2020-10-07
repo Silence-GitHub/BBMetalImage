@@ -9,6 +9,12 @@
 #include <metal_stdlib>
 using namespace metal;
 
+bool isZeroOrOne(float x) {
+    if (abs(x - round(x)) >= 1e-10) { return false; }
+    float a = abs(round(x));
+    return a == 0 || a == 1;
+}
+
 kernel void transformKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                             texture2d<half, access::sample> inputTexture [[texture(1)]],
                             constant float3x2 *matrix [[buffer(0)]],
@@ -23,7 +29,7 @@ kernel void transformKernel(texture2d<half, access::write> outputTexture [[textu
     const float a = m[0][0], b = m[0][1];
     const float c = m[1][0], d = m[1][1];
     
-    if (a * d - b * c == 0 || b * c - a * d == 0) {
+    if (a * d - b * c == 0) {
         outputTexture.write(half4(0), gid);
         return;
     }
@@ -41,6 +47,19 @@ kernel void transformKernel(texture2d<half, access::write> outputTexture [[textu
         outputTexture.write(half4(0), gid);
         return;
     }
+    
+    #if defined(__HAVE_BICUBIC_FILTERING__)
+    if (isZeroOrOne(a) &&
+        isZeroOrOne(b) &&
+        isZeroOrOne(c) &&
+        isZeroOrOne(d))
+    {
+        constexpr sampler quadSampler(mag_filter::bicubic, min_filter::bicubic);
+        const half4 color = inputTexture.sample(quadSampler, float2(inX, inY));
+        outputTexture.write(color, gid);
+        return;
+    }
+    #endif
     
     constexpr sampler quadSampler(mag_filter::linear, min_filter::linear);
     const half4 color = inputTexture.sample(quadSampler, float2(inX, inY));
