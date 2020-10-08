@@ -15,7 +15,7 @@ public class BBMetalFlipFilter: BBMetalBaseFilter {
     /// Whether to flip vertically or not
     public var vertical: Bool
     
-    public init(horizontal: Bool, vertical: Bool) {
+    public init(horizontal: Bool = false, vertical: Bool = false) {
         self.horizontal = horizontal
         self.vertical = vertical
         super.init(kernelFunctionName: "flipKernel")

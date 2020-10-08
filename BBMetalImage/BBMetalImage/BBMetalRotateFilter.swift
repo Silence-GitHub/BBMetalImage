@@ -20,7 +20,7 @@ public class BBMetalRotateFilter: BBMetalBaseFilter {
     /// True to change image size to fit rotated image, false to keep image size
     public var fitSize: Bool
     
-    public init(angle: Float, fitSize: Bool) {
+    public init(angle: Float = 0, fitSize: Bool = true) {
         _angle = angle * Float.pi / 180
         self.fitSize = fitSize
         super.init(kernelFunctionName: "rotateKernel")
