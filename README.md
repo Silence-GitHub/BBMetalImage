@@ -382,6 +382,7 @@ func finishRecording() {
 - Resize
 - Rotate
 - Flip
+- Transform
 - Sharpen
 - Unsharp Mask
 - Gaussian Blur
