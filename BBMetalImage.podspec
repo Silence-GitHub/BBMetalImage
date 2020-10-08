@@ -1,11 +1,11 @@
 Pod::Spec.new do |s|
 
   s.name         = 'BBMetalImage'
-  s.version      = '1.1.6'
+  s.version      = '1.1.7'
   s.summary      = 'A Swift library for GPU-accelerated image/video processing based on Metal.'
 
   s.description  = <<-DESC
-                   80 built-in filters.
+                   80+ built-in filters.
                    Filter chain supported.
                    Customized filter.
                    Camera capturing video and audio.
