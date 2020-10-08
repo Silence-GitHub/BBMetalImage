@@ -18,7 +18,7 @@ Test libraries are BBMetalImage (0.1.1) and GPUImage (0.1.7). Test device is iPh
 
 ## Features
 
-- [x] 80 built-in filters
+- [x] 80+ built-in filters
 - [x] Filter chain supported
 - [x] Customized filter
 - [x] Camera capturing video and audio
@@ -46,7 +46,7 @@ Install with CocoaPods:
 
 ### Single Filter
 
-Call `filteredImage(with:)` method of a filter is the simplest way to get filtered image synchronously.
+Call `filteredImage(with:)` function of a filter is the simplest way to get filtered image synchronously.
 
 ```swift
 let filteredImage = BBMetalContrastFilter(contrast: 3).filteredImage(with: image)
@@ -71,7 +71,7 @@ var videoWriter: BBMetalVideoWriter!
 
 func setup() {
     // Set up camera to capture image
-    camera = BBMetalCamera(sessionPreset: .hd1920x1080)!
+    camera = BBMetalCamera(sessionPreset: .hd1920x1080)
 
     // Set up 3 filters to process image
     let contrastFilter = BBMetalContrastFilter(contrast: 3)
@@ -114,6 +114,56 @@ func finishRecording() {
 
 #### Capture Image
 
+There are two ways to capture image with camera. Use `capturePhoto(completion:)` function or `takePhoto()` function.
+
+The `capturePhoto(completion:)` function runs faster and provides filtered frame texture if the filter chain contains filter.
+
+```swift
+// Hold camera
+var camera: BBMetalCamera!
+
+func setup() {
+    // Set up camera to capture image
+    camera = BBMetalCamera(sessionPreset: .hd1920x1080)
+
+    // Set up metal view to display image
+    let metalView = BBMetalView(frame: frame)
+    view.addSubview(metalView)
+
+    // Set up filter to process image
+    let filter = BBMetalContrastFilter(contrast: 3)
+    
+    filter.addCompletedHandler { [weak self] info in
+        // Check whether is camera photo
+        guard info.isCameraPhoto else { return }
+        switch info.result {
+        case let .success(texture):
+            // Convert filtered texture to image
+            let image = texture.bb_image
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                // Display filtered image
+            }
+        case let .failure(error):
+            // Handle error
+        }
+    }
+    
+    // Set up filter chain
+    camera.add(consumer: filter)
+        .add(consumer: metalView)
+
+    // Start capturing
+    camera.start()
+}
+
+func takePhoto() {
+    camera.capturePhoto()
+}
+```
+
+The `takePhoto()` functions runs slower and provides original frame texture.
+
 ```swift
 // Hold camera
 var camera: BBMetalCamera!
@@ -121,7 +171,7 @@ var camera: BBMetalCamera!
 func setup() {
     // Set up camera to capture image
     // Set `canTakePhoto` to true and set `photoDelegate` to nonnull
-    camera = BBMetalCamera(sessionPreset: .hd1920x1080)!
+    camera = BBMetalCamera(sessionPreset: .hd1920x1080)
     camera.canTakePhoto = true
     camera.photoDelegate = self
 
