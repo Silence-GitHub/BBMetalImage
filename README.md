@@ -133,6 +133,7 @@ func setup() {
     // Set up filter to process image
     let filter = BBMetalContrastFilter(contrast: 3)
     
+    // Add completed handler to get filtered image
     filter.addCompletedHandler { [weak self] info in
         // Check whether is camera photo
         guard info.isCameraPhoto else { return }
