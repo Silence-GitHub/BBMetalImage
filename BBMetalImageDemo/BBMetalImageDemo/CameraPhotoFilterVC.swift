@@ -12,7 +12,6 @@ import BBMetalImage
 
 class CameraPhotoFilterVC: UIViewController {
     private var camera: BBMetalCamera!
-    private var filter: BBMetalBaseFilter!
     private var metalView: BBMetalView!
     private var faceView: UIView!
     
@@ -44,7 +43,7 @@ class CameraPhotoFilterVC: UIViewController {
         camera.addMetadataOutput(with: [.face])
         camera.metadataObjectDelegate = self
         
-        filter = BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
+        let filter = BBMetalLookupFilter(lookupTable: UIImage(named: "test_lookup")!.bb_metalTexture!)
         
         filter.addCompletedHandler { [weak self] info in
             guard info.isCameraPhoto else { return }
