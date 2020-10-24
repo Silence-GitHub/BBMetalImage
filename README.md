@@ -116,7 +116,7 @@ func finishRecording() {
 
 There are two ways to capture image with camera. Use `capturePhoto(completion:)` function or `takePhoto()` function.
 
-The `capturePhoto(completion:)` function runs faster and provides filtered frame texture if the filter chain contains filter.
+The `capturePhoto(completion:)` function runs faster and provides original frame texture. If the filter chain contains filter, we can get filtered frame texture with `addCompletedHandler(_:)` function.
 
 ```swift
 // Hold camera
@@ -159,7 +159,20 @@ func setup() {
 }
 
 func takePhoto() {
-    camera.capturePhoto()
+    camera.capturePhoto { [weak self] info in
+        // No need to check whether is camera photo
+        switch info.result {
+        case let .success(texture):
+            // Convert filtered texture to image
+            let image = texture.bb_image
+            DispatchQueue.main.async {
+                guard let self = self else { return }
+                // Display filtered image
+            }
+        case let .failure(error):
+            // Handle error
+        }
+    }
 }
 ```
 
