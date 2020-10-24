@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.1.8](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.8) - 2020-10-23
+
+### Fix
+
+- Camera capturing photo texture wrong color bug
+
 ## [1.1.7](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.7) - 2020-10-07
 
 ### Add
