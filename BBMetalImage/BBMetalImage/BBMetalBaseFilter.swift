@@ -158,6 +158,21 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         for source in sources { source.transmitTexture() }
         return outputTexture?.bb_image
     }
+    
+    /// Gets a processed texture synchronously
+    ///
+    /// - Parameter textures: texture to process
+    /// - Returns: a processed texture, or nil if fail processing
+    public func filteredTexture(with textures: MTLTexture...) -> MTLTexture? {
+        let sources = textures.map { texture -> BBMetalStaticImageSource in
+            let imageSource = BBMetalStaticImageSource(texture: texture)
+            imageSource.add(consumer: self)
+            return imageSource
+        }
+        runSynchronously = true
+        for source in sources { source.transmitTexture() }
+        return outputTexture
+    }
 
     // MARK: - BBMetalImageSource
     

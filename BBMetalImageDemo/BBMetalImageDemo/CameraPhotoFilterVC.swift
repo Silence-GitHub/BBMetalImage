@@ -50,7 +50,7 @@ class CameraPhotoFilterVC: UIViewController {
             switch info.result {
             case let .success(texture):
                 let image = texture.bb_image
-                DispatchQueue.main.async {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
                     guard let self = self else { return }
                     let imageView = UIImageView(frame: self.metalView.frame)
                     imageView.contentMode = .scaleAspectFill
@@ -86,7 +86,26 @@ class CameraPhotoFilterVC: UIViewController {
     }
     
     @objc private func clickPhotoButton(_ button: UIButton) {
-        camera.capturePhoto()
+        camera.capturePhoto { [weak self] info in
+            switch info.result {
+            case let .success(texture):
+                let image = texture.bb_image
+                DispatchQueue.main.async {
+                    guard let self = self else { return }
+                    let imageView = UIImageView(frame: self.metalView.frame)
+                    imageView.contentMode = .scaleAspectFill
+                    imageView.clipsToBounds = true
+                    imageView.image = image
+                    self.view.addSubview(imageView)
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                        imageView.removeFromSuperview()
+                    }
+                }
+            case let .failure(error):
+                print("Error: \(error)")
+            }
+        }
     }
 }
 

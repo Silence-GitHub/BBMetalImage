@@ -661,7 +661,15 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         let sampleTime = CMSampleBufferGetPresentationTimeStamp(sampleBuffer)
         
         if let completion = capturePhotoCompletion {
-            let info = BBMetalFilterCompletionInfo(result: .success(texture.metalTexture),
+            var result: Result<MTLTexture, Error>
+            let filter = BBMetalPassThroughFilter(createTexture: true)
+            if let metalTexture = filter.filteredTexture(with: texture.metalTexture) {
+                result = .success(metalTexture)
+            } else {
+                let error = NSError(domain: "BBMetalCameraErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not get Metal texture"])
+                result = .failure(error)
+            }
+            let info = BBMetalFilterCompletionInfo(result: result,
                                                    sampleTime: sampleTime,
                                                    cameraPosition: cameraPosition,
                                                    isCameraPhoto: isCameraPhoto)
