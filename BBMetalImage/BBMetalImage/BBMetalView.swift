@@ -123,7 +123,14 @@ public class BBMetalView: MTKView {
     }
     
     required init(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+        frameSize = .zero
+        lastFrameSize = frameSize
+        lock = DispatchSemaphore(value: 1)
+        super.init(coder: coder)
+        super.device = BBMetalDevice.sharedDevice
+        super.isPaused = true
+        frameSize = bounds.size
+        lastFrameSize = frameSize
     }
     
     public override func draw(_ rect: CGRect) {
