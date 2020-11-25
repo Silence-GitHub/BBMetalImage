@@ -57,8 +57,7 @@ class MultipleVideoBlendVC: UIViewController {
         let url2 = Bundle.main.url(forResource: "test_video_rotate_right", withExtension: "mov")!
         videoSource = MultipleVideoSource(urls: [url, url2])
         
-        let alphaFilter = BBMetalRGBAFilter(alpha: 0.2)
-        let blendFilter = BBMetalSourceOverBlendFilter()
+        let blendFilter = BBMetalAlphaBlendFilter(mixturePercent: 0.2)
         
         let outputUrl = URL(fileURLWithPath: filePath)
         try? FileManager.default.removeItem(at: outputUrl)
@@ -69,16 +68,10 @@ class MultipleVideoBlendVC: UIViewController {
             .add(consumer: blendFilter)
             .add(consumer: metalView)
         videoSource.videoSource(at: 1)?
-            .add(consumer: alphaFilter)
             .add(consumer: blendFilter)
             .add(consumer: videoWriter)
         
-        videoWriter.start { (type) in
-//            switch type {
-//            case let .video(time, success): print("Video time = \(time), success = \(success)")
-//            case let .audio(time, success): print("Audio time = \(time), success = \(success)")
-//            }
-        }
+        videoWriter.start ()
         videoSource.start(progress: { (frameTime) in
             // print(frameTime)
         }) { [weak self] (_) in
