@@ -84,11 +84,12 @@ public class BBMetalVideoWriter {
         lock.signal()
     }
     
-    public init(url: URL,
-                frameSize: BBMetalIntSize,
-                fileType: AVFileType = .mp4,
-                outputSettings: [String : Any] = [AVVideoCodecKey : AVVideoCodecH264]) {
-        
+    public init(
+        url: URL,
+        frameSize: BBMetalIntSize,
+        fileType: AVFileType = .mp4,
+        outputSettings: [String : Any] = [AVVideoCodecKey : AVVideoCodecH264]
+    ) { 
         self.url = url
         self.frameSize = frameSize
         self.fileType = fileType
