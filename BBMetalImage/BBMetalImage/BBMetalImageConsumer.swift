@@ -84,6 +84,6 @@ public struct BBMetalVideoTextureItem {
 
 // For simulator compile
 #if targetEnvironment(simulator)
-typealias CVMetalTexture = AnyClass
-typealias CVMetalTextureCache = AnyClass
+public typealias CVMetalTexture = AnyClass
+public typealias CVMetalTextureCache = AnyClass
 #endif
