@@ -24,6 +24,7 @@
 		4A665CFF2272201300DFDF4C /* test_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = 4A665CFE2272201300DFDF4C /* test_video.mov */; };
 		4A9BCB66227A03E000E02C6F /* VideoPlayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */; };
 		4AA9C56123A1D8EC0054819E /* RecordUIVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA9C56023A1D8EC0054819E /* RecordUIVC.swift */; };
+		4ABFC321256DAEE700E7FB7E /* CameraVideoBlendVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ABFC320256DAEE700E7FB7E /* CameraVideoBlendVC.swift */; };
 		4AC5794D225529B900F7BCAC /* sunflower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4AC5794B225529B900F7BCAC /* sunflower.jpg */; };
 		4AC5794E225529B900F7BCAC /* test_lookup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AC5794C225529B900F7BCAC /* test_lookup.png */; };
 		4AFA1DC222EA7D8600B4CF24 /* test_video_rotate_right.mov in Resources */ = {isa = PBXBuildFile; fileRef = 4AFA1DC122EA7D8600B4CF24 /* test_video_rotate_right.mov */; };
@@ -67,6 +68,7 @@
 		4A665CFE2272201300DFDF4C /* test_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = test_video.mov; sourceTree = "<group>"; };
 		4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerVC.swift; sourceTree = "<group>"; };
 		4AA9C56023A1D8EC0054819E /* RecordUIVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordUIVC.swift; sourceTree = "<group>"; };
+		4ABFC320256DAEE700E7FB7E /* CameraVideoBlendVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraVideoBlendVC.swift; sourceTree = "<group>"; };
 		4AC5794B225529B900F7BCAC /* sunflower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sunflower.jpg; sourceTree = "<group>"; };
 		4AC5794C225529B900F7BCAC /* test_lookup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_lookup.png; sourceTree = "<group>"; };
 		4AFA1DC122EA7D8600B4CF24 /* test_video_rotate_right.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = test_video_rotate_right.mov; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				4A665CFC22721CAA00DFDF4C /* VideoFilterVC.swift */,
 				4A633D672281F33C00138B2A /* VideoFilterVC2.swift */,
 				4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */,
+				4ABFC320256DAEE700E7FB7E /* CameraVideoBlendVC.swift */,
 				4A45DFD124D2857900DA963E /* MultipleImageBlendVC.swift */,
 				4AFA1DC722EA7DBC00B4CF24 /* MultipleVideoBlendVC.swift */,
 				4AA9C56023A1D8EC0054819E /* RecordUIVC.swift */,
@@ -219,6 +222,7 @@
 				4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */,
 				4AFC464D2253CA08009D37A1 /* StaticImageFilterMenuVC.swift in Sources */,
 				4A633D682281F33C00138B2A /* VideoFilterVC2.swift in Sources */,
+				4ABFC321256DAEE700E7FB7E /* CameraVideoBlendVC.swift in Sources */,
 				4A4CADC4225317C20058BEB6 /* MainMenuVC.swift in Sources */,
 				4A665CFD22721CAA00DFDF4C /* VideoFilterVC.swift in Sources */,
 				4AA9C56123A1D8EC0054819E /* RecordUIVC.swift in Sources */,
