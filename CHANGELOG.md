@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.1.9](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.9) - 2020-11-26
+
+### Change
+
+- Implement BBMetalView init(coder:)
+- Make BBMetalDefaultTexture public
+- Make BBMetalVideoTextureItem public
+
 ## [1.1.8](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.8) - 2020-10-23
 
 ### Fix
