@@ -60,6 +60,24 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     }
     public private(set) var _sources: [BBMetalWeakImageSource]
     
+    /// Index of image source providing sample time.
+    /// Default value is -1, means using the first not nil sample time of image source.
+    /// To use a specific image source sample time, set the image source index to this property.
+    public var sourceSampleTimeIndex: Int {
+        get {
+            lock.wait()
+            let s = _sourceSampleTimeIndex
+            lock.signal()
+            return s
+        }
+        set {
+            lock.wait()
+            _sourceSampleTimeIndex = newValue
+            lock.signal()
+        }
+    }
+    private var _sourceSampleTimeIndex: Int
+    
     /// Filter name
     public let name: String
     
@@ -101,6 +119,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     public init(kernelFunctionName: String, useMPSKernel: Bool = false, useMainBundleKernel: Bool = false) {
         _consumers = []
         _sources = []
+        _sourceSampleTimeIndex = -1
         name = kernelFunctionName
         self.useMPSKernel = useMPSKernel
         
@@ -283,6 +302,9 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         var sampleTime: CMTime?
         var cameraPosition: AVCaptureDevice.Position?
         var isCameraPhoto = false
+        if _sourceSampleTimeIndex >= 0 && _sourceSampleTimeIndex < _sources.count {
+            sampleTime = _sources[_sourceSampleTimeIndex].sampleTime
+        }
         for i in 0..<_sources.count {
             if sampleTime == nil && _sources[i].sampleTime != nil {
                 sampleTime = _sources[i].sampleTime
