@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.1.10](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.10) - 2021-01-04
+
+### Add
+
+- BBMetalBaseFilter sourceSampleTimeIndex property
+
 ## [1.1.9](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.9) - 2020-11-26
 
 ### Change
