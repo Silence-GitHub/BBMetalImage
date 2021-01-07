@@ -104,6 +104,9 @@ public class BBMetalVideoWriter {
         descriptor.width = frameSize.width
         descriptor.height = frameSize.height
         descriptor.usage = [.shaderRead, .shaderWrite]
+        #if targetEnvironment(macCatalyst)
+        descriptor.storageMode = .managed
+        #endif
         outputTexture = BBMetalDevice.sharedDevice.makeTexture(descriptor: descriptor)
         
         threadgroupSize = MTLSize(width: 16, height: 16, depth: 1)
@@ -307,6 +310,12 @@ extension BBMetalVideoWriter: BBMetalImageConsumer {
         encoder.setTexture(texture.metalTexture, index: 1)
         encoder.dispatchThreadgroups(threadgroupCount, threadsPerThreadgroup: threadgroupSize)
         encoder.endEncoding()
+        
+        #if targetEnvironment(macCatalyst)
+        let blitEncoder = commandBuffer.makeBlitCommandEncoder()
+        blitEncoder?.synchronize(resource: outputTexture)
+        blitEncoder?.endEncoding()
+        #endif
         
         commandBuffer.commit()
         commandBuffer.waitUntilCompleted() // Wait to make sure that output texture contains new data
