@@ -1,5 +1,11 @@
 # Change Log
 
+## [1.1.11](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.11) - 2021-08-05
+
+### Add
+
+- BBMetalTransformFilter anchorPoint property
+
 ## [1.1.10](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.10) - 2021-01-04
 
 ### Add
