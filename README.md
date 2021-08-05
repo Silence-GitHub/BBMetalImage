@@ -38,7 +38,7 @@ Test libraries are BBMetalImage (0.1.1) and GPUImage (0.1.7). Test device is iPh
 
 Install with CocoaPods:
 
-1. Add `pod 'BBMetalImage'` to your Podfile.
+1. Add `use_frameworks!` and `pod 'BBMetalImage'` to your Podfile.
 2. Run `pod install` or `pod update`.
 3. Add `import BBMetalImage` to the Swift source file.
 
