@@ -30,11 +30,19 @@ public class BBMetalTransformFilter: BBMetalBaseFilter {
     }
     private var _matrix: matrix_float3x2
     
+    /// Anchor point for transformations. By default, the anchor point is left top (0, 0). Set (0.5, 0.5) to change the anchor point to the texture center.
+    public var anchorPoint: CGPoint {
+        get { CGPoint(x: CGFloat(_anchorPoint.x), y: CGFloat(_anchorPoint.y)) }
+        set { _anchorPoint = SIMD2<Float>(x: Float(newValue.x), y: Float(newValue.y)) }
+    }
+    private var _anchorPoint: SIMD2<Float>
+    
     /// True to change image size to fit transformed image, false to keep image size
     public var fitSize: Bool
     
-    public init(transform: CGAffineTransform = .identity, fitSize: Bool = true) {
+    public init(transform: CGAffineTransform = .identity, anchorPoint: CGPoint = .zero, fitSize: Bool = true) {
         self._matrix = BBMetalTransformFilter.matrix(from: transform)
+        self._anchorPoint = SIMD2<Float>(x: Float(anchorPoint.x), y: Float(anchorPoint.y))
         self.fitSize = fitSize
         super.init(kernelFunctionName: "transformKernel")
     }
@@ -58,5 +66,6 @@ public class BBMetalTransformFilter: BBMetalBaseFilter {
     
     public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
         encoder.setBytes(&_matrix, length: MemoryLayout<matrix_float3x2>.size, index: 0)
+        encoder.setBytes(&_anchorPoint, length: MemoryLayout<SIMD2<Float>>.size, index: 1)
     }
 }

@@ -18,12 +18,10 @@ bool isZeroOrOne(float x) {
 kernel void transformKernel(texture2d<half, access::write> outputTexture [[texture(0)]],
                             texture2d<half, access::sample> inputTexture [[texture(1)]],
                             constant float3x2 *matrix [[buffer(0)]],
+                            constant float2 *anchorPoint [[buffer(1)]],
                             uint2 gid [[thread_position_in_grid]]) {
     
     if ((gid.x >= outputTexture.get_width()) || (gid.y >= outputTexture.get_height())) { return; }
-    
-    const float outX = gid.x;
-    const float outY = gid.y;
     
     const float3x2 m = *matrix;
     const float a = m[0][0], b = m[0][1];
@@ -34,10 +32,16 @@ kernel void transformKernel(texture2d<half, access::write> outputTexture [[textu
         return;
     }
     
+    const float anchorX = (*anchorPoint)[0];
+    const float anchorY = (*anchorPoint)[1];
+    
+    const float outX = gid.x - outputTexture.get_width() * anchorX;
+    const float outY = gid.y - outputTexture.get_height() * anchorY;
+    
     const float tx = m[2][0], ty = m[2][1];
     
-    const float inX = (d * outX - c * outY - d * tx + c * ty) / (a * d - b * c) / inputTexture.get_width();
-    const float inY = (b * outX - a * outY - b * tx + a * ty) / (b * c - a * d) / inputTexture.get_height();
+    const float inX = (d * outX - c * outY - d * tx + c * ty) / (a * d - b * c) / inputTexture.get_width() + anchorX;
+    const float inY = (b * outX - a * outY - b * tx + a * ty) / (b * c - a * d) / inputTexture.get_height() + anchorY;
     
     // Set empty pixel when out of range
     if (inX * inputTexture.get_width() < -1 ||
