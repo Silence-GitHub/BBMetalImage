@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A00949E225C53C50089941C /* CameraFilterVC.swift */; };
 		4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */; };
+		4A33ECF9270CC4B5005F18A6 /* MultipleCameraFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33ECF8270CC4B5005F18A6 /* MultipleCameraFilterVC.swift */; };
+		4A33ECFB270CCC68005F18A6 /* PiPFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33ECFA270CCC68005F18A6 /* PiPFilter.swift */; };
+		4A33ECFD270CCF78005F18A6 /* PiPFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A33ECFC270CCF78005F18A6 /* PiPFilter.metal */; };
 		4A3CAE3F228A060900252B70 /* CameraPhotoFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A3CAE3E228A060900252B70 /* CameraPhotoFilterVC.swift */; };
 		4A45DFD224D2857900DA963E /* MultipleImageBlendVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A45DFD124D2857900DA963E /* MultipleImageBlendVC.swift */; };
 		4A4CADC2225317C20058BEB6 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A4CADC1225317C20058BEB6 /* AppDelegate.swift */; };
@@ -52,6 +55,9 @@
 /* Begin PBXFileReference section */
 		4A00949E225C53C50089941C /* CameraFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterVC.swift; sourceTree = "<group>"; };
 		4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterMenuVC.swift; sourceTree = "<group>"; };
+		4A33ECF8270CC4B5005F18A6 /* MultipleCameraFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleCameraFilterVC.swift; sourceTree = "<group>"; };
+		4A33ECFA270CCC68005F18A6 /* PiPFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPFilter.swift; sourceTree = "<group>"; };
+		4A33ECFC270CCF78005F18A6 /* PiPFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = PiPFilter.metal; sourceTree = "<group>"; };
 		4A3CAE3E228A060900252B70 /* CameraPhotoFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraPhotoFilterVC.swift; sourceTree = "<group>"; };
 		4A45DFD124D2857900DA963E /* MultipleImageBlendVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleImageBlendVC.swift; sourceTree = "<group>"; };
 		4A4CADBE225317C20058BEB6 /* BBMetalImageDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BBMetalImageDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +125,9 @@
 				4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */,
 				4A00949E225C53C50089941C /* CameraFilterVC.swift */,
 				4A3CAE3E228A060900252B70 /* CameraPhotoFilterVC.swift */,
+				4A33ECF8270CC4B5005F18A6 /* MultipleCameraFilterVC.swift */,
+				4A33ECFA270CCC68005F18A6 /* PiPFilter.swift */,
+				4A33ECFC270CCF78005F18A6 /* PiPFilter.metal */,
 				4A665CFC22721CAA00DFDF4C /* VideoFilterVC.swift */,
 				4A633D672281F33C00138B2A /* VideoFilterVC2.swift */,
 				4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */,
@@ -218,6 +227,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A33ECF9270CC4B5005F18A6 /* MultipleCameraFilterVC.swift in Sources */,
 				4AFD9C3A225EA1190000C839 /* FilterType.swift in Sources */,
 				4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */,
 				4AFC464D2253CA08009D37A1 /* StaticImageFilterMenuVC.swift in Sources */,
@@ -226,9 +236,11 @@
 				4A4CADC4225317C20058BEB6 /* MainMenuVC.swift in Sources */,
 				4A665CFD22721CAA00DFDF4C /* VideoFilterVC.swift in Sources */,
 				4AA9C56123A1D8EC0054819E /* RecordUIVC.swift in Sources */,
+				4A33ECFD270CCF78005F18A6 /* PiPFilter.metal in Sources */,
 				4AFC464F2253CDDC009D37A1 /* StaticImageFilterVC.swift in Sources */,
 				4A4CADC2225317C20058BEB6 /* AppDelegate.swift in Sources */,
 				4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */,
+				4A33ECFB270CCC68005F18A6 /* PiPFilter.swift in Sources */,
 				4A45DFD224D2857900DA963E /* MultipleImageBlendVC.swift in Sources */,
 				4A3CAE3F228A060900252B70 /* CameraPhotoFilterVC.swift in Sources */,
 				4AFA1DC922EA7DBC00B4CF24 /* MultipleVideoBlendVC.swift in Sources */,
