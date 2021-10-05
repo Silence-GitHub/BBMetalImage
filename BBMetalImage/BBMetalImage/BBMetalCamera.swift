@@ -239,6 +239,7 @@ public class BBMetalCamera: NSObject {
     ///   - multitpleSessions: whether to use independent video session and audio session (false by default). Switching camera position while recording leads to the video and audio out of sync.
     /// Set true if we allow the user to switch camera position while recording.
     public init?(
+        captureSession: AVCaptureSession = .init(),
         sessionPreset: AVCaptureSession.Preset = .high,
         position: AVCaptureDevice.Position = .back,
         multitpleSessions: Bool = false
@@ -259,9 +260,12 @@ public class BBMetalCamera: NSObject {
         guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position),
             let videoDeviceInput = try? AVCaptureDeviceInput(device: videoDevice) else { return nil }
         
-        session = AVCaptureSession()
+        session = captureSession
         session.beginConfiguration()
-        session.sessionPreset = sessionPreset
+        
+        if !(session is AVCaptureMultiCamSession) {
+            session.sessionPreset = sessionPreset
+        }
         
         if !session.canAddInput(videoDeviceInput) {
             session.commitConfiguration()
