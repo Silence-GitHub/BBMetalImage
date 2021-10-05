@@ -80,6 +80,9 @@ public class BBMetalCamera: NSObject {
     /// Camera position
     public var position: AVCaptureDevice.Position { return camera.position }
     
+    /// Camera active format
+    public var activeFormat: AVCaptureDevice.Format { camera.activeFormat }
+    
     /// Whether to run benchmark or not.
     /// Running benchmark records frame duration.
     /// False by default.
