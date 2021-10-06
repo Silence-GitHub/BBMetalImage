@@ -22,6 +22,7 @@ Test libraries are BBMetalImage (0.1.1) and GPUImage (0.1.7). Test device is iPh
 - [x] Filter chain supported
 - [x] Customized filter
 - [x] Camera capturing video and audio
+- [x] Multiple camera supported
 - [x] Video source processing video file
 - [x] Image source providing image texture
 - [x] UI source recording view animation
@@ -43,6 +44,10 @@ Install with CocoaPods:
 3. Add `import BBMetalImage` to the Swift source file.
 
 ##  How to Use
+
+### Demo
+
+View sample code in demo project.
 
 ### Single Filter
 
@@ -85,7 +90,7 @@ func setup() {
     // Set up video writer
     let filePath = NSTemporaryDirectory() + "test.mp4"
     let url = URL(fileURLWithPath: filePath)
-    videoWriter = BBMetalVideoWriter(url: url, frameSize: BBMetalIntSize(width: 1080, height: 1920))
+    videoWriter = BBMetalVideoWriter(url: url, frameSize: camera.textureSize)
 
     // Set camera audio consumer to record audio
     camera.audioConsumer = videoWriter
