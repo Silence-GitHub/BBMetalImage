@@ -76,9 +76,14 @@ class VideoFilterVC2: UIViewController {
             
             videoWriter.start()
             
-            videoSource.start(progress: { (frameTime) in
-                // print(frameTime)
-            }) { [weak self] (_) in
+            videoSource.start(progress: { _ in
+                // Some frames are dropped in some devices (e.g. iPhone 13).
+                // Maybe GPU is much faster than CPU for some devices.
+                // The video writer gets too many frames to write.
+                // Some frames are dropped because video writer is not ready to write.
+                // So sleep to wait here.
+                usleep(5 * 1000)
+            }) { [weak self] _ in
                 guard let self = self else { return }
                 self.videoWriter.finish {
                     DispatchQueue.main.async { [weak self] in
