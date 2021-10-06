@@ -1,5 +1,13 @@
 # Change Log
 
+## [1.1.12](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.12) - 2021-10-06
+
+### Add
+
+- BBMetalMultipleCamera
+- BBMetalCamera activeFormat, textureSize and videoOrientation properties
+- BBMetalBaseFilter sourceCameraPositionIndex property
+
 ## [1.1.11](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.11) - 2021-08-05
 
 ### Add
