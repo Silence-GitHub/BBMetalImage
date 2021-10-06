@@ -100,6 +100,23 @@ public class BBMetalCamera: NSObject {
         return size
     }
     
+    public var videoOrientation: AVCaptureVideoOrientation {
+        get {
+            lock.wait()
+            let v = videoOutput.connections.first?.videoOrientation ?? .portrait
+            lock.signal()
+            return v
+        }
+        set {
+            lock.wait()
+            if let connection = videoOutput.connections.first,
+               connection.isVideoOrientationSupported {
+                connection.videoOrientation = newValue
+            }
+            lock.signal()
+        }
+    }
+    
     private var originalOrientation: AVCaptureVideoOrientation
     
     /// Whether to run benchmark or not.
