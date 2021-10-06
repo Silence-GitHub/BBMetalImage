@@ -83,6 +83,25 @@ public class BBMetalCamera: NSObject {
     /// Camera active format
     public var activeFormat: AVCaptureDevice.Format { camera.activeFormat }
     
+    /// Output texture size
+    public var textureSize: BBMetalIntSize {
+        lock.wait()
+        let dimensions = CMVideoFormatDescriptionGetDimensions(camera.activeFormat.formatDescription)
+        var size = BBMetalIntSize(width: Int(dimensions.width), height: Int(dimensions.height))
+        if let orientation = videoOutput.connections.first?.videoOrientation {
+            let isLandscape: (AVCaptureVideoOrientation) -> Bool = { orientation in
+                orientation == .landscapeLeft || orientation == .landscapeRight
+            }
+            if isLandscape(orientation) != isLandscape(originalOrientation) {
+                swap(&size.width, &size.height)
+            }
+        }
+        lock.signal()
+        return size
+    }
+    
+    private var originalOrientation: AVCaptureVideoOrientation
+    
     /// Whether to run benchmark or not.
     /// Running benchmark records frame duration.
     /// False by default.
@@ -252,6 +271,7 @@ public class BBMetalCamera: NSObject {
         capturedFrameCount = 0
         totalCaptureFrameTime = 0
         ignoreInitialFrameCount = 5
+        originalOrientation = .portrait
         self.multitpleSessions = multitpleSessions
         lock = DispatchSemaphore(value: 1)
         
@@ -292,6 +312,7 @@ public class BBMetalCamera: NSObject {
                 session.commitConfiguration()
                 return nil
         }
+        originalOrientation = connection.videoOrientation
         connection.videoOrientation = .portrait
         
         session.commitConfiguration()
@@ -494,6 +515,7 @@ public class BBMetalCamera: NSObject {
         
         guard let connection = videoOutput.connections.first,
             connection.isVideoOrientationSupported else { return false }
+        originalOrientation = connection.videoOrientation
         connection.videoOrientation = .portrait
         
         return true
