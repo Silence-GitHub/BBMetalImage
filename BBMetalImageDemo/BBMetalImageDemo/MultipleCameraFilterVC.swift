@@ -89,6 +89,8 @@ class MultipleCameraFilterVC: UIViewController {
         pipFilter.add(consumer: metalView)
         pipFilter.add(consumer: videoWriter)
         
+        camera.backCamera.audioConsumer = videoWriter
+        
         updateFilterChain()
     }
     
