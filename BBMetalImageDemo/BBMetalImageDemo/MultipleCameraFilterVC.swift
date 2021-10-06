@@ -84,7 +84,7 @@ class MultipleCameraFilterVC: UIViewController {
         
         filePath = NSTemporaryDirectory() + "test.mp4"
         let url = URL(fileURLWithPath: filePath)
-        videoWriter = BBMetalVideoWriter(url: url, frameSize: BBMetalIntSize(width: 1080, height: 1920))
+        videoWriter = BBMetalVideoWriter(url: url, frameSize: camera.backCamera.textureSize)
         
         pipFilter.add(consumer: metalView)
         pipFilter.add(consumer: videoWriter)

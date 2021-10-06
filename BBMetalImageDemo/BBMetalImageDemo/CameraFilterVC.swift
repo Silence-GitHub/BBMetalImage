@@ -35,6 +35,8 @@ class CameraFilterVC: UIViewController {
         title = "\(type)"
         view.backgroundColor = .gray
         
+        camera = BBMetalCamera(sessionPreset: .hd1920x1080)
+        
         let x: CGFloat = 10
         let width: CGFloat = view.bounds.width - 20
         metalView = BBMetalView(frame: CGRect(x: x, y: 100, width: width, height: view.bounds.height - 230))
@@ -67,9 +69,8 @@ class CameraFilterVC: UIViewController {
         
         filePath = NSTemporaryDirectory() + "test.mp4"
         let url = URL(fileURLWithPath: filePath)
-        videoWriter = BBMetalVideoWriter(url: url, frameSize: BBMetalIntSize(width: 1080, height: 1920))
+        videoWriter = BBMetalVideoWriter(url: url, frameSize: camera.textureSize)
         
-        camera = BBMetalCamera(sessionPreset: .hd1920x1080)
         camera.audioConsumer = videoWriter
         camera.add(consumer: metalView)
         camera.add(consumer: videoWriter)

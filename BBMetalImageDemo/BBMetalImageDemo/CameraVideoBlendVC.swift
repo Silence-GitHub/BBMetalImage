@@ -61,7 +61,7 @@ class CameraVideoBlendVC: UIViewController {
         
         filePath = NSTemporaryDirectory() + "test.mp4"
         let outputUrl = URL(fileURLWithPath: filePath)
-        videoWriter = BBMetalVideoWriter(url: outputUrl, frameSize: BBMetalIntSize(width: 1080, height: 1920))
+        videoWriter = BBMetalVideoWriter(url: outputUrl, frameSize: camera.textureSize)
         
         camera.audioConsumer = videoWriter
         
