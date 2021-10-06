@@ -134,6 +134,10 @@ class MultipleCameraFilterVC: UIViewController {
                 camera.backCamera.add(consumer: pipFilter)
                 camera.frontCamera.add(consumer: pipFilter)
             }
+            
+            pipFilter.sourceSampleTimeIndex = 0
+            pipFilter.sourceCameraPositionIndex = 0
+            
         } else {
             if needFilter {
                 camera.frontCamera.add(consumer: contrastFilter)
@@ -144,6 +148,9 @@ class MultipleCameraFilterVC: UIViewController {
                 camera.frontCamera.add(consumer: pipFilter)
                 camera.backCamera.add(consumer: pipFilter)
             }
+            
+            pipFilter.sourceSampleTimeIndex = 1
+            pipFilter.sourceCameraPositionIndex = 1
         }
     }
     

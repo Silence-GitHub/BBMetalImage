@@ -78,6 +78,24 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     }
     private var _sourceSampleTimeIndex: Int
     
+    /// Index of image source providing camera position.
+    /// Default value is -1, means using the first not nil camera position of image source.
+    /// To use a specific image source camera position, set the image source index to this property.
+    public var sourceCameraPositionIndex: Int {
+        get {
+            lock.wait()
+            let s = _sourceCameraPositionIndex
+            lock.signal()
+            return s
+        }
+        set {
+            lock.wait()
+            _sourceCameraPositionIndex = newValue
+            lock.signal()
+        }
+    }
+    private var _sourceCameraPositionIndex: Int
+    
     /// Filter name
     public let name: String
     
@@ -120,6 +138,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         _consumers = []
         _sources = []
         _sourceSampleTimeIndex = -1
+        _sourceCameraPositionIndex = -1
         name = kernelFunctionName
         self.useMPSKernel = useMPSKernel
         
@@ -304,6 +323,9 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         var isCameraPhoto = false
         if _sourceSampleTimeIndex >= 0 && _sourceSampleTimeIndex < _sources.count {
             sampleTime = _sources[_sourceSampleTimeIndex].sampleTime
+        }
+        if _sourceCameraPositionIndex >= 0 && _sourceCameraPositionIndex < _sources.count {
+            cameraPosition = _sources[_sourceCameraPositionIndex].cameraPosition
         }
         for i in 0..<_sources.count {
             if sampleTime == nil && _sources[i].sampleTime != nil {
