@@ -27,6 +27,8 @@
 		4A665CFF2272201300DFDF4C /* test_video.mov in Resources */ = {isa = PBXBuildFile; fileRef = 4A665CFE2272201300DFDF4C /* test_video.mov */; };
 		4A9BCB66227A03E000E02C6F /* VideoPlayerVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */; };
 		4AA9C56123A1D8EC0054819E /* RecordUIVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA9C56023A1D8EC0054819E /* RecordUIVC.swift */; };
+		4AB9753F270E12BD009BDF3D /* VideoWatermarkVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB9753E270E12BD009BDF3D /* VideoWatermarkVC.swift */; };
+		4AB97541270E14D3009BDF3D /* Swift.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AB97540270E14D3009BDF3D /* Swift.png */; };
 		4ABFC321256DAEE700E7FB7E /* CameraVideoBlendVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ABFC320256DAEE700E7FB7E /* CameraVideoBlendVC.swift */; };
 		4AC5794D225529B900F7BCAC /* sunflower.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4AC5794B225529B900F7BCAC /* sunflower.jpg */; };
 		4AC5794E225529B900F7BCAC /* test_lookup.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AC5794C225529B900F7BCAC /* test_lookup.png */; };
@@ -74,6 +76,8 @@
 		4A665CFE2272201300DFDF4C /* test_video.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = test_video.mov; sourceTree = "<group>"; };
 		4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoPlayerVC.swift; sourceTree = "<group>"; };
 		4AA9C56023A1D8EC0054819E /* RecordUIVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecordUIVC.swift; sourceTree = "<group>"; };
+		4AB9753E270E12BD009BDF3D /* VideoWatermarkVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoWatermarkVC.swift; sourceTree = "<group>"; };
+		4AB97540270E14D3009BDF3D /* Swift.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Swift.png; sourceTree = "<group>"; };
 		4ABFC320256DAEE700E7FB7E /* CameraVideoBlendVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraVideoBlendVC.swift; sourceTree = "<group>"; };
 		4AC5794B225529B900F7BCAC /* sunflower.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = sunflower.jpg; sourceTree = "<group>"; };
 		4AC5794C225529B900F7BCAC /* test_lookup.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = test_lookup.png; sourceTree = "<group>"; };
@@ -130,12 +134,14 @@
 				4A33ECFC270CCF78005F18A6 /* PiPFilter.metal */,
 				4A665CFC22721CAA00DFDF4C /* VideoFilterVC.swift */,
 				4A633D672281F33C00138B2A /* VideoFilterVC2.swift */,
+				4AB9753E270E12BD009BDF3D /* VideoWatermarkVC.swift */,
 				4A9BCB65227A03E000E02C6F /* VideoPlayerVC.swift */,
 				4ABFC320256DAEE700E7FB7E /* CameraVideoBlendVC.swift */,
 				4A45DFD124D2857900DA963E /* MultipleImageBlendVC.swift */,
 				4AFA1DC722EA7DBC00B4CF24 /* MultipleVideoBlendVC.swift */,
 				4AA9C56023A1D8EC0054819E /* RecordUIVC.swift */,
 				4AC5794B225529B900F7BCAC /* sunflower.jpg */,
+				4AB97540270E14D3009BDF3D /* Swift.png */,
 				4AC5794C225529B900F7BCAC /* test_lookup.png */,
 				4AFC46502253D1A6009D37A1 /* multicolour_flowers.jpg */,
 				4A665CFE2272201300DFDF4C /* test_video.mov */,
@@ -217,6 +223,7 @@
 				4A4CADC7225317C20058BEB6 /* Main.storyboard in Resources */,
 				4A633D6A2281F43300138B2A /* test_video_2.mov in Resources */,
 				4AFA1DC222EA7D8600B4CF24 /* test_video_rotate_right.mov in Resources */,
+				4AB97541270E14D3009BDF3D /* Swift.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,6 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AB9753F270E12BD009BDF3D /* VideoWatermarkVC.swift in Sources */,
 				4A33ECF9270CC4B5005F18A6 /* MultipleCameraFilterVC.swift in Sources */,
 				4AFD9C3A225EA1190000C839 /* FilterType.swift in Sources */,
 				4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */,

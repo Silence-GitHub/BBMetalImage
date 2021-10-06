@@ -37,6 +37,9 @@ class MainMenuVC: UIViewController {
         let videoFilter2 = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(VideoFilterVC2(), animated: true) }
         }
+        let videoWatermark = { [weak self] in
+            if let self = self { self.navigationController?.pushViewController(VideoWatermarkVC(), animated: true) }
+        }
         let cameraVideoBlend = { [weak self] in
             if let self = self { self.navigationController?.pushViewController(CameraVideoBlendVC(), animated: true) }
         }
@@ -55,6 +58,7 @@ class MainMenuVC: UIViewController {
                 ("Multiple camera filter", multipleCameraFilter),
                 ("Video filter", videoFilter),
                 ("Video filter 2", videoFilter2),
+                ("Video watermark", videoWatermark),
                 ("Camera video blend", cameraVideoBlend),
                 ("Multiple image blend", multipleImageBlend),
                 ("Multiple video blend", multipleVideoBlend),
