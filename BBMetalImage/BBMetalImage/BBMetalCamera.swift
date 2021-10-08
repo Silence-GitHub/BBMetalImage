@@ -423,7 +423,10 @@ public class BBMetalCamera: NSObject {
     
     private func removePhotoOutput() {
         session.beginConfiguration()
-        if let output = photoOutput { session.removeOutput(output) }
+        if let output = photoOutput {
+            session.removeOutput(output)
+            photoOutput = nil
+        }
         session.commitConfiguration()
     }
     
