@@ -285,6 +285,8 @@ public class BBMetalCamera: NSObject {
     }
     private var _outputSynchronizer: Any!
     
+    private var depthImageSource: CameraDepthImageSource!
+    
     /// When this property is false, received video/audio sample buffer will not be processed
     public var isPaused: Bool {
         get {
@@ -535,12 +537,16 @@ public class BBMetalCamera: NSObject {
         
         guard let connection = depthDataOutput.connections.first,
             connection.isVideoOrientationSupported else {
+                session.removeOutput(output)
+                depthDataOutput = nil
                 return false
         }
         connection.videoOrientation = videoOutput.connections.first?.videoOrientation ?? .portrait
         
         outputSynchronizer = AVCaptureDataOutputSynchronizer(dataOutputs: [videoOutput, depthDataOutput])
         outputSynchronizer.setDelegate(self, queue: videoOutputQueue)
+        
+        depthImageSource = .init()
         
         return true
     }
@@ -553,6 +559,8 @@ public class BBMetalCamera: NSObject {
             depthDataOutput = nil
         }
         outputSynchronizer = nil
+        depthImageSource.removeAllConsumers()
+        depthImageSource = nil
         session.commitConfiguration()
     }
     
@@ -915,80 +923,45 @@ extension BBMetalCamera: AVCaptureDepthDataOutputDelegate {
     
     private func processDepthData(_ depthData: AVDepthData, timestamp: CMTime) {
         // Depth
-//        lock.wait()
-//        let paused = _isPaused
-//        let consumers = _consumers
-//        let willTransmit = _willTransmitTexture
-//        let cameraPosition = camera.position
-//
-//        let isCameraPhoto = _needPhoto
-//        if _needPhoto { _needPhoto = false }
-//
-//        let capturePhotoCompletion = _capturePhotoCompletion
-//        if _capturePhotoCompletion != nil { _capturePhotoCompletion = nil }
-//        lock.signal()
-//
-//        guard !paused, !consumers.isEmpty else { return }
-//
-//        var depthFormatDescription: CMFormatDescription?
-//        CMVideoFormatDescriptionCreateForImageBuffer(
-//            allocator: kCFAllocatorDefault,
-//            imageBuffer: depthData.depthDataMap,
-//            formatDescriptionOut: &depthFormatDescription
-//        )
-//
-//        guard let depthFormatDescription = depthFormatDescription else { return }
-//
-//        var inputTextureFormat = MTLPixelFormat.invalid
-//        let inputMediaSubType = CMFormatDescriptionGetMediaSubType(depthFormatDescription)
-//        if inputMediaSubType == kCVPixelFormatType_DepthFloat16 ||
-//            inputMediaSubType == kCVPixelFormatType_DisparityFloat16 {
-//            inputTextureFormat = .r16Float
-//        } else if inputMediaSubType == kCVPixelFormatType_DepthFloat32 ||
-//            inputMediaSubType == kCVPixelFormatType_DisparityFloat32 {
-//            inputTextureFormat = .r32Float
-//        } else {
-//            assertionFailure("Input format not supported")
-//            return
-//        }
-//
-//        guard let texture = texture(with: depthData.depthDataMap, pixelFormat: inputTextureFormat) else {
-//            if let completion = capturePhotoCompletion {
-//                let error = NSError(domain: "BBMetalCameraErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not get Metal texture"])
-//                let info = BBMetalFilterCompletionInfo(result: .failure(error),
-//                                                       sampleTime: timestamp,
-//                                                       cameraPosition: cameraPosition,
-//                                                       isCameraPhoto: isCameraPhoto)
-//                completion(info)
-//            }
-//            return
-//        }
-//
-//        let sampleTime = timestamp
-//
-//        if let completion = capturePhotoCompletion {
-//            var result: Result<MTLTexture, Error>
-//            let filter = BBMetalPassThroughFilter(createTexture: true)
-//            if let metalTexture = filter.filteredTexture(with: texture.metalTexture) {
-//                result = .success(metalTexture)
-//            } else {
-//                let error = NSError(domain: "BBMetalCameraErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not get Metal texture"])
-//                result = .failure(error)
-//            }
-//            let info = BBMetalFilterCompletionInfo(result: result,
-//                                                   sampleTime: sampleTime,
-//                                                   cameraPosition: cameraPosition,
-//                                                   isCameraPhoto: isCameraPhoto)
-//            completion(info)
-//        }
-//
-//        willTransmit?(texture.metalTexture, sampleTime)
-//        let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
-//                                           sampleTime: sampleTime,
-//                                           cameraPosition: cameraPosition,
-//                                           isCameraPhoto: isCameraPhoto,
-//                                           cvMetalTexture: texture.cvMetalTexture)
-//        for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
+        lock.wait()
+        let paused = _isPaused
+        let optionalSource = depthImageSource
+        let consumers = optionalSource?.consumers ?? []
+        let cameraPosition = camera.position
+        lock.signal()
+
+        guard !paused, !consumers.isEmpty, let depthImageSource = optionalSource else { return }
+
+        var depthFormatDescription: CMFormatDescription?
+        CMVideoFormatDescriptionCreateForImageBuffer(
+            allocator: kCFAllocatorDefault,
+            imageBuffer: depthData.depthDataMap,
+            formatDescriptionOut: &depthFormatDescription
+        )
+
+        guard let depthFormatDescription = depthFormatDescription else { return }
+
+        var inputTextureFormat = MTLPixelFormat.invalid
+        let inputMediaSubType = CMFormatDescriptionGetMediaSubType(depthFormatDescription)
+        if inputMediaSubType == kCVPixelFormatType_DepthFloat16 ||
+            inputMediaSubType == kCVPixelFormatType_DisparityFloat16 {
+            inputTextureFormat = .r16Float
+        } else if inputMediaSubType == kCVPixelFormatType_DepthFloat32 ||
+            inputMediaSubType == kCVPixelFormatType_DisparityFloat32 {
+            inputTextureFormat = .r32Float
+        } else {
+            assertionFailure("Input format not supported")
+            return
+        }
+
+        guard let texture = texture(with: depthData.depthDataMap, pixelFormat: inputTextureFormat) else { return }
+        
+        let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
+                                           sampleTime: timestamp,
+                                           cameraPosition: cameraPosition,
+                                           isCameraPhoto: false,
+                                           cvMetalTexture: texture.cvMetalTexture)
+        for consumer in consumers { consumer.newTextureAvailable(output, from: depthImageSource) }
     }
 }
 
@@ -1013,5 +986,64 @@ extension BBMetalCamera: AVCaptureDataOutputSynchronizerDelegate {
            !syncedDepthData.depthDataWasDropped {
             processDepthData(syncedDepthData.depthData, timestamp: syncedDepthData.timestamp)
         }
+    }
+}
+
+class CameraDepthImageSource: BBMetalImageSource {
+    
+    var consumers: [BBMetalImageConsumer] = []
+    
+    @discardableResult
+    public func add<T: BBMetalImageConsumer>(consumer: T) -> T {
+        consumers.append(consumer)
+        consumer.add(source: self)
+        return consumer
+    }
+    
+    public func add(consumer: BBMetalImageConsumer, at index: Int) {
+        consumers.insert(consumer, at: index)
+        consumer.add(source: self)
+    }
+    
+    public func remove(consumer: BBMetalImageConsumer) {
+        if let index = consumers.firstIndex(where: { $0 === consumer }) {
+            consumers.remove(at: index)
+            consumer.remove(source: self)
+        }
+    }
+    
+    public func removeAllConsumers() {
+        for consumer in consumers {
+            consumer.remove(source: self)
+        }
+        consumers.removeAll()
+    }
+}
+
+public extension BBMetalCamera {
+    @discardableResult
+    func add<T: BBMetalImageConsumer>(depthConsumer: T) -> T {
+        lock.wait()
+        let c = depthImageSource.add(consumer: depthConsumer)
+        lock.signal()
+        return c
+    }
+    
+    func add(depthConsumer: BBMetalImageConsumer, at index: Int) {
+        lock.wait()
+        depthImageSource.add(consumer: depthConsumer, at: index)
+        lock.signal()
+    }
+    
+    func remove(depthConsumer: BBMetalImageConsumer) {
+        lock.wait()
+        depthImageSource.remove(consumer: depthConsumer)
+        lock.signal()
+    }
+    
+    func removeAllDepthConsumers() {
+        lock.wait()
+        depthImageSource.removeAllConsumers()
+        lock.signal()
     }
 }
