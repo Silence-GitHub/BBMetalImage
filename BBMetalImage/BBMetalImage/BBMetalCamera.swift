@@ -250,6 +250,41 @@ public class BBMetalCamera: NSObject {
     }
     private weak var _metadataObjectDelegate: BBMetalCameraMetadataObjectDelegate?
     
+    @available(iOS 11.0, *)
+    public var canGetDepthData: Bool {
+        get {
+            lock.wait()
+            let c = _canGetDepthData
+            lock.signal()
+            return c
+        }
+        set {
+            lock.wait()
+            _canGetDepthData = newValue
+            if newValue {
+                if !addDepthDataOutput() { _canGetDepthData = false }
+            } else {
+                removeDepthDataOutput()
+            }
+            lock.signal()
+        }
+    }
+    private var _canGetDepthData: Bool
+    
+    @available(iOS 11.0, *)
+    private var depthDataOutput: AVCaptureDepthDataOutput! {
+        get { _depthDataOutput as? AVCaptureDepthDataOutput }
+        set { _depthDataOutput = newValue }
+    }
+    private var _depthDataOutput: Any!
+    
+    @available(iOS 11.0, *)
+    private var outputSynchronizer: AVCaptureDataOutputSynchronizer! {
+        get { _outputSynchronizer as? AVCaptureDataOutputSynchronizer }
+        set { _outputSynchronizer = newValue }
+    }
+    private var _outputSynchronizer: Any!
+    
     /// When this property is false, received video/audio sample buffer will not be processed
     public var isPaused: Bool {
         get {
@@ -277,10 +312,12 @@ public class BBMetalCamera: NSObject {
     public init?(
         captureSession: AVCaptureSession = .init(),
         sessionPreset: AVCaptureSession.Preset = .high,
+        deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera,
         position: AVCaptureDevice.Position = .back,
         multitpleSessions: Bool = false
     ) {
         _consumers = []
+        _canGetDepthData = false
         _canTakePhoto = false
         _needPhoto = false
         _isPaused = false
@@ -294,7 +331,7 @@ public class BBMetalCamera: NSObject {
         
         super.init()
         
-        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position),
+        guard let videoDevice = AVCaptureDevice.default(deviceType, for: .video, position: position),
             let videoDeviceInput = try? AVCaptureDeviceInput(device: videoDevice) else { return nil }
         
         session = captureSession
@@ -477,6 +514,46 @@ public class BBMetalCamera: NSObject {
         
         session.commitConfiguration()
         lock.signal()
+    }
+    
+    @available(iOS 11.0, *)
+    @discardableResult
+    private func addDepthDataOutput() -> Bool {
+        if depthDataOutput != nil { return true }
+        
+        session.beginConfiguration()
+        defer { session.commitConfiguration() }
+        
+        let output = AVCaptureDepthDataOutput()
+        output.setDelegate(self, callbackQueue: videoOutputQueue)
+        if !session.canAddOutput(output) {
+            print("Can not add depth data output")
+            return false
+        }
+        session.addOutput(output)
+        depthDataOutput = output
+        
+        guard let connection = depthDataOutput.connections.first,
+            connection.isVideoOrientationSupported else {
+                return false
+        }
+        connection.videoOrientation = videoOutput.connections.first?.videoOrientation ?? .portrait
+        
+        outputSynchronizer = AVCaptureDataOutputSynchronizer(dataOutputs: [videoOutput, depthDataOutput])
+        outputSynchronizer.setDelegate(self, queue: videoOutputQueue)
+        
+        return true
+    }
+    
+    @available(iOS 11.0, *)
+    private func removeDepthDataOutput() {
+        session.beginConfiguration()
+        if let output = depthDataOutput {
+            session.removeOutput(output)
+            depthDataOutput = nil
+        }
+        outputSynchronizer = nil
+        session.commitConfiguration()
     }
     
     /// Captures frame texture as a photo.
@@ -678,6 +755,14 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
             return
         }
         
+        processVideo(sampleBuffer)
+    }
+    
+    public func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
+        print("Camera drops \(output is AVCaptureAudioDataOutput ? "audio" : "video") sample buffer")
+    }
+    
+    private func processVideo(_ sampleBuffer: CMSampleBuffer) {
         // Video
         lock.wait()
         let paused = _isPaused
@@ -748,12 +833,12 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         }
     }
     
-    public func captureOutput(_ output: AVCaptureOutput, didDrop sampleBuffer: CMSampleBuffer, from connection: AVCaptureConnection) {
-        print("Camera drops \(output is AVCaptureAudioDataOutput ? "audio" : "video") sample buffer")
-    }
-    
     private func texture(with sampleBuffer: CMSampleBuffer) -> BBMetalVideoTextureItem? {
         guard let imageBuffer = CMSampleBufferGetImageBuffer(sampleBuffer) else { return nil }
+        return texture(with: imageBuffer, pixelFormat: .bgra8Unorm) // camera ouput BGRA
+    }
+    
+    private func texture(with imageBuffer: CVImageBuffer, pixelFormat: MTLPixelFormat) -> BBMetalVideoTextureItem? {
         let width = CVPixelBufferGetWidth(imageBuffer)
         let height = CVPixelBufferGetHeight(imageBuffer)
         
@@ -763,7 +848,7 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
                                                                textureCache,
                                                                imageBuffer,
                                                                nil,
-                                                               .bgra8Unorm, // camera ouput BGRA
+                                                               pixelFormat,
                                                                width,
                                                                height,
                                                                0,
@@ -814,5 +899,119 @@ extension BBMetalCamera: AVCapturePhotoCaptureDelegate {
 extension BBMetalCamera: AVCaptureMetadataOutputObjectsDelegate {
     public func metadataOutput(_ output: AVCaptureMetadataOutput, didOutput metadataObjects: [AVMetadataObject], from connection: AVCaptureConnection) {
         metadataObjectDelegate?.camera(self, didOutput: metadataObjects)
+    }
+}
+
+@available(iOS 11.0, *)
+extension BBMetalCamera: AVCaptureDepthDataOutputDelegate {
+    public func depthDataOutput(_ output: AVCaptureDepthDataOutput, didOutput depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection) {
+        print("Get depth data")
+        processDepthData(depthData, timestamp: timestamp)
+    }
+    
+    public func depthDataOutput(_ output: AVCaptureDepthDataOutput, didDrop depthData: AVDepthData, timestamp: CMTime, connection: AVCaptureConnection, reason: AVCaptureOutput.DataDroppedReason) {
+        print("Camera drops depth data")
+    }
+    
+    private func processDepthData(_ depthData: AVDepthData, timestamp: CMTime) {
+        // Depth
+//        lock.wait()
+//        let paused = _isPaused
+//        let consumers = _consumers
+//        let willTransmit = _willTransmitTexture
+//        let cameraPosition = camera.position
+//
+//        let isCameraPhoto = _needPhoto
+//        if _needPhoto { _needPhoto = false }
+//
+//        let capturePhotoCompletion = _capturePhotoCompletion
+//        if _capturePhotoCompletion != nil { _capturePhotoCompletion = nil }
+//        lock.signal()
+//
+//        guard !paused, !consumers.isEmpty else { return }
+//
+//        var depthFormatDescription: CMFormatDescription?
+//        CMVideoFormatDescriptionCreateForImageBuffer(
+//            allocator: kCFAllocatorDefault,
+//            imageBuffer: depthData.depthDataMap,
+//            formatDescriptionOut: &depthFormatDescription
+//        )
+//
+//        guard let depthFormatDescription = depthFormatDescription else { return }
+//
+//        var inputTextureFormat = MTLPixelFormat.invalid
+//        let inputMediaSubType = CMFormatDescriptionGetMediaSubType(depthFormatDescription)
+//        if inputMediaSubType == kCVPixelFormatType_DepthFloat16 ||
+//            inputMediaSubType == kCVPixelFormatType_DisparityFloat16 {
+//            inputTextureFormat = .r16Float
+//        } else if inputMediaSubType == kCVPixelFormatType_DepthFloat32 ||
+//            inputMediaSubType == kCVPixelFormatType_DisparityFloat32 {
+//            inputTextureFormat = .r32Float
+//        } else {
+//            assertionFailure("Input format not supported")
+//            return
+//        }
+//
+//        guard let texture = texture(with: depthData.depthDataMap, pixelFormat: inputTextureFormat) else {
+//            if let completion = capturePhotoCompletion {
+//                let error = NSError(domain: "BBMetalCameraErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not get Metal texture"])
+//                let info = BBMetalFilterCompletionInfo(result: .failure(error),
+//                                                       sampleTime: timestamp,
+//                                                       cameraPosition: cameraPosition,
+//                                                       isCameraPhoto: isCameraPhoto)
+//                completion(info)
+//            }
+//            return
+//        }
+//
+//        let sampleTime = timestamp
+//
+//        if let completion = capturePhotoCompletion {
+//            var result: Result<MTLTexture, Error>
+//            let filter = BBMetalPassThroughFilter(createTexture: true)
+//            if let metalTexture = filter.filteredTexture(with: texture.metalTexture) {
+//                result = .success(metalTexture)
+//            } else {
+//                let error = NSError(domain: "BBMetalCameraErrorDomain", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can not get Metal texture"])
+//                result = .failure(error)
+//            }
+//            let info = BBMetalFilterCompletionInfo(result: result,
+//                                                   sampleTime: sampleTime,
+//                                                   cameraPosition: cameraPosition,
+//                                                   isCameraPhoto: isCameraPhoto)
+//            completion(info)
+//        }
+//
+//        willTransmit?(texture.metalTexture, sampleTime)
+//        let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
+//                                           sampleTime: sampleTime,
+//                                           cameraPosition: cameraPosition,
+//                                           isCameraPhoto: isCameraPhoto,
+//                                           cvMetalTexture: texture.cvMetalTexture)
+//        for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
+    }
+}
+
+@available(iOS 11.0, *)
+extension BBMetalCamera: AVCaptureDataOutputSynchronizerDelegate {
+    public func dataOutputSynchronizer(_ synchronizer: AVCaptureDataOutputSynchronizer, didOutput synchronizedDataCollection: AVCaptureSynchronizedDataCollection) {
+        print("Get sync")
+        
+        lock.wait()
+        let videoOutput = videoOutput
+        let depthDataOutput = depthDataOutput
+        lock.signal()
+        
+        if let videoOutput = videoOutput,
+           let sampleBufferData = synchronizedDataCollection.synchronizedData(for: videoOutput) as? AVCaptureSynchronizedSampleBufferData,
+            !sampleBufferData.sampleBufferWasDropped {
+            processVideo(sampleBufferData.sampleBuffer)
+        }
+        
+        if let depthDataOutput = depthDataOutput,
+           let syncedDepthData = synchronizedDataCollection.synchronizedData(for: depthDataOutput) as? AVCaptureSynchronizedDepthData,
+           !syncedDepthData.depthDataWasDropped {
+            processDepthData(syncedDepthData.depthData, timestamp: syncedDepthData.timestamp)
+        }
     }
 }
