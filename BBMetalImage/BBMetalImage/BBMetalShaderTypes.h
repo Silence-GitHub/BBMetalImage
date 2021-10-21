@@ -30,4 +30,9 @@ float mod(float x, float y);
 
 float2 mod(float2 x, float2 y);
 
+struct DepthRenderParameters {
+    float offset;
+    float range;
+};
+
 #endif /* BBMetalShaderTypes_h */

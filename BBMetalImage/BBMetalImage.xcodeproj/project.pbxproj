@@ -72,6 +72,10 @@
 		4A26D0B72721E6AE006148B1 /* minMaxFromBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0B52721E6AE006148B1 /* minMaxFromBuffer.m */; };
 		4A26D0B82721E6AE006148B1 /* minMaxFromBuffer.h in Headers */ = {isa = PBXBuildFile; fileRef = 4A26D0B62721E6AE006148B1 /* minMaxFromBuffer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4A26D0B92721E6B9006148B1 /* minMaxFromBuffer.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0B52721E6AE006148B1 /* minMaxFromBuffer.m */; };
+		4A26D0C72721FA5E006148B1 /* BBMetalDepthLuminanceFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0C62721FA5E006148B1 /* BBMetalDepthLuminanceFilter.swift */; };
+		4A26D0C82721FBA1006148B1 /* BBMetalDepthLuminanceFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0C62721FA5E006148B1 /* BBMetalDepthLuminanceFilter.swift */; };
+		4A26D0CA2721FBAF006148B1 /* BBMetalDepthLuminanceFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0C92721FBAF006148B1 /* BBMetalDepthLuminanceFilter.metal */; };
+		4A26D0CB2721FC30006148B1 /* BBMetalDepthLuminanceFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0C92721FBAF006148B1 /* BBMetalDepthLuminanceFilter.metal */; };
 		4A2730902257B8D1002F90F4 /* BBMetalZoomBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A27308F2257B8D1002F90F4 /* BBMetalZoomBlurFilter.swift */; };
 		4A2730912257B8D1002F90F4 /* BBMetalZoomBlurFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A27308F2257B8D1002F90F4 /* BBMetalZoomBlurFilter.swift */; };
 		4A2730932257B934002F90F4 /* BBMetalZoomBlurFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A2730922257B934002F90F4 /* BBMetalZoomBlurFilter.metal */; };
@@ -422,6 +426,8 @@
 		4A21BDD62388EA3E0099FD82 /* BBMetalConvolution3x3Filter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BBMetalConvolution3x3Filter.metal; sourceTree = "<group>"; };
 		4A26D0B52721E6AE006148B1 /* minMaxFromBuffer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = minMaxFromBuffer.m; sourceTree = "<group>"; };
 		4A26D0B62721E6AE006148B1 /* minMaxFromBuffer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = minMaxFromBuffer.h; sourceTree = "<group>"; };
+		4A26D0C62721FA5E006148B1 /* BBMetalDepthLuminanceFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalDepthLuminanceFilter.swift; sourceTree = "<group>"; };
+		4A26D0C92721FBAF006148B1 /* BBMetalDepthLuminanceFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BBMetalDepthLuminanceFilter.metal; sourceTree = "<group>"; };
 		4A27308F2257B8D1002F90F4 /* BBMetalZoomBlurFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalZoomBlurFilter.swift; sourceTree = "<group>"; };
 		4A2730922257B934002F90F4 /* BBMetalZoomBlurFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = BBMetalZoomBlurFilter.metal; sourceTree = "<group>"; };
 		4A2730952257BA72002F90F4 /* BBMetalColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BBMetalColor.swift; sourceTree = "<group>"; };
@@ -683,6 +689,8 @@
 				4AFC46562253DE9F009D37A1 /* BBMetalLuminanceFilter.metal */,
 				4A6835462256FAD50089872B /* BBMetalLuminanceThresholdFilter.swift */,
 				4A6835432256FABE0089872B /* BBMetalLuminanceThresholdFilter.metal */,
+				4A26D0C62721FA5E006148B1 /* BBMetalDepthLuminanceFilter.swift */,
+				4A26D0C92721FBAF006148B1 /* BBMetalDepthLuminanceFilter.metal */,
 				4AEDDCF12332A3BF00838C4E /* BBMetalErosionFilter.swift */,
 				4AEDDCF32332A46500838C4E /* BBMetalErosionFilter.metal */,
 				4AEDDCF52332A7A300838C4E /* BBMetalRGBAErosionFilter.swift */,
@@ -1013,6 +1021,7 @@
 				4AA3E73F22DFD55200B26E89 /* BBMetalBilateralBlurFilter.metal in Sources */,
 				4ADCF37622590DA400B7F506 /* BBMetalLinearBurnBlendFilter.metal in Sources */,
 				4ADCF37922590DB300B7F506 /* BBMetalLinearBurnBlendFilter.swift in Sources */,
+				4A26D0CA2721FBAF006148B1 /* BBMetalDepthLuminanceFilter.metal in Sources */,
 				4AFA1DCE22EA82E600B4CF24 /* MultipleVideoSource.swift in Sources */,
 				4A00948A225BCA830089941C /* BBMetalLevelsFilter.swift in Sources */,
 				4AF665ED225FC9660014994E /* BBMetalBaseFilterGroup.swift in Sources */,
@@ -1051,6 +1060,7 @@
 				4A27310B2258674E002F90F4 /* BBMetalAlphaBlendFilter.metal in Sources */,
 				4A68F3EC227A278C00558212 /* BBMetalVideoWriter.metal in Sources */,
 				4AFD9C4E225EB5160000C839 /* BBMetalPolkaDotFilter.metal in Sources */,
+				4A26D0C72721FA5E006148B1 /* BBMetalDepthLuminanceFilter.swift in Sources */,
 				4A27309F2257CD55002F90F4 /* BBMetalMotionBlurFilter.metal in Sources */,
 				4AA3E73C22DFD53B00B26E89 /* BBMetalBilateralBlurFilter.swift in Sources */,
 				4AFC467722542BD2009D37A1 /* BBMetalBrightnessFilter.metal in Sources */,
@@ -1211,6 +1221,7 @@
 				4A26D0B92721E6B9006148B1 /* minMaxFromBuffer.m in Sources */,
 				4AF665EE225FC9660014994E /* BBMetalBaseFilterGroup.swift in Sources */,
 				4A2730BE22582853002F90F4 /* BBMetalAddBlendFilter.swift in Sources */,
+				4A26D0CB2721FC30006148B1 /* BBMetalDepthLuminanceFilter.metal in Sources */,
 				4AC5796622556B9700F7BCAC /* BBMetalRGBAFilter.metal in Sources */,
 				4A273109225866E9002F90F4 /* BBMetalAlphaBlendFilter.swift in Sources */,
 				4AFD9C5B225EE1090000C839 /* BBMetalCrosshatchFilter.metal in Sources */,
@@ -1226,6 +1237,7 @@
 				4AC57972225574B900F7BCAC /* BBMetalVibranceFilter.metal in Sources */,
 				4A6835482256FAD50089872B /* BBMetalLuminanceThresholdFilter.swift in Sources */,
 				4A1B94AB2255ADA40068675A /* BBMetalHighlightShadowFilter.swift in Sources */,
+				4A26D0C82721FBA1006148B1 /* BBMetalDepthLuminanceFilter.swift in Sources */,
 				4A3A5C752278AFC8006A4495 /* BBMetalVideoWriter.swift in Sources */,
 				4A2730FA225861B9002F90F4 /* BBMetalDifferenceBlendFilter.swift in Sources */,
 				4AF665F4225FF57D0014994E /* BBMetalUnsharpMaskFilter.metal in Sources */,
