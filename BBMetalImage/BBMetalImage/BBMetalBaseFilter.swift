@@ -377,6 +377,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
             encoder.setComputePipelineState(computePipeline)
             encoder.setTexture(_outputTexture, index: 0)
             for i in 0..<_sources.count { encoder.setTexture(_sources[i].texture, index: i + 1) }
+            updateParameters(for: encoder, texture: texture)
             updateParameters(forComputeCommandEncoder: encoder)
             encoder.dispatchThreadgroups(threadgroupCount!, threadsPerThreadgroup: threadgroupSize)
             encoder.endEncoding()
@@ -425,9 +426,17 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     
     /// Updates parameters for the compute command encoder.
     /// Override the method to set bytes or other paramters for the compute command encoder.
+    /// 
+    /// - Parameters:
+    ///   - encoder: compute command encoder to use
+    ///   - texture: texture containing parameters
+    open func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {}
+    
+    /// Updates parameters for the compute command encoder.
+    /// Override the method to set bytes or other paramters for the compute command encoder.
     ///
     /// - Parameter encoder: compute command encoder to use
     open func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
-        fatalError("\(#function) must be overridden by subclass")
+        fatalError("\(#function) must be overridden by subclass") // TODO: Mark deprecated
     }
 }

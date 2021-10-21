@@ -18,3 +18,4 @@ FOUNDATION_EXPORT const unsigned char BBMetalImageVersionString[];
 
 #import <AVFoundation/AVFoundation.h>
 #import <simd/simd.h>
+#import "minMaxFromBuffer.h"

@@ -938,9 +938,9 @@ extension BBMetalCamera: AVCaptureDepthDataOutputDelegate {
             imageBuffer: depthData.depthDataMap,
             formatDescriptionOut: &depthFormatDescription
         )
-
+        
         guard let depthFormatDescription = depthFormatDescription else { return }
-
+        
         var inputTextureFormat = MTLPixelFormat.invalid
         let inputMediaSubType = CMFormatDescriptionGetMediaSubType(depthFormatDescription)
         if inputMediaSubType == kCVPixelFormatType_DepthFloat16 ||
@@ -953,13 +953,19 @@ extension BBMetalCamera: AVCaptureDepthDataOutputDelegate {
             assertionFailure("Input format not supported")
             return
         }
-
+        
         guard let texture = texture(with: depthData.depthDataMap, pixelFormat: inputTextureFormat) else { return }
+        
+        var min: Float = 0.0
+        var max: Float = 0.0
+        minMaxFromPixelBuffer(depthData.depthDataMap, &min, &max, inputTextureFormat)
+        let depthRenderParameters = DepthRenderParameters(offset: min, range: max - min)
         
         let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
                                            sampleTime: timestamp,
                                            cameraPosition: cameraPosition,
                                            isCameraPhoto: false,
+                                           depthRenderParameters: depthRenderParameters,
                                            cvMetalTexture: texture.cvMetalTexture)
         for consumer in consumers { consumer.newTextureAvailable(output, from: depthImageSource) }
     }
@@ -968,7 +974,6 @@ extension BBMetalCamera: AVCaptureDepthDataOutputDelegate {
 @available(iOS 11.0, *)
 extension BBMetalCamera: AVCaptureDataOutputSynchronizerDelegate {
     public func dataOutputSynchronizer(_ synchronizer: AVCaptureDataOutputSynchronizer, didOutput synchronizedDataCollection: AVCaptureSynchronizedDataCollection) {
-        print("Get sync")
         
         lock.wait()
         let videoOutput = videoOutput
