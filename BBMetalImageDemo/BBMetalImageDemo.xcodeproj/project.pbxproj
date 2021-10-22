@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A00949E225C53C50089941C /* CameraFilterVC.swift */; };
 		4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */; };
+		4A26D0B42721DE99006148B1 /* DepthCameraFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0B32721DE99006148B1 /* DepthCameraFilterVC.swift */; };
+		4A26D0CD27222A7C006148B1 /* DepthMixFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0CC27222A7C006148B1 /* DepthMixFilter.swift */; };
+		4A26D0CF27222B2D006148B1 /* DepthMixFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0CE27222B2D006148B1 /* DepthMixFilter.metal */; };
 		4A33ECF9270CC4B5005F18A6 /* MultipleCameraFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33ECF8270CC4B5005F18A6 /* MultipleCameraFilterVC.swift */; };
 		4A33ECFB270CCC68005F18A6 /* PiPFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A33ECFA270CCC68005F18A6 /* PiPFilter.swift */; };
 		4A33ECFD270CCF78005F18A6 /* PiPFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A33ECFC270CCF78005F18A6 /* PiPFilter.metal */; };
@@ -57,6 +60,9 @@
 /* Begin PBXFileReference section */
 		4A00949E225C53C50089941C /* CameraFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterVC.swift; sourceTree = "<group>"; };
 		4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterMenuVC.swift; sourceTree = "<group>"; };
+		4A26D0B32721DE99006148B1 /* DepthCameraFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthCameraFilterVC.swift; sourceTree = "<group>"; };
+		4A26D0CC27222A7C006148B1 /* DepthMixFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthMixFilter.swift; sourceTree = "<group>"; };
+		4A26D0CE27222B2D006148B1 /* DepthMixFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = DepthMixFilter.metal; sourceTree = "<group>"; };
 		4A33ECF8270CC4B5005F18A6 /* MultipleCameraFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultipleCameraFilterVC.swift; sourceTree = "<group>"; };
 		4A33ECFA270CCC68005F18A6 /* PiPFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PiPFilter.swift; sourceTree = "<group>"; };
 		4A33ECFC270CCF78005F18A6 /* PiPFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = PiPFilter.metal; sourceTree = "<group>"; };
@@ -130,8 +136,11 @@
 				4A00949E225C53C50089941C /* CameraFilterVC.swift */,
 				4A3CAE3E228A060900252B70 /* CameraPhotoFilterVC.swift */,
 				4A33ECF8270CC4B5005F18A6 /* MultipleCameraFilterVC.swift */,
+				4A26D0B32721DE99006148B1 /* DepthCameraFilterVC.swift */,
 				4A33ECFA270CCC68005F18A6 /* PiPFilter.swift */,
 				4A33ECFC270CCF78005F18A6 /* PiPFilter.metal */,
+				4A26D0CC27222A7C006148B1 /* DepthMixFilter.swift */,
+				4A26D0CE27222B2D006148B1 /* DepthMixFilter.metal */,
 				4A665CFC22721CAA00DFDF4C /* VideoFilterVC.swift */,
 				4A633D672281F33C00138B2A /* VideoFilterVC2.swift */,
 				4AB9753E270E12BD009BDF3D /* VideoWatermarkVC.swift */,
@@ -243,6 +252,7 @@
 				4ABFC321256DAEE700E7FB7E /* CameraVideoBlendVC.swift in Sources */,
 				4A4CADC4225317C20058BEB6 /* MainMenuVC.swift in Sources */,
 				4A665CFD22721CAA00DFDF4C /* VideoFilterVC.swift in Sources */,
+				4A26D0B42721DE99006148B1 /* DepthCameraFilterVC.swift in Sources */,
 				4AA9C56123A1D8EC0054819E /* RecordUIVC.swift in Sources */,
 				4A33ECFD270CCF78005F18A6 /* PiPFilter.metal in Sources */,
 				4AFC464F2253CDDC009D37A1 /* StaticImageFilterVC.swift in Sources */,
@@ -252,6 +262,8 @@
 				4A45DFD224D2857900DA963E /* MultipleImageBlendVC.swift in Sources */,
 				4A3CAE3F228A060900252B70 /* CameraPhotoFilterVC.swift in Sources */,
 				4AFA1DC922EA7DBC00B4CF24 /* MultipleVideoBlendVC.swift in Sources */,
+				4A26D0CD27222A7C006148B1 /* DepthMixFilter.swift in Sources */,
+				4A26D0CF27222B2D006148B1 /* DepthMixFilter.metal in Sources */,
 				4A9BCB66227A03E000E02C6F /* VideoPlayerVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

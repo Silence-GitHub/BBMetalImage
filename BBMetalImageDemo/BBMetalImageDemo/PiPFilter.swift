@@ -6,7 +6,6 @@
 //  Copyright © 2021 Kaibo Lu. All rights reserved.
 //
 
-import UIKit
 import BBMetalImage
 
 class PiPFilter: BBMetalBaseFilter {
