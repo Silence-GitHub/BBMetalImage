@@ -38,7 +38,10 @@ class DepthCameraFilterVC: UIViewController {
             if camera != nil { camera.canGetDepthData = true }
         }
         
-        if camera == nil || !camera.canGetDepthData {
+        guard #available(iOS 11.0, *),
+              camera != nil,
+              camera.canGetDepthData
+        else {
             let label = UILabel(frame: CGRect(x: 10, y: 100, width: view.bounds.width - 20, height: 100))
             label.textAlignment = .center
             label.text = "Depth camera is not supported"
