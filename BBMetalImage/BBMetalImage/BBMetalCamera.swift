@@ -158,7 +158,7 @@ public class BBMetalCamera: NSObject {
     private var videoOutput: AVCaptureVideoDataOutput!
     private var videoOutputQueue: DispatchQueue!
     
-    private let multitpleSessions: Bool
+    private let multipleSessions: Bool
     private var audioSession: AVCaptureSession!
     private var audioInput: AVCaptureDeviceInput!
     private var audioOutput: AVCaptureAudioDataOutput!
@@ -250,6 +250,7 @@ public class BBMetalCamera: NSObject {
     }
     private weak var _metadataObjectDelegate: BBMetalCameraMetadataObjectDelegate?
     
+    /// Whether can get depth data or not
     @available(iOS 11.0, *)
     public var canGetDepthData: Bool {
         get {
@@ -316,7 +317,7 @@ public class BBMetalCamera: NSObject {
         sessionPreset: AVCaptureSession.Preset = .high,
         deviceType: AVCaptureDevice.DeviceType = .builtInWideAngleCamera,
         position: AVCaptureDevice.Position = .back,
-        multitpleSessions: Bool = false
+        multipleSessions: Bool = false
     ) {
         _consumers = []
         _canGetDepthData = false
@@ -329,7 +330,7 @@ public class BBMetalCamera: NSObject {
         ignoreInitialFrameCount = 5
         originalOrientation = .portrait
         depthImageSource = .init()
-        self.multitpleSessions = multitpleSessions
+        self.multipleSessions = multipleSessions
         lock = DispatchSemaphore(value: 1)
         
         super.init()
@@ -387,7 +388,7 @@ public class BBMetalCamera: NSObject {
         if audioOutput != nil { return true }
         
         var session: AVCaptureSession = self.session
-        if multitpleSessions {
+        if multipleSessions {
             session = AVCaptureSession()
             audioSession = session
         }
@@ -426,7 +427,7 @@ public class BBMetalCamera: NSObject {
     }
     
     private func _removeAudioInputAndOutput() {
-        let session: AVCaptureSession = multitpleSessions ? audioSession : self.session
+        let session: AVCaptureSession = multipleSessions ? audioSession : self.session
         if let input = audioInput {
             session.removeInput(input)
             audioInput = nil
@@ -716,7 +717,7 @@ public class BBMetalCamera: NSObject {
     public func start() {
         lock.wait()
         session.startRunning()
-        if multitpleSessions, let session = audioSession { session.startRunning() }
+        if multipleSessions, let session = audioSession { session.startRunning() }
         lock.signal()
     }
     
@@ -724,7 +725,7 @@ public class BBMetalCamera: NSObject {
     public func stop() {
         lock.wait()
         session.stopRunning()
-        if multitpleSessions, let session = audioSession { session.stopRunning() }
+        if multipleSessions, let session = audioSession { session.stopRunning() }
         lock.signal()
     }
     
