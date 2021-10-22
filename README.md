@@ -22,6 +22,7 @@ Test libraries are BBMetalImage (0.1.1) and GPUImage (0.1.7). Test device is iPh
 - [x] Filter chain supported
 - [x] Customized filter
 - [x] Camera capturing video and audio
+- [x] Depth camera supported
 - [x] Multiple camera supported
 - [x] Video source processing video file
 - [x] Image source providing image texture
@@ -392,6 +393,7 @@ func finishRecording() {
 - Haze
 - Luminance
 - Luminance Threshold
+- Depth Luminance
 - Erosion
 - RGBA Erosion
 - Dilation
