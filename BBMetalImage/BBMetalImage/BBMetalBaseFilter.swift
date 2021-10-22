@@ -437,6 +437,6 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     ///
     /// - Parameter encoder: compute command encoder to use
     open func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
-        fatalError("\(#function) must be overridden by subclass") // TODO: Mark deprecated
+        // TODO: Mark deprecated
     }
 }
