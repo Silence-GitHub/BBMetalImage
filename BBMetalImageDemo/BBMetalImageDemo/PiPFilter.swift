@@ -17,7 +17,7 @@ class PiPFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "pipKernel", useMainBundleKernel: true)
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&pipFrame, length: MemoryLayout<SIMD4<Float>>.size, index: 0)
     }
 
