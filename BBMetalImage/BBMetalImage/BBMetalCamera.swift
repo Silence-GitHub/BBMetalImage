@@ -285,7 +285,7 @@ public class BBMetalCamera: NSObject {
     }
     private var _outputSynchronizer: Any!
     
-    private var depthImageSource: CameraDepthImageSource!
+    private let depthImageSource: CameraDepthImageSource
     
     /// When this property is false, received video/audio sample buffer will not be processed
     public var isPaused: Bool {
@@ -328,6 +328,7 @@ public class BBMetalCamera: NSObject {
         totalCaptureFrameTime = 0
         ignoreInitialFrameCount = 5
         originalOrientation = .portrait
+        depthImageSource = .init()
         self.multitpleSessions = multitpleSessions
         lock = DispatchSemaphore(value: 1)
         
@@ -526,6 +527,11 @@ public class BBMetalCamera: NSObject {
         session.beginConfiguration()
         defer { session.commitConfiguration() }
         
+        return _addDepthDataOutput()
+    }
+    
+    @available(iOS 11.0, *)
+    private func _addDepthDataOutput() -> Bool {
         let output = AVCaptureDepthDataOutput()
         output.setDelegate(self, callbackQueue: videoOutputQueue)
         if !session.canAddOutput(output) {
@@ -546,22 +552,23 @@ public class BBMetalCamera: NSObject {
         outputSynchronizer = AVCaptureDataOutputSynchronizer(dataOutputs: [videoOutput, depthDataOutput])
         outputSynchronizer.setDelegate(self, queue: videoOutputQueue)
         
-        depthImageSource = .init()
-        
         return true
     }
     
     @available(iOS 11.0, *)
     private func removeDepthDataOutput() {
         session.beginConfiguration()
+        _removeDepthDataOutput()
+        session.commitConfiguration()
+    }
+    
+    @available(iOS 11.0, *)
+    private func _removeDepthDataOutput() {
         if let output = depthDataOutput {
             session.removeOutput(output)
             depthDataOutput = nil
         }
         outputSynchronizer = nil
-        depthImageSource.removeAllConsumers()
-        depthImageSource = nil
-        session.commitConfiguration()
     }
     
     /// Captures frame texture as a photo.
@@ -605,7 +612,22 @@ public class BBMetalCamera: NSObject {
         var position: AVCaptureDevice.Position = .back
         if camera.position == .back { position = .front }
         
-        guard let videoDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position),
+        var tempDevice = AVCaptureDevice.default(.builtInWideAngleCamera, for: .video, position: position)
+        
+        if _canGetDepthData,
+           #available(iOS 10.2, *) {
+            tempDevice = AVCaptureDevice.default(.builtInDualCamera, for: .video, position: position)
+            if tempDevice == nil,
+               #available(iOS 13.0, *) {
+                tempDevice = AVCaptureDevice.default(.builtInDualWideCamera, for: .video, position: position)
+            }
+            if tempDevice == nil,
+               #available(iOS 11.1, *) {
+                tempDevice = AVCaptureDevice.default(.builtInTrueDepthCamera, for: .video, position: position)
+            }
+        }
+        
+        guard let videoDevice = tempDevice,
             let videoDeviceInput = try? AVCaptureDeviceInput(device: videoDevice) else { return false }
         
         session.removeInput(videoInput)
@@ -622,6 +644,12 @@ public class BBMetalCamera: NSObject {
             connection.isVideoOrientationSupported else { return false }
         originalOrientation = connection.videoOrientation
         connection.videoOrientation = .portrait
+        
+        if _canGetDepthData,
+           #available(iOS 11.0, *) {
+            _removeDepthDataOutput()
+            if !_addDepthDataOutput() { return false }
+        }
         
         return true
     }
@@ -925,12 +953,11 @@ extension BBMetalCamera: AVCaptureDepthDataOutputDelegate {
         // Depth
         lock.wait()
         let paused = _isPaused
-        let optionalSource = depthImageSource
-        let consumers = optionalSource?.consumers ?? []
+        let consumers = depthImageSource.consumers
         let cameraPosition = camera.position
         lock.signal()
 
-        guard !paused, !consumers.isEmpty, let depthImageSource = optionalSource else { return }
+        guard !paused, !consumers.isEmpty else { return }
 
         var depthFormatDescription: CMFormatDescription?
         CMVideoFormatDescriptionCreateForImageBuffer(
