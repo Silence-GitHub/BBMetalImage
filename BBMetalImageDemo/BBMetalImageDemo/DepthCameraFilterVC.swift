@@ -25,12 +25,20 @@ class DepthCameraFilterVC: UIViewController {
         
         view.backgroundColor = .gray
         
-        if #available(iOS 13.0, *) {
-            camera = BBMetalCamera(sessionPreset: .hd1920x1080, deviceType: .builtInDualWideCamera)
-            camera.canGetDepthData = true
+        if #available(iOS 11.0, *) {
+            camera = BBMetalCamera(deviceType: .builtInDualCamera, position: .unspecified)
+            if camera == nil,
+               #available(iOS 13.0, *) {
+                camera = BBMetalCamera(deviceType: .builtInDualWideCamera, position: .unspecified)
+            }
+            if camera == nil,
+               #available(iOS 11.1, *) {
+                camera = BBMetalCamera(deviceType: .builtInTrueDepthCamera, position: .unspecified)
+            }
+            if camera != nil { camera.canGetDepthData = true }
         }
         
-        if camera == nil {
+        if camera == nil || !camera.canGetDepthData {
             let label = UILabel(frame: CGRect(x: 10, y: 100, width: view.bounds.width - 20, height: 100))
             label.textAlignment = .center
             label.text = "Depth camera is not supported"
@@ -43,8 +51,8 @@ class DepthCameraFilterVC: UIViewController {
         metalView = BBMetalView(frame: CGRect(x: x, y: 100, width: width, height: view.bounds.height - 230))
         view.addSubview(metalView)
         
-//        let tapMetalView = UITapGestureRecognizer(target: self, action: #selector(tapMetalView(_:)))
-//        metalView.addGestureRecognizer(tapMetalView)
+        let tapMetalView = UITapGestureRecognizer(target: self, action: #selector(tapMetalView(_:)))
+        metalView.addGestureRecognizer(tapMetalView)
         
         var y: CGFloat = metalView.frame.maxY + 10
         var i = 0
@@ -88,6 +96,10 @@ class DepthCameraFilterVC: UIViewController {
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
         camera.stop()
+    }
+    
+    @objc private func tapMetalView(_ tap: UITapGestureRecognizer) {
+        camera.switchCameraPosition()
     }
     
     @objc private func clickFilterButton(_ button: UIButton) {
