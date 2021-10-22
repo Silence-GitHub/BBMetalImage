@@ -308,7 +308,9 @@ public class BBMetalCamera: NSObject {
     
     /// Creates a camera
     /// - Parameters:
+    ///   - captureSession: An object that manages capture activity and coordinates the flow of data from input devices to capture outputs
     ///   - sessionPreset: a constant value indicating the quality level or bit rate of the output
+    ///   - deviceType: camera device type
     ///   - position: camera position
     ///   - multitpleSessions: whether to use independent video session and audio session (false by default). Switching camera position while recording leads to the video and audio out of sync.
     /// Set true if we allow the user to switch camera position while recording.
