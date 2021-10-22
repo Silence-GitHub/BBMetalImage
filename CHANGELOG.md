@@ -1,5 +1,16 @@
 # Change Log
 
+## [1.2.0](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.2.0) - 2021-10-22
+
+### Add
+
+- BBMetalCamera supports depth data
+- BBMetalDepthLuminanceFilter
+
+### Change
+
+- BBMetalBaseFilter deprecates updateParameters(forComputeCommandEncoder:) function
+
 ## [1.1.12](https://github.com/Silence-GitHub/BBMetalImage/releases/tag/1.1.12) - 2021-10-06
 
 ### Add
