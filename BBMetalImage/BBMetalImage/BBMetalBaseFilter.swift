@@ -436,7 +436,6 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
     /// Override the method to set bytes or other paramters for the compute command encoder.
     ///
     /// - Parameter encoder: compute command encoder to use
-    open func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
-        // TODO: Mark deprecated
-    }
+    @available(iOS, deprecated, message: "Use updateParameters(for:texture:) instead.")
+    open func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }
