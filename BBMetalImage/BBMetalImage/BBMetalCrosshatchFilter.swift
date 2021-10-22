@@ -21,7 +21,7 @@ public class BBMetalCrosshatchFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "crosshatchKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&crosshatchSpacing, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&lineWidth, length: MemoryLayout<Float>.size, index: 1)
     }

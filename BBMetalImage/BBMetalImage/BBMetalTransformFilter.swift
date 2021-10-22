@@ -64,7 +64,7 @@ public class BBMetalTransformFilter: BBMetalBaseFilter {
         return inputSize
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&_matrix, length: MemoryLayout<matrix_float3x2>.size, index: 0)
         encoder.setBytes(&_anchorPoint, length: MemoryLayout<SIMD2<Float>>.size, index: 1)
     }

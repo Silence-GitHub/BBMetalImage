@@ -24,7 +24,7 @@ public class BBMetalRGBAFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "rgbaKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&red, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&green, length: MemoryLayout<Float>.size, index: 1)
         encoder.setBytes(&blue, length: MemoryLayout<Float>.size, index: 2)

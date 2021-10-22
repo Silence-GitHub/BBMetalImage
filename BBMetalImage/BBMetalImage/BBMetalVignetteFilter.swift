@@ -30,7 +30,7 @@ public class BBMetalVignetteFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "vignetteKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&center, length: MemoryLayout<BBMetalPosition>.size, index: 0)
         encoder.setBytes(&color, length: MemoryLayout<BBMetalOpaqueColor>.stride, index: 1)
         encoder.setBytes(&start, length: MemoryLayout<Float>.size, index: 2)

@@ -18,7 +18,7 @@ public class BBMetalSobelEdgeDetectionFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "sobelEdgeDetectionKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&edgeStrength, length: MemoryLayout<Float>.size, index: 0)
     }
 }

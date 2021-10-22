@@ -26,6 +26,4 @@ public class BBMetalPassThroughFilter: BBMetalBaseFilter {
             for consumer in consumers { consumer.newTextureAvailable(texture, from: self) }
         }
     }
-    
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

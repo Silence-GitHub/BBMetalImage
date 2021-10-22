@@ -22,7 +22,7 @@ public class BBMetalHighlightShadowFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "highlightShadowKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&shadows, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&highlights, length: MemoryLayout<Float>.size, index: 1)
     }

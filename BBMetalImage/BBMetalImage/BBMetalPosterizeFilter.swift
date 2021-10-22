@@ -18,7 +18,7 @@ public class BBMetalPosterizeFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "posterizeKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&colorLevels, length: MemoryLayout<Float>.size, index: 0)
     }
 }

@@ -18,7 +18,7 @@ public class BBMetalLuminanceThresholdFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "luminanceThresholdKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&threshold, length: MemoryLayout<Float>.size, index: 0)
     }
 }

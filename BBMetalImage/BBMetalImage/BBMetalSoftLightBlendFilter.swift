@@ -11,5 +11,4 @@ import Metal
 /// Applies a soft light blend of two images
 public class BBMetalSoftLightBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "softLightBlendKernel") }
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

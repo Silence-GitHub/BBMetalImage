@@ -18,7 +18,7 @@ public class BBMetalKuwaharaFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "kuwaharaKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&radius, length: MemoryLayout<Int>.size, index: 0)
     }
 }

@@ -11,5 +11,4 @@ import Metal
 /// Blends two images by taking the minimum value of each color component between the images
 public class BBMetalDarkenBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "darkenBlendKernel") }
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

@@ -11,5 +11,4 @@ import Metal
 /// Applies a source over blend of two images
 public class BBMetalSourceOverBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "sourceOverBlendKernel") }
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

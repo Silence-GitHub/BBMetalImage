@@ -21,7 +21,7 @@ public class BBMetalMotionBlurFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "motionBlurKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&blurSize, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&blurAngle, length: MemoryLayout<Float>.size, index: 1)
     }

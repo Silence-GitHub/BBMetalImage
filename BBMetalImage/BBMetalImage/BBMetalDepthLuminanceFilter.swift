@@ -19,6 +19,4 @@ public class BBMetalDepthLuminanceFilter: BBMetalBaseFilter {
         depthRenderParameters = texture.depthRenderParameters ?? .init()
         encoder.setBytes(&depthRenderParameters, length: MemoryLayout<DepthRenderParameters>.size, index: 0)
     }
-    
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

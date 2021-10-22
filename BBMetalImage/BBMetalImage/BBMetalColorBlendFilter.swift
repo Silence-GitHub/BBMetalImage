@@ -11,5 +11,4 @@ import Metal
 /// Applies a color blend of two images
 public class BBMetalColorBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "colorBlendKernel") }
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

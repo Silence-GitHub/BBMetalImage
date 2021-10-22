@@ -56,7 +56,7 @@ fileprivate class _BBMetalBeautyCombinationFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "beautyCombinationKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&smoothDegree, length: MemoryLayout<Float>.size, index: 0)
     }
 }

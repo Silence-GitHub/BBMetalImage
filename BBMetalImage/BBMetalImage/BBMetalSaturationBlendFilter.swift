@@ -11,5 +11,4 @@ import Metal
 /// Applies a saturation blend of two images
 public class BBMetalSaturationBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "saturationBlendKernel") }
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

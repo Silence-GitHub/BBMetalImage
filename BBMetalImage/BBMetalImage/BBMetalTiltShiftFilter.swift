@@ -63,7 +63,7 @@ fileprivate class _BBMetalTiltShiftFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "tiltShiftKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&topFocusLevel, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&bottomFocusLevel, length: MemoryLayout<Float>.size, index: 1)
         encoder.setBytes(&focusFallOffRate, length: MemoryLayout<Float>.size, index: 2)

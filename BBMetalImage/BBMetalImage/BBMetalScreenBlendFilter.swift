@@ -11,5 +11,4 @@ import Metal
 /// Applies a screen blend of two images
 public class BBMetalScreenBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "screenBlendKernel") }
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

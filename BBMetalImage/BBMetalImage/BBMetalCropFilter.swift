@@ -22,7 +22,7 @@ public class BBMetalCropFilter: BBMetalBaseFilter {
         return BBMetalIntSize(width: Int(rect.width * Float(inputSize.width)), height: Int(rect.height * Float(inputSize.height)))
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&rect, length: MemoryLayout<BBMetalRect>.size, index: 0)
     }
 }

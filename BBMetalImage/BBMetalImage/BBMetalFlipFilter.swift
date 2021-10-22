@@ -21,7 +21,7 @@ public class BBMetalFlipFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "flipKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&horizontal, length: MemoryLayout<Bool>.size, index: 0)
         encoder.setBytes(&vertical, length: MemoryLayout<Bool>.size, index: 1)
     }

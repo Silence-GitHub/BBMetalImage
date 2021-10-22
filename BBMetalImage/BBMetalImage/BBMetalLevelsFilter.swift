@@ -31,7 +31,7 @@ public class BBMetalLevelsFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "levelsKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&minimum, length: MemoryLayout<BBMetalColor>.size, index: 0)
         encoder.setBytes(&middle, length: MemoryLayout<BBMetalColor>.size, index: 1)
         encoder.setBytes(&maximum, length: MemoryLayout<BBMetalColor>.size, index: 2)

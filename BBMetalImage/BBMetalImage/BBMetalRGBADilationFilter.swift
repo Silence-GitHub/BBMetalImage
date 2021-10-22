@@ -46,7 +46,7 @@ fileprivate class _BBMetalRGBADilationSinglePassFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "rgbaDilationKernel")
     }
     
-    fileprivate override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    fileprivate override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&pixelRadius, length: MemoryLayout<Int>.size, index: 0)
         encoder.setBytes(&vertical, length: MemoryLayout<Bool>.size, index: 1)
     }

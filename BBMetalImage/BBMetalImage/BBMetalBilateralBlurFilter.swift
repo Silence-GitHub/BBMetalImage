@@ -56,7 +56,7 @@ fileprivate class _BBMetalBilateralBlurSinglePassFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "bilateralBlurKernel")
     }
     
-    fileprivate override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    fileprivate override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&distanceNormalizationFactor, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&stepOffsetX, length: MemoryLayout<Float>.size, index: 1)
         encoder.setBytes(&stepOffsetY, length: MemoryLayout<Float>.size, index: 2)

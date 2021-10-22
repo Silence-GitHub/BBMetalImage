@@ -22,7 +22,7 @@ public class BBMetalColorMatrixFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "colorMatrixKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&intensity, length: MemoryLayout<Float>.size, index: 0)
         encoder.setBytes(&colorMatrix, length: MemoryLayout<matrix_float4x4>.size, index: 1)
     }

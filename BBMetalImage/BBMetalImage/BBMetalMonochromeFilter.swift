@@ -21,7 +21,7 @@ public class BBMetalMonochromeFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "monochromeKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&color, length: MemoryLayout<BBMetalColor>.size, index: 0)
         encoder.setBytes(&intensity, length: MemoryLayout<Float>.size, index: 1)
     }

@@ -11,5 +11,4 @@ import Metal
 /// Applies an overlay blend of two images
 public class BBMetalOverlayBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "overlayBlendKernel") }
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

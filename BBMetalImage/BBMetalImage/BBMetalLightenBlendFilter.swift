@@ -11,5 +11,4 @@ import Metal
 /// Blends two images by taking the maximum value of each color component between the images
 public class BBMetalLightenBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "lightenBlendKernel") }
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

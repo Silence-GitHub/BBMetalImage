@@ -11,5 +11,4 @@ import Metal
 /// Applies a division blend of two images
 public class BBMetalDivideBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "divideBlendKernel") }
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

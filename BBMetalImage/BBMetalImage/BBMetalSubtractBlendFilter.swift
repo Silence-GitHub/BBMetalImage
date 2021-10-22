@@ -11,5 +11,4 @@ import Metal
 /// Applies a subtractive blend of two images
 public class BBMetalSubtractBlendFilter: BBMetalBaseFilter {
     public init() { super.init(kernelFunctionName: "subtractBlendKernel") }
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {}
 }

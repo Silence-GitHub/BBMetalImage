@@ -35,7 +35,7 @@ public class BBMetalRotateFilter: BBMetalBaseFilter {
         return inputSize
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&_angle, length: MemoryLayout<Float>.size, index: 0)
     }
 }

@@ -18,7 +18,7 @@ public class BBMetalBrightnessFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "brightnessKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&brightness, length: MemoryLayout<Float>.size, index: 0)
     }
 }

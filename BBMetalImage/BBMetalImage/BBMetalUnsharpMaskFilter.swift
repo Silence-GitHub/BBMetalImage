@@ -43,7 +43,7 @@ fileprivate class _BBMetalUnsharpMaskFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "unsharpMaskKernel")
     }
     
-    override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&intensity, length: MemoryLayout<Float>.size, index: 0)
     }
 }

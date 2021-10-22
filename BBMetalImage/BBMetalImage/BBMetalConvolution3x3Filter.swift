@@ -19,7 +19,7 @@ public class BBMetalConvolution3x3Filter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "convolution3x3Kernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&convolution, length: MemoryLayout<matrix_float3x3>.size, index: 0)
     }
 }

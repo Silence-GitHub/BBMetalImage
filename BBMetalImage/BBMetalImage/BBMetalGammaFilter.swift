@@ -18,7 +18,7 @@ public class BBMetalGammaFilter: BBMetalBaseFilter {
         super.init(kernelFunctionName: "gammaKernel")
     }
     
-    public override func updateParameters(forComputeCommandEncoder encoder: MTLComputeCommandEncoder) {
+    public override func updateParameters(for encoder: MTLComputeCommandEncoder, texture: BBMetalTexture) {
         encoder.setBytes(&gamma, length: MemoryLayout<Float>.size, index: 0)
     }
 }
