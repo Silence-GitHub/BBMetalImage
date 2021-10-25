@@ -46,7 +46,11 @@ public protocol BBMetalTexture {
     /// True if frame texture is captured by `capturePhoto(completion:)` method of `BBMetalCamera`
     var isCameraPhoto: Bool { get set }
     
+    /// Depth data offset and range
     var depthRenderParameters: DepthRenderParameters? { get set }
+    
+    /// Custom parameters
+    var customParameters: Any? { get set }
 }
 
 /// Defines audio consumer behaviors
@@ -63,6 +67,7 @@ public struct BBMetalDefaultTexture: BBMetalTexture {
     public var cameraPosition: AVCaptureDevice.Position?
     public var isCameraPhoto: Bool
     public var depthRenderParameters: DepthRenderParameters?
+    public var customParameters: Any?
     public let cvMetalTexture: CVMetalTexture? // Hold CVMetalTexture to prevent stuttering. https://stackoverflow.com/questions/43550769/holding-onto-a-mtltexture-from-a-cvimagebuffer-causes-stuttering
     
     public init(
@@ -71,6 +76,7 @@ public struct BBMetalDefaultTexture: BBMetalTexture {
         cameraPosition: AVCaptureDevice.Position? = nil,
         isCameraPhoto: Bool = false,
         depthRenderParameters: DepthRenderParameters? = nil,
+        customParameters: Any? = nil,
         cvMetalTexture: CVMetalTexture? = nil
     ) {
         self.metalTexture = metalTexture
@@ -78,6 +84,7 @@ public struct BBMetalDefaultTexture: BBMetalTexture {
         self.cameraPosition = cameraPosition
         self.isCameraPhoto = isCameraPhoto
         self.depthRenderParameters = depthRenderParameters
+        self.customParameters = customParameters
         self.cvMetalTexture = cvMetalTexture
     }
 }

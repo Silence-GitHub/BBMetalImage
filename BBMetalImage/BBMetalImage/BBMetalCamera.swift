@@ -61,6 +61,21 @@ public class BBMetalCamera: NSObject {
     }
     private var _preprocessVideo: ((CMSampleBuffer) -> Void)?
     
+    public var generateVideoParameters: ((CMSampleBuffer) -> Any?)? {
+        get {
+            lock.wait()
+            let g = _generateVideoParameters
+            lock.signal()
+            return g
+        }
+        set {
+            lock.wait()
+            _generateVideoParameters = newValue
+            lock.signal()
+        }
+    }
+    private var _generateVideoParameters: ((CMSampleBuffer) -> Any?)?
+    
     /// A block to call before transmiting texture to image consumers
     public var willTransmitTexture: ((MTLTexture, CMTime) -> Void)? {
         get {
@@ -806,6 +821,7 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
         lock.wait()
         let paused = _isPaused
         let consumers = _consumers
+        let generateVideoParameters = _generateVideoParameters
         let willTransmit = _willTransmitTexture
         let preprocessVideo = _preprocessVideo
         let cameraPosition = camera.position
@@ -853,11 +869,14 @@ extension BBMetalCamera: AVCaptureVideoDataOutputSampleBufferDelegate, AVCapture
             completion(info)
         }
         
+        let customParameters = generateVideoParameters?(sampleBuffer)
+        
         willTransmit?(texture.metalTexture, sampleTime)
         let output = BBMetalDefaultTexture(metalTexture: texture.metalTexture,
                                            sampleTime: sampleTime,
                                            cameraPosition: cameraPosition,
                                            isCameraPhoto: isCameraPhoto,
+                                           customParameters: customParameters,
                                            cvMetalTexture: texture.cvMetalTexture)
         for consumer in consumers { consumer.newTextureAvailable(output, from: self) }
         
