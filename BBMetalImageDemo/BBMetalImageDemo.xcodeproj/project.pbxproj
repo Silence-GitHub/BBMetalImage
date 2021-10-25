@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		4A00949F225C53C50089941C /* CameraFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A00949E225C53C50089941C /* CameraFilterVC.swift */; };
 		4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */; };
+		4A0C8247272724AF00376ACC /* DepthCameraLuminanceVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0C8246272724AF00376ACC /* DepthCameraLuminanceVC.swift */; };
 		4A26D0B42721DE99006148B1 /* DepthCameraFilterVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0B32721DE99006148B1 /* DepthCameraFilterVC.swift */; };
 		4A26D0CD27222A7C006148B1 /* DepthMixFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0CC27222A7C006148B1 /* DepthMixFilter.swift */; };
 		4A26D0CF27222B2D006148B1 /* DepthMixFilter.metal in Sources */ = {isa = PBXBuildFile; fileRef = 4A26D0CE27222B2D006148B1 /* DepthMixFilter.metal */; };
@@ -60,6 +61,7 @@
 /* Begin PBXFileReference section */
 		4A00949E225C53C50089941C /* CameraFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterVC.swift; sourceTree = "<group>"; };
 		4A084D8C225D9EE30019FB57 /* CameraFilterMenuVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CameraFilterMenuVC.swift; sourceTree = "<group>"; };
+		4A0C8246272724AF00376ACC /* DepthCameraLuminanceVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthCameraLuminanceVC.swift; sourceTree = "<group>"; };
 		4A26D0B32721DE99006148B1 /* DepthCameraFilterVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthCameraFilterVC.swift; sourceTree = "<group>"; };
 		4A26D0CC27222A7C006148B1 /* DepthMixFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DepthMixFilter.swift; sourceTree = "<group>"; };
 		4A26D0CE27222B2D006148B1 /* DepthMixFilter.metal */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.metal; path = DepthMixFilter.metal; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 				4A00949E225C53C50089941C /* CameraFilterVC.swift */,
 				4A3CAE3E228A060900252B70 /* CameraPhotoFilterVC.swift */,
 				4A33ECF8270CC4B5005F18A6 /* MultipleCameraFilterVC.swift */,
+				4A0C8246272724AF00376ACC /* DepthCameraLuminanceVC.swift */,
 				4A26D0B32721DE99006148B1 /* DepthCameraFilterVC.swift */,
 				4A33ECFA270CCC68005F18A6 /* PiPFilter.swift */,
 				4A33ECFC270CCF78005F18A6 /* PiPFilter.metal */,
@@ -244,6 +247,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4AB9753F270E12BD009BDF3D /* VideoWatermarkVC.swift in Sources */,
+				4A0C8247272724AF00376ACC /* DepthCameraLuminanceVC.swift in Sources */,
 				4A33ECF9270CC4B5005F18A6 /* MultipleCameraFilterVC.swift in Sources */,
 				4AFD9C3A225EA1190000C839 /* FilterType.swift in Sources */,
 				4A084D8D225D9EE30019FB57 /* CameraFilterMenuVC.swift in Sources */,
