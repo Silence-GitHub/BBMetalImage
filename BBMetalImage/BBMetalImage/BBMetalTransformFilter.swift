@@ -7,6 +7,8 @@
 //
 
 import Metal
+import CoreGraphics
+import simd
 
 /// Applies affine transform to an image
 public class BBMetalTransformFilter: BBMetalBaseFilter {
