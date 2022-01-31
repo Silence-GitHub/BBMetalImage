@@ -11,6 +11,7 @@ import CoreGraphics
 
 /// A singleton class containing shared resources
 public class BBMetalDevice {
+    public static var metalBundle: Bundle { return Bundle.module }
     public static let shared: BBMetalDevice = BBMetalDevice()
     public static var sharedDevice: MTLDevice { return shared.device }
     public static var sharedCommandQueue: MTLCommandQueue { return shared.commandQueue }
