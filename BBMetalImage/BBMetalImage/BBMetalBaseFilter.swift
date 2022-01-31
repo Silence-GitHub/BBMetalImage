@@ -143,7 +143,7 @@ open class BBMetalBaseFilter: BBMetalImageSource, BBMetalImageConsumer {
         self.useMPSKernel = useMPSKernel
         
         if !useMPSKernel,
-            let library = try? BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: useMainBundleKernel ? .main : Bundle(for: BBMetalBaseFilter.self)),
+           let library = try? BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: useMainBundleKernel ? .main : Bundle.module),
             let kernelFunction = library.makeFunction(name: kernelFunctionName) {
             computePipeline = try? BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
         }

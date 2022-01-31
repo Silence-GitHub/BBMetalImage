@@ -95,7 +95,7 @@ public class BBMetalVideoWriter {
         self.fileType = fileType
         self.outputSettings = outputSettings
         
-        let library = try! BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: Bundle(for: BBMetalVideoWriter.self))
+        let library = try! BBMetalDevice.sharedDevice.makeDefaultLibrary(bundle: Bundle.module)
         let kernelFunction = library.makeFunction(name: "passThroughKernel")!
         computePipeline = try! BBMetalDevice.sharedDevice.makeComputePipelineState(function: kernelFunction)
         
