@@ -308,6 +308,7 @@ public class BBMetalCamera: NSObject {
             let videoDeviceInput = try? AVCaptureDeviceInput(device: videoDevice) else { return nil }
         
         session = captureSession
+        session.automaticallyConfiguresApplicationAudioSession = false
         session.beginConfiguration()
         
         if !(session is AVCaptureMultiCamSession) {
@@ -359,6 +360,7 @@ public class BBMetalCamera: NSObject {
         var session: AVCaptureSession = self.session
         if multitpleSessions {
             session = AVCaptureSession()
+            session.automaticallyConfiguresApplicationAudioSession = false
             audioSession = session
         }
         
