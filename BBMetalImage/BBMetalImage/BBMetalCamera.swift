@@ -388,6 +388,10 @@ public class BBMetalCamera: NSObject {
         audioOutput = output
         audioOutputQueue = outputQueue
         
+        if self.session.isRunning {
+            session.startRunning()
+        }
+        
         return nil
     }
     
