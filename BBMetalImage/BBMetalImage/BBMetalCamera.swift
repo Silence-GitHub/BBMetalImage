@@ -368,11 +368,11 @@ public class BBMetalCamera: NSObject {
         defer {
             session.commitConfiguration()
             if multitpleSessions, self.session.isRunning {
-                DispatchQueue.global().async { self.audioSession.startRunning() }
+                audioSession.startRunning()
             }
         }
         
-        guard let audioDevice = AVCaptureDevice.default(.builtInMicrophone, for: .audio, position: .unspecified),
+        guard let audioDevice = AVCaptureDevice.default(for: .audio),
             let input = try? AVCaptureDeviceInput(device: audioDevice),
             session.canAddInput(input) else {
             print("Can not add audio input")
@@ -403,7 +403,12 @@ public class BBMetalCamera: NSObject {
     }
     
     private func _removeAudioInputAndOutput() {
-        let session: AVCaptureSession = multitpleSessions ? audioSession : self.session
+        let session: AVCaptureSession
+        if multitpleSessions, let audioSession = self.audioSession {
+            session = audioSession
+        } else {
+            session = self.session
+        }
         if let input = audioInput {
             session.removeInput(input)
             audioInput = nil
