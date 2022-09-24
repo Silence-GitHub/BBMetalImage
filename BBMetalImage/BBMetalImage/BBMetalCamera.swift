@@ -365,7 +365,12 @@ public class BBMetalCamera: NSObject {
         }
         
         session.beginConfiguration()
-        defer { session.commitConfiguration() }
+        defer {
+            session.commitConfiguration()
+            if multitpleSessions, self.session.isRunning {
+                DispatchQueue.global().async { self.audioSession.startRunning() }
+            }
+        }
         
         guard let audioDevice = AVCaptureDevice.default(.builtInMicrophone, for: .audio, position: .unspecified),
             let input = try? AVCaptureDeviceInput(device: audioDevice),
@@ -387,10 +392,6 @@ public class BBMetalCamera: NSObject {
         session.addOutput(output)
         audioOutput = output
         audioOutputQueue = outputQueue
-        
-        if self.session.isRunning {
-            session.startRunning()
-        }
         
         return nil
     }
@@ -626,6 +627,15 @@ public class BBMetalCamera: NSObject {
         session.stopRunning()
         if multitpleSessions, let session = audioSession { session.stopRunning() }
         lock.signal()
+    }
+    
+    public func resetAudioConsumer() {
+        guard multitpleSessions else { return }
+        audioConsumer = nil
+        if let currentAudioSession = audioSession, currentAudioSession.isRunning {
+            currentAudioSession.stopRunning()
+        }
+        audioSession = nil
     }
     
     /// Resets benchmark record data
