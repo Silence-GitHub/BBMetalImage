@@ -403,12 +403,7 @@ public class BBMetalCamera: NSObject {
     }
     
     private func _removeAudioInputAndOutput() {
-        let session: AVCaptureSession
-        if multitpleSessions, let audioSession = self.audioSession {
-            session = audioSession
-        } else {
-            session = self.session
-        }
+        let session: AVCaptureSession = multitpleSessions ? audioSession : self.session
         if let input = audioInput {
             session.removeInput(input)
             audioInput = nil
@@ -632,15 +627,6 @@ public class BBMetalCamera: NSObject {
         session.stopRunning()
         if multitpleSessions, let session = audioSession { session.stopRunning() }
         lock.signal()
-    }
-    
-    public func resetAudioConsumer() {
-        guard multitpleSessions else { return }
-        audioConsumer = nil
-        if let currentAudioSession = audioSession, currentAudioSession.isRunning {
-            currentAudioSession.stopRunning()
-        }
-        audioSession = nil
     }
     
     /// Resets benchmark record data
