@@ -17,6 +17,11 @@ public enum BBMetalVideoWriterProgressType {
     case audio(CMTime, Bool)
 }
 
+public enum BBMetalVideoWriterError: Error {
+    case startCalledBeforePreviousWriteFinished
+    case finishCaledButNoWritingInProgress
+}
+
 /// Video writer writing video file
 public class BBMetalVideoWriter {
     /// URL of video file
@@ -120,7 +125,10 @@ public class BBMetalVideoWriter {
     /// - Parameters:
     ///   - startHandler: a closure to call after starting writting
     ///   - progress: a closure to call after writting a video frame or an audio buffer
-    public func start(startHandler: BBMetalVideoWriterStart? = nil, progress: BBMetalVideoWriterProgress? = nil) {
+    /// - Returns:
+    ///   - Error if something goes wrong
+    @discardableResult
+    public func start(startHandler: BBMetalVideoWriterStart? = nil, progress: BBMetalVideoWriterProgress? = nil) -> Error? {
         lock.wait()
         defer { lock.signal() }
         
@@ -130,22 +138,27 @@ public class BBMetalVideoWriter {
         if writer == nil {
             if !prepareAssetWriter() {
                 reset()
-                return
+                return nil
             }
         } else {
             print("Should not call \(#function) before last writing operation is finished")
-            return
+            return BBMetalVideoWriterError.startCalledBeforePreviousWriteFinished
         }
+        
         if !writer.startWriting() {
+            let error = writer.error
             reset()
             print("Asset writer can not start writing")
+            return error
         }
+        
+        return nil
     }
     
     /// Finishes writing video file
     ///
     /// - Parameter completion: a closure to call after writing video file
-    public func finish(completion: (() -> Void)?) {
+    public func finish(completion: ((Error?) -> Void)?) {
         lock.wait()
         defer { lock.signal() }
         if let videoInput = self.videoInput,
@@ -170,10 +183,11 @@ public class BBMetalVideoWriter {
                 self.lock.signal()
                 */
                 NotificationCenter.default.post(name: NSNotification.Name(name), object: object, userInfo: nil)
-                completion?()
+                completion?(writer.error)
             }
         } else {
             print("Should not call \(#function) while video writer is not writing")
+            completion?(BBMetalVideoWriterError.finishCaledButNoWritingInProgress)
         }
     }
     

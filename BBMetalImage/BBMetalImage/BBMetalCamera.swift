@@ -34,6 +34,11 @@ public protocol BBMetalCameraMetadataObjectDelegate: AnyObject {
     func camera(_ camera: BBMetalCamera, didOutput metadataObjects: [AVMetadataObject])
 }
 
+public enum BBMetalCameraError: Error {
+    case cannotAddAudioInput
+    case cannotAddAudioOutput
+}
+
 /// Camera capturing image and providing Metal texture
 public class BBMetalCamera: NSObject {
     /// Image consumers
@@ -176,15 +181,20 @@ public class BBMetalCamera: NSObject {
         }
         set {
             lock.wait()
+            audioConsumerAssignError = nil
             _audioConsumer = newValue
             if newValue != nil {
-                if !addAudioInputAndOutput() { _audioConsumer = nil }
+                if let error = addAudioInputAndOutput() {
+                    _audioConsumer = nil
+                    audioConsumerAssignError = error
+                }
             } else {
                 removeAudioInputAndOutput()
             }
             lock.signal()
         }
     }
+    public var audioConsumerAssignError: Error?
     private var _audioConsumer: BBMetalAudioConsumer?
     
     private var photoOutput: AVCapturePhotoOutput!
@@ -298,6 +308,7 @@ public class BBMetalCamera: NSObject {
             let videoDeviceInput = try? AVCaptureDeviceInput(device: videoDevice) else { return nil }
         
         session = captureSession
+        session.automaticallyConfiguresApplicationAudioSession = false
         session.beginConfiguration()
         
         if !(session is AVCaptureMultiCamSession) {
@@ -343,23 +354,29 @@ public class BBMetalCamera: NSObject {
     }
     
     @discardableResult
-    private func addAudioInputAndOutput() -> Bool {
-        if audioOutput != nil { return true }
+    private func addAudioInputAndOutput() -> Error? {
+        if audioOutput != nil { return nil }
         
         var session: AVCaptureSession = self.session
         if multitpleSessions {
             session = AVCaptureSession()
+            session.automaticallyConfiguresApplicationAudioSession = false
             audioSession = session
         }
         
         session.beginConfiguration()
-        defer { session.commitConfiguration() }
+        defer {
+            session.commitConfiguration()
+            if multitpleSessions, self.session.isRunning {
+                audioSession.startRunning()
+            }
+        }
         
-        guard let audioDevice = AVCaptureDevice.default(.builtInMicrophone, for: .audio, position: .unspecified),
+        guard let audioDevice = AVCaptureDevice.default(for: .audio),
             let input = try? AVCaptureDeviceInput(device: audioDevice),
             session.canAddInput(input) else {
-                print("Can not add audio input")
-                return false
+            print("Can not add audio input")
+            return BBMetalCameraError.cannotAddAudioInput
         }
         session.addInput(input)
         audioInput = input
@@ -370,13 +387,13 @@ public class BBMetalCamera: NSObject {
         guard session.canAddOutput(output) else {
             _removeAudioInputAndOutput()
             print("Can not add audio output")
-            return false
+            return BBMetalCameraError.cannotAddAudioOutput
         }
         session.addOutput(output)
         audioOutput = output
         audioOutputQueue = outputQueue
         
-        return true
+        return nil
     }
     
     private func removeAudioInputAndOutput() {
