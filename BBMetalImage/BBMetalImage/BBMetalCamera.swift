@@ -151,6 +151,11 @@ public class BBMetalCamera: NSObject {
         return d
     }
     
+    /// true means it's separate audio session
+    public var sessionInterruptionHandler: ((AVCaptureSession, AVCaptureSession.InterruptionReason, Bool) -> Void)?
+    /// true means it's separate audio session
+    public var sessionErrorHandler: ((AVCaptureSession, AVError, Bool) -> Void)?
+    
     private var capturedFrameCount: Int
     private var totalCaptureFrameTime: Double
     private let ignoreInitialFrameCount: Int
@@ -616,16 +621,24 @@ public class BBMetalCamera: NSObject {
     /// Starts capturing
     public func start() {
         lock.wait()
+        addObservers(session: session)
         session.startRunning()
-        if multitpleSessions, let session = audioSession { session.startRunning() }
+        if multitpleSessions, let session = audioSession {
+            addObservers(session: session)
+            session.startRunning()
+        }
         lock.signal()
     }
     
     /// Stops capturing
     public func stop() {
         lock.wait()
+        removeObservers(session: session)
         session.stopRunning()
-        if multitpleSessions, let session = audioSession { session.stopRunning() }
+        if multitpleSessions, let session = audioSession {
+            removeObservers(session: session)
+            session.stopRunning()
+        }
         lock.signal()
     }
     
@@ -674,6 +687,44 @@ extension BBMetalCamera: BBMetalImageSource {
         for consumer in consumers {
             consumer.remove(source: self)
         }
+    }
+}
+
+private extension BBMetalCamera {
+    func addObservers(session: AVCaptureSession) {
+        NotificationCenter.default.addObserver(self, selector: #selector(BBMetalCamera.sessionRuntimeErrorOccurred(notification:)), name: NSNotification.Name.AVCaptureSessionRuntimeError, object: session)
+        NotificationCenter.default.addObserver(self, selector: #selector(BBMetalCamera.sessionWasInterrupted(notification:)), name: NSNotification.Name.AVCaptureSessionWasInterrupted, object: session)
+        NotificationCenter.default.addObserver(self, selector: #selector(BBMetalCamera.sessionInterruptionEnded), name: NSNotification.Name.AVCaptureSessionInterruptionEnded, object: session)
+    }
+    
+    func removeObservers(session: AVCaptureSession) {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVCaptureSessionRuntimeError, object: session)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVCaptureSessionWasInterrupted, object: session)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.AVCaptureSessionInterruptionEnded, object: session)
+    }
+    
+    @objc func sessionWasInterrupted(notification: Notification) {
+        guard let userInfoValue = notification.userInfo?[AVCaptureSessionInterruptionReasonKey] as AnyObject?,
+              let reasonIntegerValue = userInfoValue.integerValue,
+              let reason = AVCaptureSession.InterruptionReason(rawValue: reasonIntegerValue),
+              let session = notification.object as? AVCaptureSession else {
+            return
+        }
+        let isSeparateAudioSession = multitpleSessions && session == audioSession
+        sessionInterruptionHandler?(session, reason, isSeparateAudioSession)
+    }
+    
+    @objc func sessionInterruptionEnded(notification: Notification) {
+        // TODO: implement
+    }
+    
+    @objc func sessionRuntimeErrorOccurred(notification: Notification) {
+        guard let error = notification.userInfo?[AVCaptureSessionErrorKey] as? AVError,
+              let session = notification.object as? AVCaptureSession else {
+            return
+        }
+        let isSeparateAudioSession = multitpleSessions && session == audioSession
+        sessionErrorHandler?(session, error, isSeparateAudioSession)
     }
 }
 
